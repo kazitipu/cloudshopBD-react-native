@@ -1,0 +1,167 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.otrixcommerce"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="30" />
+10
+11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+11-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/debug/AndroidManifest.xml:5:5-77
+11-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/debug/AndroidManifest.xml:5:22-75
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:4:5-67
+12-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:4:22-64
+13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+13-->[com.facebook.flipper:flipper:0.99.0] /Users/kazitipu/.gradle/caches/transforms-3/df7b208c45426f45016d16c0c3a6a059/transformed/jetified-flipper-0.99.0/AndroidManifest.xml:16:5-76
+13-->[com.facebook.flipper:flipper:0.99.0] /Users/kazitipu/.gradle/caches/transforms-3/df7b208c45426f45016d16c0c3a6a059/transformed/jetified-flipper-0.99.0/AndroidManifest.xml:16:22-73
+14    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Permission will be merged into the manifest of the hosting app. -->
+14-->[:react-native-community_netinfo] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-79
+14-->[:react-native-community_netinfo] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-76
+15    <!-- Is required to launch foreground extraction service for targetSdkVersion 28+. -->
+16    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+16-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:8:3-74
+16-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:8:20-72
+17
+18    <application
+18-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:6:5-24:19
+19        android:name="com.otrixcommerce.MainApplication"
+19-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:7:7-38
+20        android:allowBackup="false"
+20-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:11:7-34
+21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+21-->[androidx.core:core:1.6.0] /Users/kazitipu/.gradle/caches/transforms-3/9f18c6b50baa776d71894ad120630276/transformed/core-1.6.0/AndroidManifest.xml:24:18-86
+22        android:debuggable="true"
+23        android:icon="@mipmap/ic_launcher"
+23-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:9:7-41
+24        android:label="@string/app_name"
+24-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:8:7-39
+25        android:roundIcon="@mipmap/ic_launcher_round"
+25-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:10:7-52
+26        android:theme="@style/AppTheme"
+26-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:12:7-38
+27        android:usesCleartextTraffic="true" >
+27-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/debug/AndroidManifest.xml:8:9-44
+28        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+28-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/debug/AndroidManifest.xml:11:9-86
+28-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/debug/AndroidManifest.xml:11:19-83
+29        <activity
+29-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:13:7-23:18
+30            android:name="com.otrixcommerce.MainActivity"
+30-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:14:9-37
+31            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+31-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:16:9-86
+32            android:label="@string/app_name"
+32-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:15:9-41
+33            android:launchMode="singleTask"
+33-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:17:9-40
+34            android:windowSoftInputMode="adjustResize" >
+34-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:18:9-51
+35            <intent-filter>
+35-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:19:9-22:25
+36                <action android:name="android.intent.action.MAIN" />
+36-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:20:13-65
+36-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:20:21-62
+37
+38                <category android:name="android.intent.category.LAUNCHER" />
+38-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:21:13-73
+38-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/src/main/AndroidManifest.xml:21:23-70
+39            </intent-filter>
+40        </activity>
+41
+42        <provider
+42-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
+43            android:name="com.imagepicker.ImagePickerProvider"
+43-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-63
+44            android:authorities="com.otrixcommerce.imagepickerprovider"
+44-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-71
+45            android:exported="false"
+45-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
+46            android:grantUriPermissions="true" >
+46-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
+47            <meta-data
+47-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:70
+48                android:name="android.support.FILE_PROVIDER_PATHS"
+48-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+49                android:resource="@xml/imagepicker_provider_paths" />
+49-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-67
+50        </provider>
+51        <provider
+51-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
+52            android:name="cl.json.RNShareFileProvider"
+52-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-55
+53            android:authorities="com.otrixcommerce.rnshare.fileprovider"
+53-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-72
+54            android:exported="false"
+54-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
+55            android:grantUriPermissions="true" >
+55-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
+56            <meta-data
+56-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:70
+57                android:name="android.support.FILE_PROVIDER_PATHS"
+57-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+58                android:resource="@xml/share_download_paths" />
+58-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-67
+59        </provider>
+60
+61        <meta-data
+61-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /Users/kazitipu/.gradle/caches/transforms-3/7b4ebcd5b4aff9e01b5235f48d47d4b4/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:11:9-13:43
+62            android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
+62-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /Users/kazitipu/.gradle/caches/transforms-3/7b4ebcd5b4aff9e01b5235f48d47d4b4/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:12:13-84
+63            android:value="GlideModule" />
+63-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /Users/kazitipu/.gradle/caches/transforms-3/7b4ebcd5b4aff9e01b5235f48d47d4b4/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:13:13-40
+64
+65        <activity
+65-->[com.google.android.gms:play-services-base:17.5.0] /Users/kazitipu/.gradle/caches/transforms-3/cbc5c86377f75d03b121c53755dd73d8/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:23:9-26:75
+66            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+66-->[com.google.android.gms:play-services-base:17.5.0] /Users/kazitipu/.gradle/caches/transforms-3/cbc5c86377f75d03b121c53755dd73d8/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:24:13-79
+67            android:exported="false"
+67-->[com.google.android.gms:play-services-base:17.5.0] /Users/kazitipu/.gradle/caches/transforms-3/cbc5c86377f75d03b121c53755dd73d8/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:25:13-37
+68            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+68-->[com.google.android.gms:play-services-base:17.5.0] /Users/kazitipu/.gradle/caches/transforms-3/cbc5c86377f75d03b121c53755dd73d8/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:26:13-72
+69
+70        <meta-data
+70-->[com.google.android.gms:play-services-basement:17.5.0] /Users/kazitipu/.gradle/caches/transforms-3/49082f8dff4f66a25d4d47841ba1595c/transformed/jetified-play-services-basement-17.5.0/AndroidManifest.xml:23:9-25:69
+71            android:name="com.google.android.gms.version"
+71-->[com.google.android.gms:play-services-basement:17.5.0] /Users/kazitipu/.gradle/caches/transforms-3/49082f8dff4f66a25d4d47841ba1595c/transformed/jetified-play-services-basement-17.5.0/AndroidManifest.xml:24:13-58
+72            android:value="@integer/google_play_services_version" /> <!-- The activities will be merged into the manifest of the hosting app. -->
+72-->[com.google.android.gms:play-services-basement:17.5.0] /Users/kazitipu/.gradle/caches/transforms-3/49082f8dff4f66a25d4d47841ba1595c/transformed/jetified-play-services-basement-17.5.0/AndroidManifest.xml:25:13-66
+73        <activity
+73-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:5-271
+74            android:name="com.google.android.play.core.missingsplits.PlayCoreMissingSplitsActivity"
+74-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:15-102
+75            android:enabled="false"
+75-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:103-126
+76            android:exported="false"
+76-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:127-151
+77            android:launchMode="singleInstance"
+77-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:204-239
+78            android:process=":playcore_missing_splits_activity"
+78-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:152-203
+79            android:stateNotNeeded="true" />
+79-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:240-269
+80        <activity
+80-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:5-226
+81            android:name="com.google.android.play.core.common.PlayCoreDialogWrapperActivity"
+81-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:15-95
+82            android:enabled="false"
+82-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:96-119
+83            android:exported="false"
+83-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:120-144
+84            android:stateNotNeeded="true"
+84-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:145-174
+85            android:theme="@style/Theme.PlayCore.Transparent" /> <!-- The service will be merged into the manifest of the hosting app. -->
+85-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:175-224
+86        <service
+86-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:16:5-145
+87            android:name="com.google.android.play.core.assetpacks.AssetPackExtractionService"
+87-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:16:14-95
+88            android:enabled="false"
+88-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:16:96-119
+89            android:exported="true" />
+89-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/2ebff19d3d679fc82328018415c29b5f/transformed/jetified-core-1.9.0/AndroidManifest.xml:16:120-143
+90    </application>
+91
+92</manifest>

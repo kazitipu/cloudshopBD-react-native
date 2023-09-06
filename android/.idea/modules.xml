@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/otrixcommerce.iml" filepath="$PROJECT_DIR$/.idea/modules/otrixcommerce.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/otrixcommerce.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/otrixcommerce.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-557922084/otrixcommerce.react-native-community_async-storage.iml" filepath="$PROJECT_DIR$/.idea/modules/-557922084/otrixcommerce.react-native-community_async-storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/914884861/otrixcommerce.react-native-community_netinfo.iml" filepath="$PROJECT_DIR$/.idea/modules/914884861/otrixcommerce.react-native-community_netinfo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/2113721106/otrixcommerce.react-native-fast-image.iml" filepath="$PROJECT_DIR$/.idea/modules/2113721106/otrixcommerce.react-native-fast-image.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1196611554/otrixcommerce.react-native-gesture-handler.iml" filepath="$PROJECT_DIR$/.idea/modules/-1196611554/otrixcommerce.react-native-gesture-handler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1280931752/otrixcommerce.react-native-image-picker.iml" filepath="$PROJECT_DIR$/.idea/modules/1280931752/otrixcommerce.react-native-image-picker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1733732476/otrixcommerce.react-native-in-app-review.iml" filepath="$PROJECT_DIR$/.idea/modules/-1733732476/otrixcommerce.react-native-in-app-review.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-576660432/otrixcommerce.react-native-linear-gradient.iml" filepath="$PROJECT_DIR$/.idea/modules/-576660432/otrixcommerce.react-native-linear-gradient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/773507223/otrixcommerce.react-native-masked-view_masked-view.iml" filepath="$PROJECT_DIR$/.idea/modules/773507223/otrixcommerce.react-native-masked-view_masked-view.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1286803272/otrixcommerce.react-native-rate.iml" filepath="$PROJECT_DIR$/.idea/modules/1286803272/otrixcommerce.react-native-rate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1758900487/otrixcommerce.react-native-safe-area-context.iml" filepath="$PROJECT_DIR$/.idea/modules/1758900487/otrixcommerce.react-native-safe-area-context.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-2006753825/otrixcommerce.react-native-screens.iml" filepath="$PROJECT_DIR$/.idea/modules/-2006753825/otrixcommerce.react-native-screens.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/635381303/otrixcommerce.react-native-share.iml" filepath="$PROJECT_DIR$/.idea/modules/635381303/otrixcommerce.react-native-share.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1416667716/otrixcommerce.react-native-svg.iml" filepath="$PROJECT_DIR$/.idea/modules/-1416667716/otrixcommerce.react-native-svg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1388768136/otrixcommerce.react-native-vector-icons.iml" filepath="$PROJECT_DIR$/.idea/modules/-1388768136/otrixcommerce.react-native-vector-icons.iml" />
+    </modules>
+  </component>
+</project>
