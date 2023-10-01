@@ -21,7 +21,13 @@ import {
 } from "react-native-responsive-screen";
 import { Colors, GlobalStyles } from "@helpers";
 import { Avatar, Badge } from "native-base";
-import { heart, offerBanner, avatarImg, avatarImg2 } from "@common";
+import {
+  heart,
+  offerBanner,
+  avatarImg,
+  avatarImg2,
+  cloudshopBD,
+} from "@common";
 import Fonts from "@helpers/Fonts";
 import { _roundDimensions } from "@helpers/util";
 import { _addToWishlist, logfunction } from "@helpers/FunctionHelper";
@@ -74,7 +80,7 @@ function HomeScreen(props) {
           )}
         </TouchableOpacity>
         <View style={styles.headerCenter}>
-          <Text style={styles.headingTxt}>CloudshopBD</Text>
+          <Image source={cloudshopBD} style={styles.cloudshopBDIcon}></Image>
         </View>
 
         {!loading && (
@@ -183,6 +189,12 @@ const styles = StyleSheet.create({
     height: hp("6.5%"),
     resizeMode: "contain",
     tintColor: Colors.custom_pink,
+  },
+  cloudshopBDIcon: {
+    width: wp("65%"),
+    height: hp("6.5%"),
+    resizeMode: "cover",
+    marginLeft: 20,
   },
   headerCenter: {
     flex: 0.75,

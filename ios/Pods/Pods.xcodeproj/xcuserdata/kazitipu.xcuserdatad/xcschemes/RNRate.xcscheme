@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "01902010C275AA793ECF6F87A82AE992"
-               BuildableName = "libRNRate.a"
+               BuildableName = "RNRate.framework"
                BlueprintName = "RNRate"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

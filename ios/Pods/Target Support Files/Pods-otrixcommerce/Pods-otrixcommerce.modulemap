@@ -1,4 +1,4 @@
-module Pods_otrixcommerce {
+framework module Pods_otrixcommerce {
   umbrella header "Pods-otrixcommerce-umbrella.h"
 
   export *

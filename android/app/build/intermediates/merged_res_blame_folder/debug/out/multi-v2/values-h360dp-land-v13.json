@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/otrixcommerce/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-h360dp-land-v13/values-h360dp-land-v13.xml",
+            "outputFile": "/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-h360dp-land-v13/values-h360dp-land-v13.xml",
             "map": [
                 {
-                    "source": "/Users/kazitipu/.gradle/caches/transforms-3/7c0c7e113c074df493b9385345dc4b6b/transformed/material-1.1.0/res/values-h360dp-land-v13/values-h360dp-land-v13.xml",
+                    "source": "/Users/kazitipu/.gradle/caches/transforms-3/86a7c0a38d427f930b6ded2c77e67db1/transformed/material-1.1.0/res/values-h360dp-land-v13/values-h360dp-land-v13.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10",
                         "startColumns": "4,4,4,4,4,4,4,4,4",

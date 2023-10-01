@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4C974BC7C0469FEEA85FA823D8870838"
-               BuildableName = "libRNShare.a"
+               BuildableName = "RNShare.framework"
                BlueprintName = "RNShare"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

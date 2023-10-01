@@ -1,4 +1,4 @@
-module react_native_in_app_review {
+framework module react_native_in_app_review {
   umbrella header "react-native-in-app-review-umbrella.h"
 
   export *

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A97896C59BE9825B96620C48E6D2849A"
-               BuildableName = "libPods-otrixcommerce-otrixcommerceTests.a"
+               BuildableName = "Pods_otrixcommerce_otrixcommerceTests.framework"
                BlueprintName = "Pods-otrixcommerce-otrixcommerceTests"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

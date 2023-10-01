@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0BB7745637E0758DEA373456197090C6"
-               BuildableName = "libRNFastImage.a"
+               BuildableName = "RNFastImage.framework"
                BlueprintName = "RNFastImage"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A825B9BC253DDA7637593FC3425A5F0B"
-               BuildableName = "libreact-native-in-app-review.a"
+               BuildableName = "react_native_in_app_review.framework"
                BlueprintName = "react-native-in-app-review"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

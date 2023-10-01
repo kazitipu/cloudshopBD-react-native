@@ -1,4 +1,4 @@
-module Pods_otrixcommerce_otrixcommerceTests {
+framework module Pods_otrixcommerce_otrixcommerceTests {
   umbrella header "Pods-otrixcommerce-otrixcommerceTests-umbrella.h"
 
   export *
