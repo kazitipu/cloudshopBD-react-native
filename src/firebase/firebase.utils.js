@@ -421,6 +421,103 @@ export const getAllBanners = async () => {
     alert(error);
   }
 };
+
+export const getAllCategories = async () => {
+  const productsCollectionRef = firestore().collection("categories");
+
+  try {
+    const products = await productsCollectionRef.get();
+    const productsArray = [];
+    products.forEach((doc) => {
+      productsArray.push(doc.data());
+    });
+    return productsArray;
+  } catch (error) {
+    alert(error);
+  }
+};
+
+export const getAllHomeScreenCategories = async () => {
+  const productsCollectionRef = firestore()
+    .collection("categories")
+    .where("homePage", "==", true);
+
+  try {
+    const products = await productsCollectionRef.get();
+    const productsArray = [];
+    products.forEach((doc) => {
+      productsArray.push(doc.data());
+    });
+    return productsArray;
+  } catch (error) {
+    alert(error);
+  }
+};
+export const getAllHomeScreenProducts = async (categoryId) => {
+  const productsCollectionRef = firestore()
+    .collection("products")
+    .where("checkedValues", "array-contains", categoryId)
+    .orderBy("id", "desc")
+    .limit(10);
+  try {
+    const products = await productsCollectionRef.get();
+    const productsArray = [];
+    products.forEach((doc) => {
+      productsArray.push(doc.data());
+    });
+    return productsArray;
+  } catch (error) {
+    alert(error);
+    console.log(error);
+  }
+};
+export const getAllLatestProducts = async () => {
+  const productsCollectionRef = firestore()
+    .collection("products")
+    .where("new", "==", true)
+    .orderBy("id", "desc")
+    .limit(10);
+  try {
+    const products = await productsCollectionRef.get();
+    const productsArray = [];
+    products.forEach((doc) => {
+      productsArray.push(doc.data());
+    });
+    return productsArray;
+  } catch (error) {
+    alert(error);
+    console.log(error);
+  }
+};
+export const getSingleCategoryProducts = async (categories) => {
+  console.log(categories);
+  const productsCollectionRef = firestore()
+    .collection("products")
+    .where("checkedValues", "array-contains-any", categories);
+
+  try {
+    const products = await productsCollectionRef.get();
+    const productsArray = [];
+    products.forEach((doc) => {
+      productsArray.push(doc.data());
+    });
+    return productsArray;
+  } catch (error) {
+    alert(error);
+    console.log(error);
+  }
+};
+export const getSingleProduct = async (id) => {
+  const productRef = firestore().doc(`products/${id}`);
+  try {
+    const product = await productRef.get();
+    return product.data();
+  } catch (error) {
+    alert(error);
+    console.log(error);
+  }
+};
+
 export const getAllExpressRatesParcel = async () => {
   const expressRatesParcelCollectionRef =
     firestore().collection("expressRatesParcel");

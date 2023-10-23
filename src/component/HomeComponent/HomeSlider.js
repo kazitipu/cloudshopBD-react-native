@@ -33,7 +33,9 @@ function HomeSlider(props) {
 
   let images = [];
   if (props.banners.length > 0) {
-    images = props.banners.map((banner) => banner.banner);
+    images = props.banners
+      .filter((banner) => !banner.secondBanner)
+      .map((banner) => banner.banner);
   }
 
   const _renderItem = ({ item, index }, parallaxProps) => {
@@ -55,7 +57,7 @@ function HomeSlider(props) {
       <Carousel
         sliderWidth={screenWidth}
         sliderHeight={screenWidth}
-        itemWidth={screenWidth - screenWidth / 8.125}
+        itemWidth={screenWidth - screenWidth / 21}
         data={images}
         inactiveSlideOpacity={0.5}
         inactiveSlideScale={1}
@@ -80,7 +82,7 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, { getAllBannersRedux })(HomeSlider);
 const styles = StyleSheet.create({
   item: {
-    width: screenWidth - 55,
+    width: screenWidth - screenWidth / 18,
     height: screenWidth - 220,
     right: wp("3.5%"),
   },

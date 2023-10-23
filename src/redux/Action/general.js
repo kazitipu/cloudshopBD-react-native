@@ -3,6 +3,12 @@ import AsyncStorage from "@react-native-community/async-storage";
 import {
   getAllTopCategories,
   getAllBanners,
+  getAllHomeScreenCategories,
+  getAllHomeScreenProducts,
+  getAllLatestProducts,
+  getSingleCategoryProducts,
+  getAllCategories,
+  getSingleProduct,
 } from "../../firebase/firebase.utils";
 export function requestInit(user) {
   return {
@@ -138,5 +144,60 @@ export const getAllBannersRedux = () => async (dispatch) => {
   dispatch({
     type: "GET_ALL_BANNERS",
     payload: allBanners,
+  });
+};
+
+export const getAllCategoriesRedux = () => async (dispatch) => {
+  const allCats = await getAllCategories();
+  dispatch({
+    type: "GET_ALL_CATEGORIES",
+    payload: allCats,
+  });
+};
+
+export const getAllHomeScreenCategoriesRedux = () => async (dispatch) => {
+  const allCats = await getAllHomeScreenCategories();
+  dispatch({
+    type: "GET_ALL_HOMESCREEN_CATEGORIES",
+    payload: allCats,
+  });
+};
+
+export const getAllHomeScreenProductsRedux =
+  (categoryId) => async (dispatch) => {
+    const allProducts = await getAllHomeScreenProducts(categoryId);
+    dispatch({
+      type: "GET_ALL_HOMESCREEN_PRODUCTS",
+      payload: { categoryId: categoryId, products: allProducts },
+    });
+  };
+export const getAllLatestProductsRedux = () => async (dispatch) => {
+  const allProducts = await getAllLatestProducts();
+  dispatch({
+    type: "GET_ALL_LATEST_PRODUCTS",
+    payload: allProducts,
+  });
+};
+export const getSingleCategoryProductsRedux =
+  (categories) => async (dispatch) => {
+    const allProducts = await getSingleCategoryProducts(categories);
+    dispatch({
+      type: "GET_ALL_SINGLE_CATEGORY_PRODUCTS",
+      payload: allProducts,
+    });
+  };
+export const getSimilarCategoryProductsRedux =
+  (categories) => async (dispatch) => {
+    const allProducts = await getSingleCategoryProducts(categories);
+    dispatch({
+      type: "GET_ALL_SIMILAR_CATEGORY_PRODUCTS",
+      payload: allProducts,
+    });
+  };
+export const getSingleProductRedux = (id) => async (dispatch) => {
+  const product = await getSingleProduct(id);
+  dispatch({
+    type: "GET_SINGLE_PRODUCT",
+    payload: product,
   });
 };

@@ -6,6 +6,10 @@ const initialState = {
   navScreen: "",
   allTopCategories: [],
   banners: [],
+  homeCategories: [],
+  homeProducts: [],
+  latestProducts: [],
+  categories: [],
 };
 export default (state = initialState, action) => {
   //    logfunction("STATE LOG ====", action)
@@ -25,6 +29,26 @@ export default (state = initialState, action) => {
       return {
         ...state,
         allTopCategories: action.payload,
+      };
+    case "GET_ALL_CATEGORIES":
+      return {
+        ...state,
+        categories: action.payload,
+      };
+    case "GET_ALL_HOMESCREEN_CATEGORIES":
+      return {
+        ...state,
+        homeCategories: action.payload,
+      };
+    case "GET_ALL_LATEST_PRODUCTS":
+      return {
+        ...state,
+        latestProducts: action.payload,
+      };
+    case "GET_ALL_HOMESCREEN_PRODUCTS":
+      return {
+        ...state,
+        homeProducts: [...state.homeProducts, action.payload],
       };
     case "GET_ALL_BANNERS":
       return {

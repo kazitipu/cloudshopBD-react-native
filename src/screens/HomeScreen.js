@@ -10,8 +10,9 @@ import {
   HomeCategoryView,
   SearchBar,
   NewProduct,
+  NewProduct2,
   TrendingProduct,
-  BestDeal,
+  LatestProducts,
 } from "@component";
 import { HomeSkeleton } from "@skeleton";
 import { addToWishList } from "@actions";
@@ -31,6 +32,7 @@ import {
 import Fonts from "@helpers/Fonts";
 import { _roundDimensions } from "@helpers/util";
 import { _addToWishlist, logfunction } from "@helpers/FunctionHelper";
+import { getAllHomeScreenCategoriesRedux } from "../redux/Action";
 
 function HomeScreen(props) {
   const [state, setState] = React.useState({
@@ -52,9 +54,19 @@ function HomeScreen(props) {
       clearTimeout(loadHomePage);
     };
   }, []);
+  useEffect(() => {
+    props.getAllHomeScreenCategoriesRedux();
+  }, []);
 
   const { loading } = state;
-  const { authStatus, wishlistData, wishlistCount } = props;
+  const { authStatus, wishlistData, wishlistCount, banners, homeCategories } =
+    props;
+  const firstCategories = homeCategories
+    .filter((category) => category.homePosition < 4)
+    .sort((a, b) => Number(a.homePosition) - Number(b.homePosition));
+  const secondCategories = homeCategories
+    .filter((category) => category.homePosition > 3)
+    .sort((a, b) => Number(a.homePosition) - Number(b.homePosition));
   return (
     <OtrixContainer customStyles={{ backgroundColor: Colors.white }}>
       {/* Header */}
@@ -137,18 +149,38 @@ function HomeScreen(props) {
           <OtrixDivider size={"md"} />
 
           {/* NewProduct Component */}
-          <NewProduct
-            navigation={props.navigation}
-            wishlistArr={wishlistData}
-            addToWishlist={addToWish}
-          />
+          {firstCategories.map((category, index) => (
+            <NewProduct2
+              key={category.id}
+              navigation={props.navigation}
+              wishlistArr={wishlistData}
+              addToWishlist={addToWish}
+              category={category}
+            />
+          ))}
 
           {/* Banner Image */}
-          <Image source={offerBanner} style={styles.bannerStyle} />
+          {banners.length > 0 && banners.find((banner) => banner.secondBanner) && (
+            <Image
+              source={{
+                uri: banners.find((banner) => banner.secondBanner).banner,
+              }}
+              style={styles.bannerStyle}
+            />
+          )}
           <OtrixDivider size={"sm"} />
+          {secondCategories.map((category, index) => (
+            <NewProduct2
+              key={category.id}
+              navigation={props.navigation}
+              wishlistArr={wishlistData}
+              addToWishlist={addToWish}
+              category={category}
+            />
+          ))}
 
-          {/* BestDeal Component */}
-          <BestDeal
+          {/*Latest Products Component */}
+          <LatestProducts
             navigation={props.navigation}
             wishlistArr={wishlistData}
             addToWishlist={addToWish}
@@ -156,11 +188,6 @@ function HomeScreen(props) {
           <OtrixDivider size={"sm"} />
 
           {/* TrendingProduct Component */}
-          <TrendingProduct
-            navigation={props.navigation}
-            wishlistArr={wishlistData}
-            addToWishlist={addToWish}
-          />
         </OtrixContent>
       )}
     </OtrixContainer>
@@ -172,10 +199,15 @@ function mapStateToProps(state) {
     authStatus: state.auth.authStatus,
     wishlistData: state.wishlist.wishlistData,
     wishlistCount: state.wishlist.wishlistCount,
+    banners: state.mainScreenInit.banners,
+    homeCategories: state.mainScreenInit.homeCategories,
   };
 }
 
-export default connect(mapStateToProps, { addToWishList })(HomeScreen);
+export default connect(mapStateToProps, {
+  addToWishList,
+  getAllHomeScreenCategoriesRedux,
+})(HomeScreen);
 
 const styles = StyleSheet.create({
   headerRight: {

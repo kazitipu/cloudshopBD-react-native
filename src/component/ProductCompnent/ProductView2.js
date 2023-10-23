@@ -9,9 +9,118 @@ import Fonts from "@helpers/Fonts";
 import Stars from "react-native-stars";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { _roundDimensions } from "@helpers/util";
-function ProductView(props) {
+function ProductView2(props) {
   const data = props.data;
   const wishlistArr = props.wishlistArray ? props.wishlistArray : null;
+
+  const getPrice = (product) => {
+    if (product.displayedVariations.length > 0) {
+      if (product.displayedVariations[0].salePrice == 0) {
+        return (
+          <>
+            <Text style={styles.price}>
+              ৳{product.displayedVariations[0].price}
+            </Text>
+            <View
+              style={{
+                flex: 0.5,
+                flexDirection: "column",
+                alignItems: "flex-end",
+              }}
+            >
+              <Text style={{ ...styles.offerTxt, color: "white" }}>৳0</Text>
+              <View
+                style={{
+                  ...styles.offertxt2Container,
+                  backgroundColor: "white",
+                }}
+              >
+                <Text style={{ ...styles.offerTxt2 }}>0% Off</Text>
+              </View>
+            </View>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <Text style={styles.price}>
+              ৳{product.displayedVariations[0].salePrice}
+            </Text>
+            <View
+              style={{
+                flex: 0.5,
+                flexDirection: "column",
+                alignItems: "flex-end",
+              }}
+            >
+              <Text style={styles.offerTxt}>
+                ৳{product.displayedVariations[0].price}
+              </Text>
+              <View style={styles.offertxt2Container}>
+                <Text style={styles.offerTxt2}>
+                  {parseInt(
+                    100 -
+                      (product.displayedVariations[0].salePrice /
+                        product.displayedVariations[0].price) *
+                        100
+                  )}
+                  % Off
+                </Text>
+              </View>
+            </View>
+          </>
+        );
+      }
+    } else {
+      if (product.salePrice == 0) {
+        return (
+          <>
+            <Text style={styles.price}>৳{product.price}</Text>
+            <View
+              style={{
+                flex: 0.5,
+                flexDirection: "column",
+                alignItems: "flex-end",
+              }}
+            >
+              <Text style={{ ...styles.offerTxt, color: "white" }}>
+                ৳{product.price}
+              </Text>
+              <View
+                style={{
+                  ...styles.offertxt2Container,
+                  backgroundColor: "white",
+                }}
+              >
+                <Text style={styles.offerTxt2}>0% Off</Text>
+              </View>
+            </View>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <Text style={styles.price}>৳{product.salePrice}</Text>
+            <View
+              style={{
+                flex: 0.5,
+                flexDirection: "column",
+                alignItems: "flex-end",
+              }}
+            >
+              <Text style={{ ...styles.offerTxt }}>৳{product.price}</Text>
+              <View style={styles.offertxt2Container}>
+                <Text style={styles.offerTxt2}>
+                  {parseInt(100 - (product.salePrice / product.price) * 100)}%
+                  Off
+                </Text>
+              </View>
+            </View>
+          </>
+        );
+      }
+    }
+  };
   return (
     <TouchableOpacity
       style={styles.productBox}
@@ -27,7 +136,10 @@ function ProductView(props) {
           },
         ]}
       >
-        <Image source={data.image} style={styles.image}></Image>
+        <Image
+          source={{ uri: `${data.pictures[0]}` }}
+          style={styles.image}
+        ></Image>
       </View>
       <View style={styles.infromationView}>
         {/* <View style={styles.starView}>
@@ -59,17 +171,14 @@ function ProductView(props) {
         <Text style={styles.productName} numberOfLines={2}>
           {data.name.slice(0, 12)}...
         </Text>
-        <View style={styles.priceView}>
-          <Text style={styles.price}>{data.price}</Text>
-          <Text style={styles.offerTxt}>{data.off}</Text>
-        </View>
+        <View style={styles.priceView}>{getPrice(data)}</View>
       </View>
-      {data.out_of_stock && (
+      {data.stockStatus == "Out of stock" && (
         <View style={styles.outstockview}>
           <Text style={styles.outofstockTxt}>Out of stock</Text>
         </View>
       )}
-      {data.out_of_stock == false && data.new == true && (
+      {data.new && data.stockStatus != "Out of stock" && (
         <View style={styles.newtextView}>
           <Text style={styles.newTxt}>New</Text>
         </View>
@@ -99,7 +208,7 @@ function ProductView(props) {
   );
 }
 
-export default ProductView;
+export default ProductView2;
 
 const styles = StyleSheet.create({
   productBox: {
@@ -114,6 +223,7 @@ const styles = StyleSheet.create({
   imageView: {
     flex: 0.6,
     backgroundColor: Colors.light_white,
+
     width: wp("28.2%"),
     borderTopStartRadius: wp("2%"),
     borderTopEndRadius: wp("2%"),
@@ -152,18 +262,30 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   price: {
-    flex: 0.3,
+    flex: 0.5,
     color: Colors.black,
     fontFamily: Fonts.Font_Bold,
     fontSize: wp("3.2%"),
   },
   offerTxt: {
-    flex: 0.7,
     textAlign: "right",
     color: Colors.link_color,
     fontFamily: Fonts.Font_Semibold,
     fontSize: wp("2.5%"),
-    textTransform: "uppercase",
+    textDecorationLine: "line-through",
+  },
+  offerTxt2: {
+    textAlign: "right",
+    color: "white",
+    fontFamily: Fonts.Font_Semibold,
+    fontSize: wp("2%"),
+  },
+  offertxt2Container: {
+    padding: 3,
+    paddingLeft: 7,
+    paddingRight: 7,
+    backgroundColor: "#ff8084",
+    borderRadius: 5,
   },
 
   outstockview: {

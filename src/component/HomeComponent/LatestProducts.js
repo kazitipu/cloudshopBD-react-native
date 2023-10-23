@@ -3,23 +3,25 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  SafeAreaView,
-  Image,
   FlatList,
-  Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { GlobalStyles, Colors } from "@helpers";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import NewProductDummy from "../items/NewProductDummy";
+import DealProductDummy from "../items/DealProductDummy";
 import OtrixDivider from "../OtrixComponent/OtrixDivider";
-import ProductView from "../ProductCompnent/ProductView";
+import DealsProductView from "./DealsProductView";
+import Fonts from "@helpers/Fonts";
 import { logfunction } from "@helpers/FunctionHelper";
-const { width: screenWidth } = Dimensions.get("window");
-function NewProduct(props) {
+import { connect } from "react-redux";
+import { getAllLatestProductsRedux } from "../../redux/Action";
+function LatestProducts(props) {
+  useEffect(() => {
+    props.getAllLatestProductsRedux();
+  }, []);
   const navigateToDetailPage = (data) => {
     props.navigation.navigate("ProductDetailScreen", { id: data.id });
   };
@@ -29,12 +31,10 @@ function NewProduct(props) {
     // logfunction(" wishlist Data ", wishlistData)
   };
 
-  const { wishlistArr } = props;
-
   const renderCard = (item) => {
     return (
       <View style={styles.productBox} key={item.id.toString()}>
-        <ProductView
+        <DealsProductView
           data={item}
           key={item.id}
           navToDetail={navigateToDetailPage}
@@ -45,15 +45,18 @@ function NewProduct(props) {
     );
   };
 
+  const { wishlistArr, latestProducts } = props;
+  console.log(latestProducts);
   return (
     <>
       <View style={styles.catHeading}>
-        <Text style={GlobalStyles.boxHeading}>New Products</Text>
+        <Text style={GlobalStyles.boxHeading}>Latest Products</Text>
         <TouchableOpacity
           style={{ flex: 0.5 }}
           onPress={() =>
             props.navigation.navigate("ProductListScreen", {
-              title: "New Products",
+              title: "Latest Products",
+              item: "Latest Products",
             })
           }
         >
@@ -61,26 +64,23 @@ function NewProduct(props) {
         </TouchableOpacity>
       </View>
       <OtrixDivider size={"sm"} />
-      <FlatList
-        style={{ padding: wp("1%"), flexDirection: "row", flexWrap: "wrap" }}
-        data={NewProductDummy}
-        contentContainerStyle={{ paddingRight: wp("3%") }}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        onEndReachedThreshold={1}
-        keyExtractor={(contact, index) => String(index)}
-        renderItem={({ item, index }) => renderCard(item)}
-      ></FlatList>
-      {/* <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                {NewProductDummy.map((item, index) => {
-                    return renderCard(item);
-                })}
-            </View> */}
+      <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+        {latestProducts.map((item, index) => {
+          return renderCard(item);
+        })}
+      </View>
     </>
   );
 }
 
-export default NewProduct;
+const mapStateToProps = (state) => {
+  return {
+    latestProducts: state.mainScreenInit.latestProducts,
+  };
+};
+export default connect(mapStateToProps, {
+  getAllLatestProductsRedux,
+})(LatestProducts);
 
 const styles = StyleSheet.create({
   catHeading: {
@@ -95,7 +95,14 @@ const styles = StyleSheet.create({
     marginHorizontal: wp("1%"),
     borderRadius: 5,
   },
+  catName: {
+    fontSize: wp("3.3%"),
+    fontFamily: Fonts.Font_Reguler,
+    textAlign: "center",
+    color: Colors.text_color,
+  },
   productBox: {
+    flexDirection: "column",
     flexDirection: "row",
     justifyContent: "center",
     backgroundColor: Colors.white,
@@ -104,7 +111,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 3,
     elevation: 6,
-    width: wp("28%"),
+    width: "46%",
     height: "auto",
     marginBottom: wp("3%"),
     borderRadius: wp("2%"),

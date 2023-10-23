@@ -55,6 +55,7 @@ const HomeCategoryView = (props) => {
             onPress={() =>
               props.navigation.navigate("ProductListScreen", {
                 title: item.name,
+                item: item,
               })
             }
           >
