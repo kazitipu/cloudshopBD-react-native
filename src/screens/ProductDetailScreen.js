@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   View,
   TouchableOpacity,
@@ -19,6 +19,7 @@ import {
   SimilarProduct,
   SizeContainerComponent,
   RatingComponent,
+  CartView,
 } from "@component";
 import {
   widthPercentageToDP as wp,
@@ -39,30 +40,25 @@ import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 import ImageViewer from "react-native-image-zoom-viewer";
 import Stars from "react-native-stars";
 import { getSingleProductRedux } from "../redux/Action";
-
+import BottomSheet from "../component/CartComponent/BottomSheet";
+import GradientButton from "../component/CartComponent/Button";
 const COLORS = ["#3ad35c", Colors.themeColor, "#efcd19", "#ff1e1a"];
 
 function ProductDetailScreen(props) {
   const { width } = useWindowDimensions();
+
   const [state, setState] = React.useState({
     loading: true,
     productCount: 1,
-
     fetchCart: false,
     selectedColor: 1,
     showZoom: false,
     zoomImages: [],
     msg: "",
   });
-  const {
-    loading,
-
-    selectedColor,
-    productCount,
-    zoomImages,
-    showZoom,
-    msg,
-  } = state;
+  const sheetRef = useRef(null);
+  const { loading, selectedColor, productCount, zoomImages, showZoom, msg } =
+    state;
 
   const _CartData = () => {
     // setState({ ...state, fetchCart: false })
@@ -114,125 +110,56 @@ function ProductDetailScreen(props) {
   }
 
   return (
-    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+    <OtrixContainer customStyles={{ backgroundColor: "white" }}>
       {loading ? (
         <OtrixLoader />
       ) : product ? (
         <>
           {/* Product Detail View */}
-          {product.pictures.length > 0 && (
-            <View style={styles.container}>
-              <SliderBox
-                images={images}
-                onCurrentImagePressed={(index) =>
-                  setState({ ...state, showZoom: true })
-                }
-                dotColor={Colors.themeColor}
-                inactiveDotColor="#90A4AE"
-                sliderBoxHeight={hp("45%")}
-                paginationBoxVerticalPadding={20}
-                autoplay={true}
-                ImageComponentStyle={{
-                  borderRadius: 15,
-                  width: "80%",
-                  marginTop: 5,
-                }}
-                circleLoop={true}
-                resizeMode={"cover"}
-                dotStyle={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: 15,
-                  marginHorizontal: 0,
-                  padding: 0,
-                  margin: 0,
-                }}
-              />
-            </View>
-          )}
 
           {/* Header */}
           <View
             style={{
               flexDirection: "row",
               position: "absolute",
-              marginTop: hp("1.2%"),
+              backgroundColor: "white",
               zIndex: 9999999,
+              paddingBottom: 10,
             }}
           >
             <TouchableOpacity
               style={[
                 GlobalStyles.headerLeft,
-                { zIndex: 999999999, flex: 0.9, alignItems: "flex-start" },
+                { zIndex: 999999999, flex: 0.7, alignItems: "flex-start" },
               ]}
               onPress={() => props.navigation.goBack()}
             >
               <OtirxBackButton />
             </TouchableOpacity>
-            <TouchableOpacity
+            <View
               style={[
                 GlobalStyles.headerRight,
                 {
                   zIndex: 999999999,
-                  flex: 0.1,
+                  flex: 0.3,
                   backgroundColor: "transparent",
-                  alignItems: "center",
-                  alignSelf: "flex-end",
+                  alignItems: "flex-end",
                 },
               ]}
-              onPress={() => props.navigation.navigate("CartScreen")}
             >
-              <Image source={bottomCart} style={styles.menuImage} />
-              {cartCount > 0 && (
-                <Badge
-                  style={[
-                    GlobalStyles.badge,
-                    {
-                      left: wp("4.4%"),
-                      top: -hp("1.4%"),
-                      height: cartCount > 9 ? 28 : 24,
-                      width: cartCount > 9 ? 28 : 24,
-                      backgroundColor: Colors.white,
-                    },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      GlobalStyles.badgeText,
-                      {
-                        color: Colors.themeColor,
-                        fontSize: cartCount > 9 ? wp("2.5%") : wp("3%"),
-                      },
-                    ]}
-                  >
-                    {cartCount}
-                  </Text>
-                </Badge>
-              )}
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              position: "absolute",
-              marginTop: hp("34%"),
-              marginLeft: wp("75%"),
-              zIndex: 9999999,
-            }}
-          >
-            <View style={styles.heartIconView}>
               {product.isFav ? (
                 <TouchableOpacity
-                  style={[styles.FavCircle, { left: wp("12%"), top: 0 }]}
+                  style={[styles.FavCircle, { left: wp("8%"), top: 0 }]}
                 >
                   <FontAwesomeIcon
                     name="heart"
-                    style={GlobalStyles.FavIcon}
+                    style={{ ...GlobalStyles.FavIcon, fontSize: wp("3.8%") }}
                     color={Colors.white}
                   />
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  style={[styles.unFavCircle, { left: wp("12%"), top: 0 }]}
+                  style={[styles.unFavCircle, { left: wp("8%"), top: 0 }]}
                 >
                   <FontAwesomeIcon
                     name="heart-o"
@@ -241,16 +168,86 @@ function ProductDetailScreen(props) {
                   />
                 </TouchableOpacity>
               )}
+
+              <TouchableOpacity
+                style={{ alignSelf: "flex-end" }}
+                onPress={() => props.navigation.navigate("HomeCartScreen")}
+              >
+                <Image source={bottomCart} style={styles.menuImage} />
+                {cartCount > 0 && (
+                  <Badge
+                    style={[
+                      GlobalStyles.badge,
+                      {
+                        left: wp("4.4%"),
+                        top: -hp("1.4%"),
+                        height: cartCount > 9 ? 28 : 24,
+                        width: cartCount > 9 ? 28 : 24,
+                        backgroundColor: Colors.white,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        GlobalStyles.badgeText,
+                        {
+                          color: Colors.themeColor,
+                          fontSize: cartCount > 9 ? wp("2.5%") : wp("3%"),
+                        },
+                      ]}
+                    >
+                      {cartCount}
+                    </Text>
+                  </Badge>
+                )}
+              </TouchableOpacity>
             </View>
           </View>
+          <View
+            style={{
+              position: "absolute",
+              marginTop: hp("3%"),
+              marginLeft: wp("75%"),
+              zIndex: 9999999,
+            }}
+          ></View>
           {/* Content Start from here */}
-          <OtrixContent customStyles={styles.productDetailView}>
-            <OtrixDivider size={"md"} />
-            <ScrollView
-              style={styles.childView}
-              showsVerticalScrollIndicator={false}
-            >
-              <View style={styles.subContainer}>
+
+          <OtrixDivider size={"md"} />
+          <ScrollView
+            style={styles.childView}
+            showsVerticalScrollIndicator={false}
+          >
+            {product.pictures.length > 0 && (
+              <View style={{ paddingTop: 10, marginTop: 10 }}>
+                <SliderBox
+                  images={images}
+                  onCurrentImagePressed={(index) =>
+                    setState({ ...state, showZoom: true })
+                  }
+                  dotColor={Colors.themeColor}
+                  inactiveDotColor="#90A4AE"
+                  sliderBoxHeight={hp("45%")}
+                  paginationBoxVerticalPadding={20}
+                  autoplay={true}
+                  ImageComponentStyle={{
+                    width: "100%",
+                  }}
+                  circleLoop={true}
+                  resizeMode={"cover"}
+                  dotStyle={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: 15,
+                    marginHorizontal: 0,
+                    padding: 0,
+                    margin: 0,
+                  }}
+                />
+              </View>
+            )}
+            <OtrixContent customStyles={styles.productDetailView}>
+              <View style={{ ...styles.subContainer, marginTop: 10 }}>
                 <Text style={styles.headingTxt}>{product.name}</Text>
                 <Text
                   style={[
@@ -332,87 +329,110 @@ function ProductDetailScreen(props) {
               <OtrixDivider size={"md"} />
               <View
                 style={{
+                  borderWidth: 1,
+                  borderColor: "#ff8084",
+                  borderRadius: 5,
+                  borderStyle: "dashed",
+                  padding: 10,
+                  paddingVertical: 13,
+                  backgroundColor: "#fffbfc",
                   display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
+                  flexDirection: "column",
                 }}
               >
-                <Text>
-                  {" "}
-                  <FontAwesomeIcon
-                    name={"clock-o"}
-                    size={wp("3.5%")}
-                    style={[styles.myStarStyle2]}
-                  />
-                </Text>
-                <Text
+                <View
                   style={{
-                    color: "#292929",
-                    marginLeft: 5,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
                   }}
                 >
-                  Order in The Next{" "}
-                  <Text
-                    style={{
-                      textDecorationLine: "underline",
-                      color: "#ff8084",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    06 hours 09 minutes
-                  </Text>{" "}
-                  to get it{" "}
-                  <Text
-                    style={{
-                      fontWeight: "bold",
-                    }}
-                  >
-                    October 23, 2023
+                  <Text>
+                    {" "}
+                    <FontAwesomeIcon
+                      name={"clock-o"}
+                      style={[styles.myStarStyle2]}
+                    />
                   </Text>
-                  .
-                </Text>
-              </View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                }}
-              >
-                <Text>
-                  {" "}
-                  <FontAwesomeIcon
-                    name={"truck"}
-                    size={wp("3.5%")}
-                    style={[styles.myStarStyle2]}
-                  />
-                </Text>
-                <Text style={{ color: "#292929", marginLeft: 5 }}>
-                  Spend{" "}
+                  <View style={{ maxWidth: "95%", width: "95%" }}>
+                    <Text
+                      style={{
+                        color: "#292929",
+                        marginLeft: 5,
+                        fontSize: wp("3.2%"),
+                      }}
+                    >
+                      Order in The Next{" "}
+                      <Text
+                        style={{
+                          textDecorationLine: "underline",
+                          color: "#ff8084",
+                          fontWeight: "bold",
+                          fontSize: wp("3.2%"),
+                        }}
+                      >
+                        06 hours 09 minutes
+                      </Text>{" "}
+                      to get it by{" "}
+                      <Text
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: wp("3.2%"),
+                        }}
+                      >
+                        October 23, 2023
+                      </Text>
+                      .
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    marginTop: 5,
+                  }}
+                >
+                  <Text>
+                    {" "}
+                    <FontAwesomeIcon
+                      name={"truck"}
+                      style={[styles.myStarStyle2]}
+                    />
+                  </Text>
                   <Text
                     style={{
-                      color: "#ff8084",
-                      fontWeight: "bold",
-                      textDecorationLine: "underline",
+                      color: "#292929",
+                      marginLeft: 5,
+                      fontSize: wp("3.2%"),
                     }}
                   >
-                    ৳ 915.00{" "}
+                    Spend{" "}
+                    <Text
+                      style={{
+                        color: "#ff8084",
+                        fontWeight: "bold",
+                        textDecorationLine: "underline",
+                        fontSize: wp("3.2%"),
+                      }}
+                    >
+                      ৳ 915.00{" "}
+                    </Text>
+                    to get Free Shipping.
                   </Text>
-                  to get Free Shipping.
-                </Text>
+                </View>
               </View>
-
               {/* Color */}
               <OtrixDivider size={"md"} />
-
+              <View style={GlobalStyles.horizontalLine}></View>
               {product.savedAttributes.length > 0 &&
                 product.savedAttributes.map((attribute) => (
                   <>
-                    <View style={GlobalStyles.horizontalLine}></View>
-                    <OtrixDivider size={"md"} />
+                    <OtrixDivider size={"sm"} />
                     <View>
                       <Text
-                        style={[styles.headingTxt, { fontSize: wp("3.8%") }]}
+                        style={[styles.headingTxt, { fontSize: wp("3.4%") }]}
                       >
                         {attribute.name}
                       </Text>
@@ -424,7 +444,6 @@ function ProductDetailScreen(props) {
                           flexWrap: "wrap",
                           width: "100%",
                           alignItems: "flex-start",
-                          marginTop: 5,
                         }}
                       >
                         {attribute.selectedTerms.map((term) => (
@@ -438,14 +457,21 @@ function ProductDetailScreen(props) {
                               marginLeft: 0,
                             }}
                           >
-                            <Text>{term.name}</Text>
+                            <Text style={{ color: "gray", fontSize: wp("3%") }}>
+                              {term.name}
+                            </Text>
                           </View>
                         ))}
                       </View>
                     </View>
-                    <OtrixDivider size={"md"} />
                   </>
                 ))}
+              {product.savedAttributes.length > 0 && (
+                <>
+                  <OtrixDivider size={"md"} />
+                  <View style={GlobalStyles.horizontalLine}></View>
+                </>
+              )}
 
               {/* <View style={styles.colorView}> */}
               {/* Color */}
@@ -505,8 +531,8 @@ function ProductDetailScreen(props) {
                 navigation={props.navigation}
                 item={product.selectedCategories[0]}
               />
-            </ScrollView>
-          </OtrixContent>
+            </OtrixContent>
+          </ScrollView>
 
           {/* Zoom image */}
           <Modal visible={showZoom} transparent={true}>
@@ -533,53 +559,24 @@ function ProductDetailScreen(props) {
           </Modal>
 
           {/* Bottom View */}
-          <View style={styles.footerView}>
-            <Button
-              size="md"
-              variant="solid"
-              bg={Colors.themeColor}
-              style={[
-                GlobalStyles.button,
-                { flex: 0.7, marginHorizontal: wp("2%") },
-              ]}
-              onPress={() =>
-                product.stockStatus == "In stock"
-                  ? _addToCart()
-                  : showOutofStock()
-              }
-            >
-              <Text style={GlobalStyles.buttonText}>Add to cart</Text>
-            </Button>
-            <View style={styles.countBox}>
-              <Text style={styles.countTxt}>{productCount}</Text>
-              <View style={styles.arrowContainer}>
-                <TouchableOpacity
-                  style={{ flex: 0.5 }}
-                  onPress={() =>
-                    setState({ ...state, productCount: productCount + 1 })
-                  }
-                >
-                  <MaterialIconsIcon
-                    name="keyboard-arrow-up"
-                    style={styles.plusminusArrow}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{ flex: 0.5 }}
-                  onPress={() =>
-                    setState({
-                      ...state,
-                      productCount: productCount > 1 ? productCount - 1 : 1,
-                    })
-                  }
-                >
-                  <MaterialIconsIcon
-                    name="keyboard-arrow-down"
-                    style={styles.plusminusArrow}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
+
+          <View
+            style={{
+              position: "absolute",
+              bottom: -10,
+              padding: 10,
+              backgroundColor: "white",
+              display: "flex",
+              flexDirection: "row",
+              minWidth: "100%",
+            }}
+          >
+            <GradientButton
+              label={"ADD TO CART"}
+              onPress={() => {
+                sheetRef.current.open();
+              }}
+            />
           </View>
         </>
       ) : null}
@@ -595,6 +592,53 @@ function ProductDetailScreen(props) {
           {msg}
         </Text>
       )}
+
+      <BottomSheet sheetRef={sheetRef} buttonText="Confirm" height={hp("80%")}>
+        <View style={styles.sheet}>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginTop: 10,
+              paddingBottom: 15,
+            }}
+          >
+            <Text weight="medium" style={styles.select}>
+              YOUR SHOPPING CART
+            </Text>
+            <TouchableOpacity
+              style={[
+                GlobalStyles.headerLeft,
+                { zIndex: 999999999, flex: 0.9, alignItems: "flex-end" },
+              ]}
+              onPress={() => sheetRef.current.close()}
+            >
+              <MaterialIconsIcon name="close" style={styles.close} />
+            </TouchableOpacity>
+          </View>
+          <ScrollView style={{ marginBottom: 35 }}>
+            <CartView
+              navigation={props.navigation}
+              products={ProductListDummy}
+              bottomSheet={true}
+            />
+          </ScrollView>
+        </View>
+        <View
+          style={{
+            position: "absolute",
+            bottom: 20,
+            padding: 10,
+            backgroundColor: "white",
+            display: "flex",
+            flexDirection: "row",
+            minWidth: "100%",
+          }}
+        >
+          <GradientButton label={"VIEW CART"} />
+        </View>
+      </BottomSheet>
     </OtrixContainer>
   );
 }
@@ -613,21 +657,36 @@ export default connect(mapStateToProps, { addToCart, getSingleProductRedux })(
 const styles = StyleSheet.create({
   productDetailView: {
     backgroundColor: Colors.white,
-    marginHorizontal: 0,
+    marginHorizontal: wp("5%"),
+  },
+  sheet: {
+    padding: 10,
+    marginBottom: hp("10%"),
+  },
+  select: {
+    fontSize: wp("3.8%"),
+    color: "#ec345b",
+    fontWeight: "bold",
+  },
+  close: {
+    fontSize: wp("6%"),
+    color: "#ec345b",
+    fontWeight: "bold",
+    marginRight: 5,
+    marginTop: -4,
   },
   container: {
     height: hp("40%"),
-    position: "relative",
+
     backgroundColor: Colors.light_white,
     zIndex: 99,
   },
   childView: {
-    marginHorizontal: wp("5%"),
     paddingBottom: hp("1.8%"),
   },
   menuImage: {
-    width: wp("6%"),
-    height: hp("6%"),
+    width: wp("7%"),
+    height: hp("7%"),
     resizeMode: "contain",
     tintColor: Colors.themeColor,
   },
@@ -685,6 +744,7 @@ const styles = StyleSheet.create({
     fontSize: wp("4.5%"),
     fontFamily: Fonts.Font_Bold,
     textAlignVertical: "center",
+    color: "#4d5156",
     flex: 0.8,
   },
   subContainer: {
@@ -807,10 +867,14 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
     color: Colors.text_color,
     fontFamily: Fonts.Font_Semibold,
+    alignSelf: "center",
   },
   arrowContainer: {
     flex: 0.4,
     flexDirection: "column",
+    borderLeftColor: "gainsboro",
+    borderLeftWidth: 1,
+    paddingLeft: 5,
   },
   plusminusArrow: {
     fontSize: wp("5.2%"),

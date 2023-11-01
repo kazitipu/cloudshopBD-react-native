@@ -266,8 +266,10 @@ export const GlobalStyles = StyleSheet.create({
     backgroundColor: Colors.white,
     fontSize: Platform.isPad === true ? wp("3.5%") : wp("3.2%"),
     color: Colors.secondry_text_color,
-    padding: 5,
-    //  borderColor: Colors.light_gray
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "gainsboro",
+    borderRadius: 5,
   },
   textAreaInputStyle: {
     height: wp("20%"),

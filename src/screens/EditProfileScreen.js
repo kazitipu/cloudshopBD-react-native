@@ -1,120 +1,141 @@
 import React, { useEffect } from "react";
+import { View, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { requestInit } from "@actions";
 import {
-    View,
-    StyleSheet,
-    TouchableOpacity
-} from "react-native";
-import { requestInit } from '@actions';
+  OtrixContainer,
+  OtrixHeader,
+  OtrixContent,
+  OtirxBackButton,
+  OtrixDivider,
+} from "@component";
+import { Input, Text, FormControl, Button, InfoOutlineIcon } from "native-base";
+import { connect } from "react-redux";
 import {
-    OtrixContainer, OtrixHeader, OtrixContent, OtirxBackButton, OtrixDivider
-} from '@component';
-import { Input, Text, FormControl, Button, InfoOutlineIcon } from "native-base"
-import { connect } from 'react-redux';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { GlobalStyles, Colors } from '@helpers'
-import Icon from 'react-native-vector-icons/Ionicons';
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import { GlobalStyles, Colors } from "@helpers";
+import Icon from "react-native-vector-icons/Ionicons";
 import Fonts from "../helpers/Fonts";
 
 function EditProfileScreen(props) {
-    const [state, setData] = React.useState({ first_name: 'Otrixweb', last_name: "User", email: "otrixweb@mail.com", phone: "9898989898", submited: false });
+  const [state, setData] = React.useState({
+    first_name: "Tipu",
+    last_name: "User",
+    email: "otrixweb@mail.com",
+    phone: "9898989898",
+    submited: false,
+  });
 
-    const { first_name, last_name, email, phone, submited } = state;
-    return (
-        <OtrixContainer>
+  const { first_name, last_name, email, phone, submited } = state;
+  return (
+    <OtrixContainer>
+      {/* Header */}
+      <OtrixHeader
+        customStyles={{
+          backgroundColor: Colors.light_white,
+          height: Platform.OS === "ios" ? wp("13%") : wp("10%"),
+        }}
+      >
+        <TouchableOpacity
+          style={{ ...GlobalStyles.headerLeft }}
+          onPress={() => props.navigation.goBack()}
+        >
+          <OtirxBackButton />
+        </TouchableOpacity>
+        <View style={[GlobalStyles.headerCenter, { flex: 1 }]}>
+          <Text style={{ ...GlobalStyles.headingTxt, fontSize: wp("4.5%") }}>
+            {" "}
+            Edit Profile
+          </Text>
+        </View>
+      </OtrixHeader>
+      <OtrixDivider size={"md"} />
+      {/* Content Start from here */}
+      <OtrixContent>
+        {/* Profile  Start from here */}
+        <FormControl
+          isRequired
+          isInvalid={submited && first_name == "" ? true : false}
+        >
+          <TextInput
+            variant="outline"
+            value={first_name}
+            placeholder="First Name"
+            style={GlobalStyles.textInputStyle}
+            onChangeText={(value) => setData({ ...state, first_name: value })}
+          />
+          <FormControl.ErrorMessage leftIcon={<InfoOutlineIcon size="xs" />}>
+            First Name is required
+          </FormControl.ErrorMessage>
+        </FormControl>
 
-            {/* Header */}
-            <OtrixHeader customStyles={{ backgroundColor: Colors.light_white }}>
-                <TouchableOpacity style={GlobalStyles.headerLeft} onPress={() => props.navigation.goBack()}>
-                    <OtirxBackButton />
-                </TouchableOpacity>
-                <View style={[GlobalStyles.headerCenter, { flex: 1 }]}>
-                    <Text style={GlobalStyles.headingTxt}>  Edit Profile</Text>
-                </View>
-            </OtrixHeader>
-            <OtrixDivider size={'md'} />
-            {/* Content Start from here */}
-            <OtrixContent>
+        <OtrixDivider size={"md"} />
+        <FormControl>
+          <TextInput
+            variant="outline"
+            value={last_name}
+            placeholder="Last Name"
+            style={GlobalStyles.textInputStyle}
+            onChangeText={(value) => setData({ ...state, last_name: value })}
+          />
+        </FormControl>
+        <OtrixDivider size={"md"} />
 
-                {/* Profile  Start from here */}
-                <FormControl isRequired isInvalid={submited && first_name == '' ? true : false}>
-                    <Input variant="outline"
-                        value={first_name}
-                        placeholder="First Name" style={GlobalStyles.textInputStyle}
-                        onChangeText={(value) => setData({ ...state, first_name: value })}
-                    />
-                    <FormControl.ErrorMessage
-                        leftIcon={<InfoOutlineIcon size="xs" />}
-                    >
-                        First Name is required
-                    </FormControl.ErrorMessage>
-                </FormControl>
+        <FormControl
+          isRequired
+          isInvalid={submited && email == "" ? true : false}
+        >
+          <TextInput
+            variant="outline"
+            value={email}
+            keyboardType="email-address"
+            placeholder="Email Address"
+            style={GlobalStyles.textInputStyle}
+            onChangeText={(value) => setData({ ...state, email: value })}
+          />
+          <FormControl.ErrorMessage leftIcon={<InfoOutlineIcon size="xs" />}>
+            Email is required
+          </FormControl.ErrorMessage>
+        </FormControl>
+        <OtrixDivider size={"md"} />
 
-                <OtrixDivider size={'md'} />
-                <FormControl >
-                    <Input variant="outline"
-                        value={last_name}
-                        placeholder="Last Name" style={GlobalStyles.textInputStyle}
-                        onChangeText={(value) => setData({ ...state, last_name: value })}
-                    />
-                </FormControl>
-                <OtrixDivider size={'md'} />
-
-                <FormControl isRequired isInvalid={submited && email == '' ? true : false}>
-                    <Input variant="outline"
-                        value={email}
-                        keyboardType="email-address"
-                        placeholder="Email Address" style={GlobalStyles.textInputStyle}
-                        onChangeText={(value) => setData({ ...state, email: value })}
-                    />
-                    <FormControl.ErrorMessage
-                        leftIcon={<InfoOutlineIcon size="xs" />}
-                    >
-                        Email is required
-                    </FormControl.ErrorMessage>
-                </FormControl>
-                <OtrixDivider size={'md'} />
-
-                <FormControl isRequired isInvalid={submited && phone == '' ? true : false}>
-                    <Input variant="outline"
-                        value={phone}
-                        keyboardType="number-pad"
-                        placeholder="Mobile Number" style={GlobalStyles.textInputStyle}
-                        onChangeText={(value) => setData({ ...state, phone: value })}
-                    />
-                    <FormControl.ErrorMessage
-                        leftIcon={<InfoOutlineIcon size="xs" />}
-                    >
-                        Mobile Number is required
-                    </FormControl.ErrorMessage>
-                </FormControl>
-                <OtrixDivider size={'md'} />
-                <Button
-                    size="md"
-                    variant="solid"
-                    bg={Colors.themeColor}
-                    style={GlobalStyles.button}
-                    onPress={() => props.navigation.navigate('MainScreen')}
-                >
-                    <Text style={GlobalStyles.buttonText}>Update</Text>
-                </Button>
-                <OtrixDivider size={'md'} />
-
-
-
-            </OtrixContent>
-
-        </OtrixContainer >
-    )
-
+        <FormControl
+          isRequired
+          isInvalid={submited && phone == "" ? true : false}
+        >
+          <TextInput
+            variant="outline"
+            value={phone}
+            keyboardType="number-pad"
+            placeholder="Mobile Number"
+            style={{ ...GlobalStyles.textInputStyle, ...styles.textInput }}
+            onChangeText={(value) => setData({ ...state, phone: value })}
+          />
+          <FormControl.ErrorMessage leftIcon={<InfoOutlineIcon size="xs" />}>
+            Mobile Number is required
+          </FormControl.ErrorMessage>
+        </FormControl>
+        <OtrixDivider size={"md"} />
+        <Button
+          size="md"
+          variant="solid"
+          bg={Colors.themeColor}
+          style={GlobalStyles.button}
+          onPress={() => props.navigation.navigate("MainScreen")}
+        >
+          <Text style={GlobalStyles.buttonText}>Update</Text>
+        </Button>
+        <OtrixDivider size={"md"} />
+      </OtrixContent>
+    </OtrixContainer>
+  );
 }
 
 function mapStateToProps({ params }) {
-    return {}
+  return {};
 }
 
 export default connect(mapStateToProps, { requestInit })(EditProfileScreen);
 
-const styles = StyleSheet.create({
-
-
-});
+const styles = StyleSheet.create({});

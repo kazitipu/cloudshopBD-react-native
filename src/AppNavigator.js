@@ -16,6 +16,7 @@ import {
   ForgotPasswordScreen,
   CategoryScreen,
   CartScreen,
+  HomeCartScreen,
   ProfileScreen,
   ProductListScreen,
   ProductDetailScreen,
@@ -23,6 +24,7 @@ import {
   EditProfileScreen,
   ChangePasswordScreen,
   ManageAddressScreen,
+  AddAddressScreen,
   WishlistScreen,
   OrderScreen,
   OrderDetailScreen,
@@ -262,11 +264,22 @@ function AppNavigator(props) {
         <Stack.Screen
           name="LoginScreen"
           component={AuthNavigator}
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="ProductListScreen"
           component={ProductListScreen}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
+        />
+        <Stack.Screen
+          name="HomeCartScreen"
+          component={HomeCartScreen}
           options={{
             headerShown: false,
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -307,6 +320,14 @@ function AppNavigator(props) {
         <Stack.Screen
           name="ManageAddressScreen"
           component={ManageAddressScreen}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
+        />
+        <Stack.Screen
+          name="AddAddressScreen"
+          component={AddAddressScreen}
           options={{
             headerShown: false,
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

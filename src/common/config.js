@@ -28,6 +28,7 @@ export const bottomSettingFill = require("../assets/images/bottomtab/Bottom_Sett
 export const google = require("../assets/images/google.png");
 export const facebook = require("../assets/images/facebook.jpg");
 export const twitter = require("../assets/images/twitter.jpg");
+export const apple = require("../assets/images/apple.png");
 
 //home slider
 export const homeSlider1 = require("../assets/images/homeslider/1.jpg");

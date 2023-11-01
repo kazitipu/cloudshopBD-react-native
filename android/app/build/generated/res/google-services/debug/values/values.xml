@@ -3,7 +3,7 @@
     <string name="default_web_client_id" translatable="false">65158771737-t16114kjqgie041v951j37jifan4345i.apps.googleusercontent.com</string>
     <string name="gcm_defaultSenderId" translatable="false">65158771737</string>
     <string name="google_api_key" translatable="false">AIzaSyDKmntbEvrLXnolrNqJ9AHkXf-azkB8wmc</string>
-    <string name="google_app_id" translatable="false">1:65158771737:android:6c51ec6985d0fb1e066688</string>
+    <string name="google_app_id" translatable="false">1:65158771737:android:08440dd4bd943f9c066688</string>
     <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDKmntbEvrLXnolrNqJ9AHkXf-azkB8wmc</string>
     <string name="google_storage_bucket" translatable="false">cloudshopbd-1aaae.appspot.com</string>
     <string name="project_id" translatable="false">cloudshopbd-1aaae</string>

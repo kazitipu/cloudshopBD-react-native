@@ -20,7 +20,10 @@
 #import "RNRotationHandler.h"
 #import "RNTapHandler.h"
 #import "RNGestureHandler.h"
+#import "RNGestureHandlerActionType.h"
 #import "RNGestureHandlerButton.h"
+#import "RNGestureHandlerButtonComponentView.h"
+#import "RNGestureHandlerButtonManager.h"
 #import "RNGestureHandlerDirection.h"
 #import "RNGestureHandlerEvents.h"
 #import "RNGestureHandlerManager.h"
@@ -29,9 +32,9 @@
 #import "RNGestureHandlerRegistry.h"
 #import "RNGestureHandlerState.h"
 #import "RNGestureHandlerStateManager.h"
+#import "RNGHTouchEventType.h"
 #import "RNManualActivationRecognizer.h"
 #import "RNRootViewGestureRecognizer.h"
-#import "RNTouchEventType.h"
 
 FOUNDATION_EXPORT double RNGestureHandlerVersionNumber;
 FOUNDATION_EXPORT const unsigned char RNGestureHandlerVersionString[];

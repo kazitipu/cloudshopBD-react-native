@@ -22,7 +22,6 @@
 #include <string>
 #include <vector>
 
-#include "Firestore/core/src/api/api_fwd.h"
 #include "Firestore/core/src/core/core_fwd.h"
 #include "Firestore/core/src/credentials/auth_token.h"
 #include "Firestore/core/src/credentials/credentials_fwd.h"
@@ -45,7 +44,6 @@ namespace firestore {
 
 namespace model {
 class Document;
-class AggregateField;
 };  // namespace model
 
 namespace remote {
@@ -106,11 +104,7 @@ class Datastore : public std::enable_shared_from_this<Datastore> {
   void CommitMutations(const std::vector<model::Mutation>& mutations,
                        CommitCallback&& callback);
   void LookupDocuments(const std::vector<model::DocumentKey>& keys,
-                       LookupCallback&& user_callback);
-
-  void RunAggregateQuery(const core::Query& query,
-                         const std::vector<model::AggregateField>& aggregates,
-                         api::AggregateQueryCallback&& result_callback);
+                       LookupCallback&& callback);
 
   /** Returns true if the given error is a gRPC ABORTED error. */
   static bool IsAbortedError(const util::Status& error);
@@ -140,10 +134,6 @@ class Datastore : public std::enable_shared_from_this<Datastore> {
 
   static std::string GetAllowlistedHeadersAsString(
       const GrpcCall::Metadata& headers);
-
-  const core::DatabaseInfo& database_info() const {
-    return database_info_;
-  }
 
   Datastore(const Datastore& other) = delete;
   Datastore(Datastore&& other) = delete;
@@ -186,14 +176,10 @@ class Datastore : public std::enable_shared_from_this<Datastore> {
       const credentials::AuthToken& auth_token,
       const std::string& app_check_token,
       const std::vector<model::DocumentKey>& keys,
-      LookupCallback&& user_callback);
-
-  void RunAggregateQueryWithCredentials(
-      const credentials::AuthToken& auth_token,
-      const std::string& app_check_token,
-      const core::Query& query,
-      const std::vector<model::AggregateField>& aggregates,
-      api::AggregateQueryCallback&& callback);
+      LookupCallback&& callback);
+  void OnLookupDocumentsResponse(
+      const util::StatusOr<std::vector<grpc::ByteBuffer>>& result,
+      const LookupCallback& callback);
 
   using OnCredentials = std::function<void(
       const util::StatusOr<credentials::AuthToken>&, const std::string&)>;
@@ -217,7 +203,6 @@ class Datastore : public std::enable_shared_from_this<Datastore> {
   std::unique_ptr<util::Executor> rpc_executor_;
   grpc::CompletionQueue grpc_queue_;
   ConnectivityMonitor* connectivity_monitor_ = nullptr;
-  core::DatabaseInfo database_info_;
   GrpcConnection grpc_connection_;
 
   std::vector<std::unique_ptr<GrpcCall>> active_calls_;

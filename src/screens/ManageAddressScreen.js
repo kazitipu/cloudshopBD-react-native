@@ -1,204 +1,524 @@
 import React, { useEffect } from "react";
 import {
-    View,
-    TouchableOpacity,
-    Text,
-    StyleSheet, ScrollView,
-    Modal
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Modal,
+  Image,
 } from "react-native";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import {
-    OtrixContainer, OtrixHeader, OtrixDivider, OtirxBackButton, AddAdressComponent, EditAddressComponent
-} from '@component';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { GlobalStyles, Colors } from '@helpers';
-import { _roundDimensions } from '@helpers/util';
-import { proceedCheckout } from '@actions';
-import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+  OtrixContainer,
+  OtrixHeader,
+  OtrixDivider,
+  OtirxBackButton,
+  AddAdressComponent,
+  EditAddressComponent,
+} from "@component";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import { GlobalStyles, Colors } from "@helpers";
+import { _roundDimensions } from "@helpers/util";
+import { proceedCheckout } from "@actions";
+import MatIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import Entypo from "react-native-vector-icons/Entypo";
+import Ionicon from "react-native-vector-icons/Ionicons";
 import Fonts from "@helpers/Fonts";
-import DummyAddress from '@component/items/DummyAddress';
-import { Button } from 'native-base';
-
+import DummyAddress from "@component/items/DummyAddress";
+import { Button } from "native-base";
+import Delivery from "./delivery.png";
+import CashOnDelivery from "./cashonDelivery.png";
+import { fontWeight } from "styled-system";
 function ManageAddressScreen(props) {
-    const [state, setState] = React.useState({ cartArr: [], showAdd: false, sumAmount: 0, addresses: DummyAddress, selctedAddress: DummyAddress[0].id, showEdit: false, editAddressData: [], step: 1, selectedPaymentMethod: 4, paymentSuccessModal: false });
+  const [state, setState] = React.useState({
+    cartArr: [],
+    showAdd: false,
+    sumAmount: 0,
+    addresses: DummyAddress,
+    selctedAddress: DummyAddress[0].id,
+    showEdit: false,
+    editAddressData: [],
+    step: 1,
+    selectedPaymentMethod: 4,
+    paymentSuccessModal: false,
+  });
 
-    const storeAddress = (addressData) => {
-        let newID = "" + Math.floor(Math.random() * 10000) + 1;
-        let newObj = { id: "" + newID, name: addressData.name, country: addressData.country, city: addressData.city, postcode: addressData.postcode, address1: addressData.address1, address2: addressData.address2 };
-        setState({
-            ...state, addresses: [newObj, ...addresses], showAdd: false
-        });
+  const storeAddress = (addressData) => {
+    let newID = "" + Math.floor(Math.random() * 10000) + 1;
+    let newObj = {
+      id: "" + newID,
+      name: addressData.name,
+      country: addressData.country,
+      city: addressData.city,
+      postcode: addressData.postcode,
+      address1: addressData.address1,
+      address2: addressData.address2,
+    };
+    setState({
+      ...state,
+      addresses: [newObj, ...addresses],
+      showAdd: false,
+    });
+  };
+
+  const updateAddress = (addressData) => {
+    let newID = "" + Math.floor(Math.random() * 10000) + 1;
+    if (selctedAddress == addressData.id) {
+      setState({ ...state, selctedAddress: newID });
     }
+    let findIndex = addresses.findIndex(
+      (item) => item.id === editAddressData.id
+    );
+    let newObj = {
+      id: newID,
+      name: addressData.name,
+      country: addressData.country,
+      city: addressData.city,
+      postcode: addressData.postcode,
+      address1: addressData.address1,
+      address2: addressData.address2,
+    };
+    addresses.splice(findIndex, 1);
 
-    const updateAddress = (addressData) => {
-        let newID = "" + Math.floor(Math.random() * 10000) + 1;
-        if (selctedAddress == addressData.id) {
-            setState({ ...state, selctedAddress: newID });
-        }
-        let findIndex = addresses.findIndex((item) => item.id === editAddressData.id);
-        let newObj = { id: newID, name: addressData.name, country: addressData.country, city: addressData.city, postcode: addressData.postcode, address1: addressData.address1, address2: addressData.address2 };
-        addresses.splice(findIndex, 1);
-
-        setState({
-            ...state, addresses: [newObj, ...addresses], showEdit: false
-        });
-        if (selctedAddress == addressData.id) {
-            setState({ ...state, selctedAddress: newID });
-        }
+    setState({
+      ...state,
+      addresses: [newObj, ...addresses],
+      showEdit: false,
+    });
+    if (selctedAddress == addressData.id) {
+      setState({ ...state, selctedAddress: newID });
     }
+  };
 
-    const editAddress = (id) => {
-        let findAddress = addresses.filter(item => item.id.indexOf(id) > -1);
-        setState({ ...state, editAddressData: findAddress[0], showEdit: true });
-    }
+  const editAddress = (id) => {
+    let findAddress = addresses.filter((item) => item.id.indexOf(id) > -1);
+    setState({ ...state, editAddressData: findAddress[0], showEdit: true });
+  };
 
-    const closeAddressModel = () => {
-        setState({
-            ...state,
-            showAdd: false
-        });
-    }
+  const closeAddressModel = () => {
+    setState({
+      ...state,
+      showAdd: false,
+    });
+  };
 
-    const closeAddressEditModel = () => {
-        setState({
-            ...state,
-            showEdit: false
-        });
-    }
+  const closeAddressEditModel = () => {
+    setState({
+      ...state,
+      showEdit: false,
+    });
+  };
 
-    useEffect(() => {
+  useEffect(() => {}, []);
 
-    }, []);
+  const {
+    showAdd,
+    addresses,
+    selctedAddress,
+    showEdit,
+    editAddressData,
+    step,
+  } = state;
 
-    const { showAdd, addresses, selctedAddress, showEdit, editAddressData, step } = state;
+  return (
+    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+      {/* Header */}
+      <OtrixHeader
+        customStyles={{
+          backgroundColor: Colors.light_white,
+          height: Platform.OS === "ios" ? wp("13%") : wp("10%"),
+        }}
+      >
+        <TouchableOpacity
+          style={{ ...GlobalStyles.headerLeft }}
+          onPress={() => props.navigation.goBack()}
+        >
+          <OtirxBackButton />
+        </TouchableOpacity>
+        <View style={[GlobalStyles.headerCenter, { flex: 1 }]}>
+          <Text style={{ ...GlobalStyles.headingTxt, fontSize: wp("4.5%") }}>
+            {" "}
+            Manage Address
+          </Text>
+        </View>
+      </OtrixHeader>
 
-    return (
-        <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+      {/* Address Content start from here */}
 
-            {/* Header */}
-            <OtrixHeader customStyles={{ backgroundColor: Colors.light_white }}>
-                <TouchableOpacity style={GlobalStyles.headerLeft} onPress={() => props.navigation.goBack()}>
-                    <OtirxBackButton />
-                </TouchableOpacity>
-                <View style={[GlobalStyles.headerCenter, { flex: 1 }]}>
-                    <Text style={GlobalStyles.headingTxt}>  Manage Address</Text>
-                </View>
-            </OtrixHeader>
-
-            {/* Address Content start from here */}
-            {step == 1 && <>
-                <OtrixDivider size={"md"} />
-                <Text style={styles.deliveryTitle}>Your Address</Text>
-                <OtrixDivider size={"sm"} />
-                <View style={styles.addressContent}>
-                    {/*horizontal address* */}
-                    <ScrollView style={styles.addressBox} showsHorizontalScrollIndicator={false} vertical={true}>
-                        {
-                            addresses.length > 0 && addresses.map((item, index) =>
-                                <TouchableOpacity key={index} style={[styles.deliveryBox, {
-                                    borderWidth: 1,
-                                    borderColor: Colors.light_gray
-                                }]}
-                                    onPress={() => setState({ ...state, selctedAddress: item.id })}
-                                >
-                                    <Text style={styles.addressTxt} numberOfLines={1}>{item.name}     </Text>
-                                    <Text style={styles.addressTxt} numberOfLines={2}>{item.address1}    </Text>
-                                    <Text style={styles.addressTxt} numberOfLines={2}>{item.address2}, {item.city}</Text>
-                                    <Text style={styles.addressTxt} numberOfLines={1}>{item.postcode}, {item.country}</Text>
-                                    <TouchableOpacity style={[styles.editView, { bottom: selctedAddress == item.id ? hp('10%') : hp('10%') }]} onPress={() => editAddress(item.id)}>
-                                        <Text style={styles.edit}> <MatIcon name="pencil" color={Colors.text_color} size={wp('5%')} /></Text>
-                                    </TouchableOpacity>
-                                </TouchableOpacity>
-                            )
-                        }
-
-                    </ScrollView>
-
-                </View>
-                <Button
-                    size="md"
-                    variant="solid"
-                    bg={Colors.themeColor}
-                    style={[GlobalStyles.button, { marginHorizontal: wp('5%'), marginBottom: hp('1%') }]}
-                    onPress={() => setState({ ...state, showAdd: true })}
+      <>
+        <View style={styles.addressContent}>
+          {/*horizontal address* */}
+          <ScrollView
+            style={styles.addressBox}
+            showsHorizontalScrollIndicator={false}
+            vertical={true}
+          >
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  props.navigation.navigate("AddAddressScreen");
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: "#ffedf1",
+                    padding: 13,
+                    borderRadius: 5,
+                    borderStyle: "dotted",
+                    borderWidth: 1,
+                    borderColor: "#ff8084",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
                 >
-                    <Text style={GlobalStyles.buttonText}>  <MatIcon name="plus" color={Colors.white} size={wp('4%')} /> Add</Text>
-                </Button>
+                  <MatIcon name="plus" color={"#ec345b"} size={wp("5.5%")} />
+                  <Text style={{ color: "#ec345b", marginTop: 3 }}>
+                    {" "}
+                    Add New Address
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                marginTop: 10,
+                marginBottom: 10,
+                height: 1,
+                widht: "100%",
+                backgroundColor: "gainsboro",
+              }}
+            ></View>
+            <View style={styles.box}>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  flex: 1,
+                  marginTop: 15,
+                  paddingBottom: 20,
+                }}
+              >
+                <View
+                  style={{
+                    flex: 0.2,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Entypo
+                    name={"location"}
+                    color={"#ec345b"}
+                    style={{ fontSize: wp("6.5%") }}
+                  />
+                  <View
+                    style={{
+                      backgroundColor: "green",
+                      padding: 5,
+                      paddingTop: 2,
+                      paddingBottom: 2,
+                      alignSelf: "center",
+                      marginTop: 7,
+                      fontSize: wp("3%"),
+                      borderRadius: 3,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: wp("2.8%"),
+                        color: "white",
+                      }}
+                    >
+                      Home
+                    </Text>
+                  </View>
+                </View>
+                <View style={{ flex: 0.6 }}>
+                  <Text style={styles.text}>Kazi Tipu</Text>
+                  <Text style={styles.text}>+8801641103558</Text>
+                  <Text style={styles.text}>
+                    431/12,Bakshibagh,Malibagh,Dhaka City,Dhaka
+                  </Text>
+                </View>
 
-            </>
-            }
+                <View style={{ flex: 0.2, paddingRight: 15 }}>
+                  <View
+                    style={{
+                      padding: 5,
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      backgroundColor: "#fff0f4",
+                      borderRadius: 7,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#ff8084",
+                        textAlign: "center",
+                        fontSize: wp("3%"),
+                      }}
+                    >
+                      Edit
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={styles.box}>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  flex: 1,
+                  marginTop: 15,
+                  paddingBottom: 20,
+                }}
+              >
+                <View
+                  style={{
+                    flex: 0.2,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Entypo
+                    name={"location"}
+                    color={"#ec345b"}
+                    style={{ fontSize: wp("6.5%") }}
+                  />
+                  <View
+                    style={{
+                      backgroundColor: "blue",
+                      padding: 5,
+                      paddingTop: 2,
+                      paddingBottom: 2,
+                      alignSelf: "center",
+                      marginTop: 7,
+                      fontSize: wp("3%"),
+                      borderRadius: 3,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: wp("2.8%"),
+                        color: "white",
+                      }}
+                    >
+                      Office
+                    </Text>
+                  </View>
+                </View>
+                <View style={{ flex: 0.6 }}>
+                  <Text style={styles.text}>Kazi Tipu</Text>
+                  <Text style={styles.text}>+8801641103558</Text>
+                  <Text style={styles.text}>
+                    431/12,Bakshibagh,Malibagh,Dhaka City,Dhaka
+                  </Text>
+                </View>
 
-            {/* Add Address Screen */}
-            <Modal visible={showAdd}
-                transparent={true}>
-                <AddAdressComponent closeAdd={closeAddressModel} addAdress={storeAddress} />
-            </Modal>
+                <View style={{ flex: 0.2, paddingRight: 15 }}>
+                  <View
+                    style={{
+                      padding: 5,
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      backgroundColor: "#fff0f4",
+                      borderRadius: 7,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#ff8084",
+                        textAlign: "center",
+                        fontSize: wp("3%"),
+                      }}
+                    >
+                      Edit
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={styles.box}>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  flex: 1,
+                  marginTop: 15,
+                  paddingBottom: 20,
+                }}
+              >
+                <View
+                  style={{
+                    flex: 0.2,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Entypo
+                    name={"location"}
+                    color={"#ec345b"}
+                    style={{ fontSize: wp("6.5%") }}
+                  />
+                  <View
+                    style={{
+                      backgroundColor: "darkorange",
+                      padding: 5,
+                      paddingTop: 2,
+                      paddingBottom: 2,
+                      alignSelf: "center",
+                      marginTop: 7,
+                      fontSize: wp("3%"),
+                      borderRadius: 3,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: wp("2.8%"),
+                        color: "white",
+                      }}
+                    >
+                      Village
+                    </Text>
+                  </View>
+                </View>
+                <View style={{ flex: 0.6 }}>
+                  <Text style={styles.text}>Kazi Tipu</Text>
+                  <Text style={styles.text}>+8801641103558</Text>
+                  <Text style={styles.text}>
+                    431/12,Bakshibagh,Malibagh,Dhaka City,Dhaka
+                  </Text>
+                  <View
+                    style={{
+                      marginTop: 7,
+                      backgroundColor: "#0092ac",
+                      alignSelf: "flex-start",
+                      padding: 5,
+                      paddingTop: 3,
+                      paddingBottom: 3,
+                      borderRadius: 4,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: wp("2.7%"),
+                        fontWeight: "bold",
+                        color: "white",
+                      }}
+                    >
+                      Shipping Address
+                    </Text>
+                  </View>
+                </View>
 
-            {/* Edit Address Screen */}
-            <Modal visible={showEdit}
-                transparent={true}>
-                <EditAddressComponent closeEdit={closeAddressEditModel} editAddress={updateAddress} editData={editAddressData} />
-            </Modal>
+                <View style={{ flex: 0.2, paddingRight: 15 }}>
+                  <View
+                    style={{
+                      padding: 5,
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      backgroundColor: "#fff0f4",
+                      borderRadius: 7,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#ff8084",
+                        textAlign: "center",
+                        fontSize: wp("3%"),
+                      }}
+                    >
+                      Edit
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+      </>
 
-        </OtrixContainer >
-
-    )
+      {/* Add Address Screen */}
+    </OtrixContainer>
+  );
 }
 
 function mapStateToProps(state) {
-    return {
-        cartData: state.cart.cartData,
-
-    }
+  return {
+    cartData: state.cart.cartData,
+  };
 }
 
-
-export default connect(mapStateToProps, { proceedCheckout })(ManageAddressScreen);
+export default connect(mapStateToProps, { proceedCheckout })(
+  ManageAddressScreen
+);
 
 const styles = StyleSheet.create({
-
-    deliveryTitle: {
-        fontFamily: Fonts.Font_Semibold,
-        fontSize: wp('3.8%'),
-        color: Colors.text_color,
-        marginLeft: wp('5%')
-    },
-    addressBox: {
-        marginLeft: wp('5%'),
-        marginRight: wp('2.5%'),
-        flex: 1,
-        height: 'auto',
-        borderRadius: wp('2%'),
-    },
-    deliveryBox: {
-        marginHorizontal: wp('1.5%'),
-        width: wp('88%'),
-        marginVertical: hp('0.5%'),
-        height: hp('13.5%'),
-        borderRadius: wp('2%'),
-        backgroundColor: Colors.white,
-        padding: wp('2.5%')
-    },
-    addressTxt: {
-        fontSize: wp('3.6%'),
-        fontFamily: Fonts.Font_Reguler,
-        color: Colors.text_color,
-        textAlign: 'left',
-
-    },
-    deliveryAddressTxt: {
-        textAlign: 'right',
-        fontSize: wp('3.4%'),
-        fontFamily: Fonts.Font_Reguler,
-        color: Colors.link_color,
-    },
-    edit: {
-        textAlign: 'right'
-    },
-    editView: { justifyContent: 'flex-start', },
-    addressContent: {
-        flexDirection: 'row',
-        height: hp('70%')
-    },
-
+  deliveryTitle: {
+    fontFamily: Fonts.Font_Semibold,
+    fontSize: wp("3.8%"),
+    color: Colors.text_color,
+    marginLeft: wp("5%"),
+  },
+  addressBox: {
+    marginLeft: wp("5%"),
+    marginRight: wp("2.5%"),
+    flex: 1,
+    height: "auto",
+    borderRadius: wp("2%"),
+  },
+  deliveryBox: {
+    marginHorizontal: wp("1.5%"),
+    width: wp("88%"),
+    marginVertical: hp("0.5%"),
+    height: hp("13.5%"),
+    borderRadius: wp("2%"),
+    backgroundColor: Colors.white,
+    padding: wp("2.5%"),
+  },
+  addressTxt: {
+    fontSize: wp("3.6%"),
+    fontFamily: Fonts.Font_Reguler,
+    color: Colors.text_color,
+    textAlign: "left",
+  },
+  deliveryAddressTxt: {
+    textAlign: "right",
+    fontSize: wp("3.4%"),
+    fontFamily: Fonts.Font_Reguler,
+    color: Colors.link_color,
+  },
+  edit: {
+    textAlign: "right",
+  },
+  editView: { justifyContent: "flex-start" },
+  addressContent: {
+    flexDirection: "row",
+    height: hp("70%"),
+  },
+  box: {
+    backgroundColor: Colors.white,
+    shadowColor: "grey",
+    shadowOffset: { width: 0, height: 0.4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 6,
+    borderRadius: wp("3%"),
+    margin: 4,
+  },
+  text: {
+    color: "gray",
+    fontSize: wp("3.3%"),
+  },
 });

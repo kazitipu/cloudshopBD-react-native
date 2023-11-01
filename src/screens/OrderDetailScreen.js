@@ -1,312 +1,279 @@
 import React, { useEffect } from "react";
+import { View, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
+import { connect } from "react-redux";
+import { Input, Button } from "native-base";
 import {
-    View,
-    TouchableOpacity,
-    Text,
-    StyleSheet, ScrollView,
-    Image
-} from "react-native";
-import { connect } from 'react-redux';
+  OtrixContainer,
+  OtrixHeader,
+  OtrixContent,
+  OtrixDivider,
+  OtirxBackButton,
+} from "@component";
+import CartView from "../component/OrderDetailComponent/CartView";
+import OrderTrackingModalResult from "../component/OrderDetailComponent/orderTrackingModalResult";
 import {
-    OtrixContainer, OtrixHeader, OtrixDivider, OtirxBackButton,
-} from '@component';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { GlobalStyles, Colors } from '@helpers';
-import { _roundDimensions } from '@helpers/util';
-import { proceedCheckout } from '@actions';
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import { GlobalStyles, Colors } from "@helpers";
+import { _roundDimensions } from "@helpers/util";
+import { removeFromCart, decrementQuantity, incrementQuantity } from "@actions";
+import ProductListDummy from "@component/items/ProductListDummy";
+import Icon from "react-native-vector-icons/Ionicons";
 import Fonts from "@helpers/Fonts";
+import GradientButton from "../component/CartComponent/Button";
+import Entypo from "react-native-vector-icons/Entypo";
+import Ionicon from "react-native-vector-icons/Ionicons";
+import Delivery from "./delivery.png";
+import CashOnDelivery from "./cashonDelivery.png";
+function CheckoutScreen(props) {
+  const [state, setState] = React.useState({
+    loading: true,
+    cartArr: [],
+    cartProducts: [],
+    sumAmount: 0,
+    isApplied: false,
+    validCode: false,
+    couponCode: null,
+    noRecord: false,
+  });
 
-function OrderDetailScreen(props) {
-    const { orderData } = props.route.params;
+  const applyCouponCode = () => {
+    const { couponCode } = state;
+    if (couponCode != null) {
+      if (couponCode == "otrixweb") {
+        setState({ ...state, isApplied: true, validCode: true });
+      } else {
+        setState({ ...state, isApplied: true, validCode: false });
+      }
+    } else {
+      setState({ ...state, isApplied: true, validCode: false });
+    }
+  };
 
-    return (
-        <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+  const onDeleteItem = (id) => {
+    props.removeFromCart(id);
+  };
 
-            {/* Header */}
-            <OtrixHeader customStyles={{ backgroundColor: Colors.light_white }}>
-                <TouchableOpacity style={GlobalStyles.headerLeft} onPress={() => props.navigation.goBack()}>
-                    <OtirxBackButton />
-                </TouchableOpacity>
-                <View style={[GlobalStyles.headerCenter, { flex: 1 }]}>
-                    <Text style={GlobalStyles.headingTxt}> Orders Details </Text>
-                </View>
-            </OtrixHeader>
+  const decrement = (id) => {
+    props.decrementQuantity(id);
+  };
 
-            {/* Orders Content start from here */}
+  const increment = (id) => {
+    props.incrementQuantity(id);
+  };
 
-            <View style={styles.addressContent}>
-                <ScrollView style={styles.addressBox} showsHorizontalScrollIndicator={false} vertical={true}>
+  const calculateCart = () => {
+    let cartProducts = props.cartData;
+    let cartItems = ProductListDummy;
+    let sumAmount = 2000;
 
-                    <OtrixDivider size={"md"} />
-                    <Text style={styles.deliveryTitle}>View Orders Details</Text>
-                    <OtrixDivider size={"sm"} />
-                    <View style={styles.cartContent} >
-                        <View style={styles.detailBox} >
-                            <View style={styles.detailRow}>
-                                <View style={styles.leftView}>
-                                    <Text style={styles.leftTxt}>Order Date</Text>
-                                </View>
-                                <View style={styles.rightView}>
-                                    <Text style={styles.rightTxt}>{orderData.orderDate}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.detailRow}>
-                                <View style={styles.leftView}>
-                                    <Text style={styles.leftTxt}>Order</Text>
-                                </View>
-                                <View style={styles.rightView}>
-                                    <Text style={styles.rightTxt}>#{orderData.orderid}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.detailRow}>
-                                <View style={styles.leftView}>
-                                    <Text style={[styles.leftTxt]}>Order Total</Text>
-                                </View>
-                                <View style={styles.rightView}>
-                                    <Text style={styles.rightTxt}>{orderData.price}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
+    setState({
+      ...state,
+      noRecord: cartItems.length > 0 ? false : true,
+      loading: false,
+      cartProducts: cartItems,
+      sumAmount: sumAmount,
+    });
+  };
 
-                    <OtrixDivider size={"md"} />
-                    <Text style={styles.deliveryTitle}>Product Details</Text>
-                    <OtrixDivider size={"sm"} />
+  useEffect(() => {
+    calculateCart();
+  }, []);
 
-                    <View style={styles.cartContent} >
-                        <View style={styles.cartBox} >
-                            <View style={styles.imageView}>
-                                <Image source={orderData.image} style={styles.image}
-                                ></Image>
-                            </View>
-                            <View style={styles.infromationView}>
-                                <View >
-                                    <Text style={styles.name}>{orderData.name}</Text>
-                                </View>
-                                <Text style={styles.orderDate}>Quantity: {orderData.orderQty}</Text>
-                                <Text style={styles.orderDate}>Order Status: <Text style={styles.orderStatuss}>{orderData.orderStatus}</Text></Text>
-                            </View>
-                        </View>
-                        <View style={styles.priceView}>
-                            <Text style={styles.price}>{orderData.price}</Text>
-                        </View>
-                    </View>
+  const {
+    cartProducts,
+    sumAmount,
+    couponCode,
+    loading,
+    isApplied,
+    validCode,
+    noRecord,
+  } = state;
+  return (
+    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+      {/* Header */}
+      <OtrixHeader
+        customStyles={{
+          backgroundColor: Colors.light_white,
+          height: Platform.OS === "ios" ? wp("13%") : wp("10%"),
+        }}
+      >
+        <TouchableOpacity
+          style={{ ...GlobalStyles.headerLeft }}
+          onPress={() => props.navigation.goBack()}
+        >
+          <OtirxBackButton />
+        </TouchableOpacity>
+        <View style={[GlobalStyles.headerCenter, { flex: 1 }]}>
+          <Text style={{ ...GlobalStyles.headingTxt, fontSize: wp("4.5%") }}>
+            {" "}
+            Order Details
+          </Text>
+        </View>
+      </OtrixHeader>
 
-                    <OtrixDivider size={"md"} />
-                    <Text style={styles.deliveryTitle}>Shipping Address</Text>
-                    <OtrixDivider size={"sm"} />
-                    <View style={styles.cartContent} >
-                        <TouchableOpacity style={[styles.deliveryBox]}    >
-                            <Text style={styles.addressTxt} numberOfLines={1}>{orderData.deliveryAddress.name}     </Text>
-                            <Text style={styles.addressTxt} numberOfLines={2}>{orderData.deliveryAddress.address1}    </Text>
-                            <Text style={styles.addressTxt} numberOfLines={2}>{orderData.deliveryAddress.address2}, {orderData.deliveryAddress.city}</Text>
-                            <Text style={styles.addressTxt} numberOfLines={1}>{orderData.deliveryAddress.postcode}, {orderData.deliveryAddress.country}</Text>
-                        </TouchableOpacity>
-                    </View>
-
-
-                    <OtrixDivider size={"md"} />
-                    <Text style={styles.deliveryTitle}>Orders Summary</Text>
-                    <OtrixDivider size={"sm"} />
-                    <View style={styles.cartContent} >
-                        <View style={[styles.detailBox, { height: hp('16%') }]} >
-                            <View style={styles.detailRow}>
-                                <View style={styles.leftView}>
-                                    <Text style={styles.leftTxt}>Items</Text>
-                                </View>
-                                <View style={styles.rightView}>
-                                    <Text style={styles.rightTxt}>{orderData.price}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.detailRow}>
-                                <View style={styles.leftView}>
-                                    <Text style={styles.leftTxt}>Tax</Text>
-                                </View>
-                                <View style={styles.rightView}>
-                                    <Text style={styles.rightTxt}>{orderData.tax}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.detailRow}>
-                                <View style={styles.leftView}>
-                                    <Text style={styles.leftTxt}>Discount</Text>
-                                </View>
-                                <View style={styles.rightView}>
-                                    <Text style={styles.rightTxt}>{orderData.discount}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.detailRow}>
-                                <View style={styles.leftView}>
-                                    <Text style={[styles.leftTxt, { color: Colors.link_color, fontSize: wp('4.5%') }]}>Order Total</Text>
-                                </View>
-                                <View style={styles.rightView}>
-                                    <Text style={[styles.rightTxt, , { color: Colors.link_color, fontSize: wp('4.5%') }]}>{orderData.grand_total}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-
-                </ScrollView>
+      {/* Content Start from here */}
+      <OtrixContent
+        customStyles={{
+          marginHorizontal: wp("2%"),
+        }}
+      >
+        <View style={{ ...styles.box, marginBottom: 10 }}>
+          <OrderTrackingModalResult />
+        </View>
+        {/* Cart Component Start from here */}
+        <View style={styles.box}>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              backgroundColor: "#ffe6ec",
+              padding: 10,
+              paddingTop: 5,
+              paddingBottom: 5,
+            }}
+          >
+            <Entypo
+              name={"location"}
+              color={"#ec345b"}
+              style={{ fontSize: wp("4.5%") }}
+            />
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: "#ec345b",
+                fontSize: wp("3.3%"),
+              }}
+            >
+              {"   "}
+              Delivery Address
+            </Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              flex: 1,
+              marginTop: 10,
+              paddingBottom: 10,
+            }}
+          >
+            <View style={{ flex: 0.2 }}>
+              <Image
+                source={Delivery}
+                style={{ height: 40, width: "100%" }}
+                resizeMode="contain"
+              />
             </View>
-
-
-
-        </OtrixContainer >
-
-    )
+            <View style={{ flex: 0.6 }}>
+              <Text style={styles.text}>Kazi Tipu</Text>
+              <Text style={styles.text}>+8801641103558</Text>
+              <Text style={styles.text}>
+                431/12,Bakshibagh,Malibagh,Dhaka City,Dhaka
+              </Text>
+              <Text style={styles.text}>kazi.tipu.nxt@gmail.com</Text>
+            </View>
+          </View>
+        </View>
+        <CartView
+          navigation={props.navigation}
+          products={cartProducts}
+          deleteItem={onDeleteItem}
+          decrementItem={decrement}
+          incrementItem={increment}
+        />
+      </OtrixContent>
+    </OtrixContainer>
+  );
 }
 
 function mapStateToProps(state) {
-    return {
-        cartData: state.cart.cartData,
-
-    }
+  return {
+    cartData: state.cart.cartData,
+  };
 }
 
-
-export default connect(mapStateToProps, { proceedCheckout })(OrderDetailScreen);
+export default connect(mapStateToProps, {
+  removeFromCart,
+  decrementQuantity,
+  incrementQuantity,
+})(CheckoutScreen);
 
 const styles = StyleSheet.create({
-
-    deliveryTitle: {
-        fontFamily: Fonts.Font_Semibold,
-        fontSize: wp('3.8%'),
-        color: Colors.text_color,
-        marginLeft: wp('2%')
-    },
-    addressBox: {
-        marginLeft: wp('5%'),
-        marginRight: wp('2.5%'),
-        flex: 1,
-        height: 'auto',
-        borderRadius: wp('2%'),
-    },
-    deliveryBox: {
-        marginHorizontal: wp('1.5%'),
-        width: wp('88%'),
-        marginVertical: hp('0.5%'),
-        height: hp('14.5%'),
-        borderRadius: wp('2%'),
-        backgroundColor: Colors.white,
-        padding: wp('2.5%')
-    },
-    addressTxt: {
-        fontSize: wp('3.6%'),
-        fontFamily: Fonts.Font_Reguler,
-        color: Colors.text_color,
-        textAlign: 'left',
-
-    },
-    deliveryAddressTxt: {
-        textAlign: 'right',
-        fontSize: wp('3.4%'),
-        fontFamily: Fonts.Font_Reguler,
-        color: Colors.link_color,
-    },
-    edit: {
-        textAlign: 'right'
-    },
-    editView: { justifyContent: 'flex-start', },
-    addressContent: {
-        flexDirection: 'row',
-    },
-
-    cartContent: {
-        flex: 1,
-        flexDirection: 'row',
-        backgroundColor: Colors.white,
-        justifyContent: 'center',
-        borderRadius: wp('2%'),
-        marginLeft: wp('1%'),
-    },
-    cartBox: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: hp('11%'),
-        width: wp('90%'),
-        flex: 0.85,
-    },
-    detailBox: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: hp('11%'),
-        flex: 1,
-    },
-    imageView: {
-        flex: 0.30,
-        backgroundColor: Colors.light_white,
-        margin: wp('1%'),
-        height: hp('8%'),
-        borderRadius: wp('1.5%')
-    },
-    image: {
-        resizeMode: 'contain',
-        alignSelf: 'center',
-        height: undefined,
-        aspectRatio: 1,
-        width: wp('15.5%')
-    },
-    infromationView: {
-        flex: 0.70,
-        marginBottom: hp('1.4%'),
-        marginLeft: wp('1%'),
-        marginTop: hp('1%'),
-        justifyContent: 'center',
-        alignItems: 'flex-start'
-    },
-    name: {
-        textAlign: 'center',
-        color: Colors.text_color,
-        fontSize: wp('3.8%'),
-        fontFamily: Fonts.Font_Bold,
-    },
-    orderDate: {
-        textAlign: 'center',
-        color: Colors.secondry_text_color,
-        lineHeight: hp('3%'),
-        fontSize: wp('3.5%'),
-        fontFamily: Fonts.Font_Regular,
-    },
-    orderStatuss: {
-        fontFamily: Fonts.Font_Bold,
-        fontSize: wp('3.5%'),
-        color: Colors.text_color
-    },
-    priceView: {
-        flex: 0.15,
-        marginTop: hp('1%'),
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        marginRight: wp('2%')
-    },
-    price: {
-        color: Colors.link_color,
-        fontSize: wp('4%'),
-        fontFamily: Fonts.Font_Semibold
-    },
-    leftView: {
-        flex: 0.30,
-        marginLeft: wp('3%'),
-        justifyContent: 'center',
-        alignItems: 'flex-start'
-    },
-    rightView: {
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        flex: 0.70
-    },
-    leftTxt: {
-        fontFamily: Fonts.Font_Semibold,
-        fontSize: wp('3.5%'),
-        color: Colors.secondry_text_color
-    },
-    rightTxt: {
-        fontFamily: Fonts.Font_Semibold,
-        fontSize: wp('4%'),
-        color: Colors.text_color
-    },
-    detailRow: {
-        flexDirection: 'row',
-        marginVertical: hp('0.4%')
-    }
+  checkoutView: {
+    backgroundColor: Colors.light_white,
+    height: hp("5%"),
+    shadowColor: "grey",
+    shadowOffset: { width: 0, height: 0.4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 6,
+    borderTopLeftRadius: wp("2%"),
+    borderTopRightRadius: wp("2%"),
+  },
+  text: {
+    color: "#777",
+    fontSize: wp("3.3%"),
+  },
+  couponInput: {
+    marginHorizontal: wp("5%"),
+    marginVertical: hp("1.5%"),
+  },
+  inputStyle: {
+    borderColor: Colors.black,
+    backgroundColor: Colors.light_white,
+  },
+  applyTxt: {
+    color: Colors.link_color,
+    fontFamily: Fonts.Font_Semibold,
+    fontSize: wp("4%"),
+  },
+  applyView: {
+    marginHorizontal: wp("2%"),
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 5,
+  },
+  totalView: {
+    flex: 1,
+    flexDirection: "row",
+    marginHorizontal: wp("6%"),
+  },
+  leftTxt: {
+    color: Colors.secondry_text_color,
+    fontFamily: Fonts.Font_Bold,
+    flex: 0.5,
+    fontSize: wp("3.8%"),
+    textAlign: "left",
+  },
+  rightTxt: {
+    color: Colors.text_color,
+    fontFamily: Fonts.Font_Bold,
+    fontSize: wp("4.5%"),
+    flex: 0.5,
+    textAlign: "right",
+  },
+  noRecord: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+    marginTop: hp("25%"),
+  },
+  emptyTxt: {
+    fontSize: wp("6%"),
+    marginVertical: hp("1.5%"),
+    fontFamily: Fonts.Font_Semibold,
+    color: Colors.secondry_text_color,
+  },
+  box: {
+    backgroundColor: Colors.white,
+    shadowColor: "grey",
+    shadowOffset: { width: 0, height: 0.4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 6,
+    borderRadius: wp("3%"),
+    margin: 4,
+  },
 });

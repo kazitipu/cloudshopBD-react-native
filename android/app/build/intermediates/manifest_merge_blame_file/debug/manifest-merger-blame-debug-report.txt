@@ -6,7 +6,7 @@
 6
 7    <uses-sdk
 8        android:minSdkVersion="21"
-9        android:targetSdkVersion="30" />
+9        android:targetSdkVersion="33" />
 10
 11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 11-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/debug/AndroidManifest.xml:5:5-77
@@ -15,33 +15,33 @@
 12-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:4:5-67
 12-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:4:22-64
 13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-13-->[com.facebook.flipper:flipper:0.99.0] /Users/kazitipu/.gradle/caches/transforms-3/6da3d76e50520dbd1ee0a0b5139f9de9/transformed/jetified-flipper-0.99.0/AndroidManifest.xml:16:5-76
-13-->[com.facebook.flipper:flipper:0.99.0] /Users/kazitipu/.gradle/caches/transforms-3/6da3d76e50520dbd1ee0a0b5139f9de9/transformed/jetified-flipper-0.99.0/AndroidManifest.xml:16:22-73
+13-->[com.facebook.flipper:flipper:0.99.0] /Users/kazitipu/.gradle/caches/transforms-3/1bbed222024c35da0cae5792852a820d/transformed/jetified-flipper-0.99.0/AndroidManifest.xml:16:5-76
+13-->[com.facebook.flipper:flipper:0.99.0] /Users/kazitipu/.gradle/caches/transforms-3/1bbed222024c35da0cae5792852a820d/transformed/jetified-flipper-0.99.0/AndroidManifest.xml:16:22-73
 14    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 14-->[:react-native-community_netinfo] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-79
 14-->[:react-native-community_netinfo] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-76
 15    <uses-permission android:name="android.permission.WAKE_LOCK" />
-15-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/7d0fa69fddcaea6d605f15799944fcb4/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:24:5-68
-15-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/7d0fa69fddcaea6d605f15799944fcb4/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:24:22-65
+15-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/8c154b9a4511ab8b6d36a5eb8862c8cf/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:24:5-68
+15-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/8c154b9a4511ab8b6d36a5eb8862c8cf/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:24:22-65
 16    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
-16-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/7d0fa69fddcaea6d605f15799944fcb4/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:25:5-79
-16-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/7d0fa69fddcaea6d605f15799944fcb4/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:25:22-76
+16-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/8c154b9a4511ab8b6d36a5eb8862c8cf/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:25:5-79
+16-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/8c154b9a4511ab8b6d36a5eb8862c8cf/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:25:22-76
 17    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" /> <!-- Permission will be merged into the manifest of the hosting app. -->
-17-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:26:5-110
-17-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:26:22-107
+17-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:26:5-110
+17-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:26:22-107
 18    <!-- Is required to launch foreground extraction service for targetSdkVersion 28+. -->
 19    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-19-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:8:3-74
-19-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:8:20-72
+19-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:8:3-74
+19-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:8:20-72
 20
 21    <application
-21-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:6:5-24:19
+21-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:6:5-25:19
 22        android:name="com.cloudshopbd.MainApplication"
 22-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:7:7-38
 23        android:allowBackup="false"
 23-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:11:7-34
 24        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-24-->[androidx.core:core:1.6.0] /Users/kazitipu/.gradle/caches/transforms-3/3018c23e9bf63d14093901a6961e6612/transformed/core-1.6.0/AndroidManifest.xml:24:18-86
+24-->[androidx.core:core:1.6.0] /Users/kazitipu/.gradle/caches/transforms-3/c9e4d8d89d8ad699c7137d5c477646a7/transformed/core-1.6.0/AndroidManifest.xml:24:18-86
 25        android:debuggable="true"
 26        android:icon="@mipmap/ic_launcher"
 26-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:9:7-41
@@ -57,243 +57,239 @@
 31-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/debug/AndroidManifest.xml:11:9-86
 31-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/debug/AndroidManifest.xml:11:19-83
 32        <activity
-32-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:13:7-23:18
+32-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:13:7-24:18
 33            android:name="com.cloudshopbd.MainActivity"
 33-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:14:9-37
 34            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
 34-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:16:9-86
-35            android:label="@string/app_name"
-35-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:15:9-41
-36            android:launchMode="singleTask"
-36-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:17:9-40
-37            android:windowSoftInputMode="adjustResize" >
-37-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:18:9-51
-38            <intent-filter>
-38-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:19:9-22:25
-39                <action android:name="android.intent.action.MAIN" />
-39-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:20:13-65
-39-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:20:21-62
-40
-41                <category android:name="android.intent.category.LAUNCHER" />
-41-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:21:13-73
-41-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:21:23-70
-42            </intent-filter>
-43        </activity>
-44
-45        <meta-data
-45-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:9-13:36
-46            android:name="app_data_collection_default_enabled"
-46-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-63
-47            android:value="true" />
-47-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-33
-48
-49        <service
-49-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:9-23:19
-50            android:name="com.google.firebase.components.ComponentDiscoveryService"
-50-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-84
-51            android:directBootAware="true"
-51-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:13-43
-52            android:exported="false" >
-52-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:18:13-37
-53            <meta-data
-53-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:20:13-22:85
-54                android:name="com.google.firebase.components:io.invertase.firebase.app.ReactNativeFirebaseAppRegistrar"
-54-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:21:17-120
-55                android:value="com.google.firebase.components.ComponentRegistrar" />
-55-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-82
-56            <meta-data
-56-->[com.google.firebase:firebase-analytics-ktx:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/505bc7f6d04d02af24a7fe37bd3e22b0/transformed/jetified-firebase-analytics-ktx-21.3.0/AndroidManifest.xml:11:13-13:85
-57                android:name="com.google.firebase.components:com.google.firebase.analytics.ktx.FirebaseAnalyticsKtxRegistrar"
-57-->[com.google.firebase:firebase-analytics-ktx:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/505bc7f6d04d02af24a7fe37bd3e22b0/transformed/jetified-firebase-analytics-ktx-21.3.0/AndroidManifest.xml:12:17-126
-58                android:value="com.google.firebase.components.ComponentRegistrar" />
-58-->[com.google.firebase:firebase-analytics-ktx:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/505bc7f6d04d02af24a7fe37bd3e22b0/transformed/jetified-firebase-analytics-ktx-21.3.0/AndroidManifest.xml:13:17-82
-59            <meta-data
-59-->[com.google.firebase:firebase-common-ktx:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/a8fc8e2a76b0b2ae9ecd9c654fd77c67/transformed/jetified-firebase-common-ktx-20.3.3/AndroidManifest.xml:14:13-16:85
-60                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonKtxRegistrar"
-60-->[com.google.firebase:firebase-common-ktx:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/a8fc8e2a76b0b2ae9ecd9c654fd77c67/transformed/jetified-firebase-common-ktx-20.3.3/AndroidManifest.xml:15:17-113
-61                android:value="com.google.firebase.components.ComponentRegistrar" />
-61-->[com.google.firebase:firebase-common-ktx:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/a8fc8e2a76b0b2ae9ecd9c654fd77c67/transformed/jetified-firebase-common-ktx-20.3.3/AndroidManifest.xml:16:17-82
-62            <meta-data
-62-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/7d0fa69fddcaea6d605f15799944fcb4/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:31:13-33:85
-63                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
-63-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/7d0fa69fddcaea6d605f15799944fcb4/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:32:17-139
-64                android:value="com.google.firebase.components.ComponentRegistrar" />
-64-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/7d0fa69fddcaea6d605f15799944fcb4/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:33:17-82
-65            <meta-data
-65-->[com.google.firebase:firebase-installations:17.1.4] /Users/kazitipu/.gradle/caches/transforms-3/f266f9a2e65896d5e1af520bee557ffb/transformed/jetified-firebase-installations-17.1.4/AndroidManifest.xml:15:13-17:85
-66                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
-66-->[com.google.firebase:firebase-installations:17.1.4] /Users/kazitipu/.gradle/caches/transforms-3/f266f9a2e65896d5e1af520bee557ffb/transformed/jetified-firebase-installations-17.1.4/AndroidManifest.xml:16:17-127
-67                android:value="com.google.firebase.components.ComponentRegistrar" />
-67-->[com.google.firebase:firebase-installations:17.1.4] /Users/kazitipu/.gradle/caches/transforms-3/f266f9a2e65896d5e1af520bee557ffb/transformed/jetified-firebase-installations-17.1.4/AndroidManifest.xml:17:17-82
-68        </service>
-69
-70        <provider
-70-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:9-29:38
-71            android:name="io.invertase.firebase.app.ReactNativeFirebaseAppInitProvider"
-71-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:26:13-88
-72            android:authorities="com.cloudshopbd.reactnativefirebaseappinitprovider"
-72-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:27:13-86
-73            android:exported="false"
-73-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:13-37
-74            android:initOrder="99" />
-74-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:29:13-35
-75        <provider
-75-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
-76            android:name="com.imagepicker.ImagePickerProvider"
-76-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-63
-77            android:authorities="com.cloudshopbd.imagepickerprovider"
-77-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-71
-78            android:exported="false"
-78-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
-79            android:grantUriPermissions="true" >
-79-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
-80            <meta-data
-80-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:70
-81                android:name="android.support.FILE_PROVIDER_PATHS"
-81-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
-82                android:resource="@xml/imagepicker_provider_paths" />
-82-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-67
-83        </provider>
-84        <provider
-84-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
-85            android:name="cl.json.RNShareFileProvider"
-85-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-55
-86            android:authorities="com.cloudshopbd.rnshare.fileprovider"
-86-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-72
-87            android:exported="false"
-87-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
-88            android:grantUriPermissions="true" >
-88-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
-89            <meta-data
-89-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:70
-90                android:name="android.support.FILE_PROVIDER_PATHS"
-90-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
-91                android:resource="@xml/share_download_paths" />
-91-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-67
-92        </provider>
-93        <provider
-93-->[com.google.firebase:firebase-common:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/dad3a89d79dad85c339273233d9921ad/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:25:9-30:39
-94            android:name="com.google.firebase.provider.FirebaseInitProvider"
-94-->[com.google.firebase:firebase-common:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/dad3a89d79dad85c339273233d9921ad/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:26:13-77
-95            android:authorities="com.cloudshopbd.firebaseinitprovider"
-95-->[com.google.firebase:firebase-common:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/dad3a89d79dad85c339273233d9921ad/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:27:13-72
-96            android:directBootAware="true"
-96-->[com.google.firebase:firebase-common:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/dad3a89d79dad85c339273233d9921ad/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:28:13-43
-97            android:exported="false"
-97-->[com.google.firebase:firebase-common:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/dad3a89d79dad85c339273233d9921ad/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:29:13-37
-98            android:initOrder="100" />
-98-->[com.google.firebase:firebase-common:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/dad3a89d79dad85c339273233d9921ad/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:30:13-36
-99
-100        <meta-data
-100-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /Users/kazitipu/.gradle/caches/transforms-3/201aafc1f4ac34cf426e9b6b5601d3ea/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:11:9-13:43
-101            android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
-101-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /Users/kazitipu/.gradle/caches/transforms-3/201aafc1f4ac34cf426e9b6b5601d3ea/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:12:13-84
-102            android:value="GlideModule" />
-102-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /Users/kazitipu/.gradle/caches/transforms-3/201aafc1f4ac34cf426e9b6b5601d3ea/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:13:13-40
-103
-104        <activity
-104-->[com.google.android.gms:play-services-auth:20.7.0] /Users/kazitipu/.gradle/caches/transforms-3/79d5306e5224b9b5c62b6e91b2cdc10f/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:23:9-27:75
-105            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
-105-->[com.google.android.gms:play-services-auth:20.7.0] /Users/kazitipu/.gradle/caches/transforms-3/79d5306e5224b9b5c62b6e91b2cdc10f/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:24:13-93
-106            android:excludeFromRecents="true"
-106-->[com.google.android.gms:play-services-auth:20.7.0] /Users/kazitipu/.gradle/caches/transforms-3/79d5306e5224b9b5c62b6e91b2cdc10f/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:25:13-46
-107            android:exported="false"
-107-->[com.google.android.gms:play-services-auth:20.7.0] /Users/kazitipu/.gradle/caches/transforms-3/79d5306e5224b9b5c62b6e91b2cdc10f/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:26:13-37
-108            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-108-->[com.google.android.gms:play-services-auth:20.7.0] /Users/kazitipu/.gradle/caches/transforms-3/79d5306e5224b9b5c62b6e91b2cdc10f/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:27:13-72
-109        <!--
-110            Service handling Google Sign-In user revocation. For apps that do not integrate with
-111            Google Sign-In, this service will never be started.
-112        -->
-113        <service
-113-->[com.google.android.gms:play-services-auth:20.7.0] /Users/kazitipu/.gradle/caches/transforms-3/79d5306e5224b9b5c62b6e91b2cdc10f/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:33:9-37:51
-114            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
-114-->[com.google.android.gms:play-services-auth:20.7.0] /Users/kazitipu/.gradle/caches/transforms-3/79d5306e5224b9b5c62b6e91b2cdc10f/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:34:13-89
-115            android:exported="true"
-115-->[com.google.android.gms:play-services-auth:20.7.0] /Users/kazitipu/.gradle/caches/transforms-3/79d5306e5224b9b5c62b6e91b2cdc10f/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:35:13-36
-116            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
-116-->[com.google.android.gms:play-services-auth:20.7.0] /Users/kazitipu/.gradle/caches/transforms-3/79d5306e5224b9b5c62b6e91b2cdc10f/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:36:13-107
-117            android:visibleToInstantApps="true" />
-117-->[com.google.android.gms:play-services-auth:20.7.0] /Users/kazitipu/.gradle/caches/transforms-3/79d5306e5224b9b5c62b6e91b2cdc10f/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:37:13-48
-118
-119        <activity
-119-->[com.google.android.gms:play-services-base:18.0.1] /Users/kazitipu/.gradle/caches/transforms-3/ec018caa9216a78ee3a36100856b8347/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:9-22:45
-120            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-120-->[com.google.android.gms:play-services-base:18.0.1] /Users/kazitipu/.gradle/caches/transforms-3/ec018caa9216a78ee3a36100856b8347/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:19-85
-121            android:exported="false"
-121-->[com.google.android.gms:play-services-base:18.0.1] /Users/kazitipu/.gradle/caches/transforms-3/ec018caa9216a78ee3a36100856b8347/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:22:19-43
-122            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-122-->[com.google.android.gms:play-services-base:18.0.1] /Users/kazitipu/.gradle/caches/transforms-3/ec018caa9216a78ee3a36100856b8347/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:21:19-78
-123
-124        <receiver
-124-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:29:9-33:20
-125            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
-125-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:30:13-85
-126            android:enabled="true"
-126-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:31:13-35
-127            android:exported="false" >
-127-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:32:13-37
-128        </receiver>
-129
-130        <service
-130-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:35:9-38:40
-131            android:name="com.google.android.gms.measurement.AppMeasurementService"
-131-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:36:13-84
-132            android:enabled="true"
-132-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:37:13-35
-133            android:exported="false" />
-133-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:38:13-37
-134        <service
-134-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:39:9-43:72
-135            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
-135-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:40:13-87
-136            android:enabled="true"
-136-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:41:13-35
-137            android:exported="false"
-137-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:42:13-37
-138            android:permission="android.permission.BIND_JOB_SERVICE" />
-138-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/69b51082e8bb00e6164067f4549340c7/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:43:13-69
-139
-140        <meta-data
-140-->[com.google.android.gms:play-services-basement:18.2.0] /Users/kazitipu/.gradle/caches/transforms-3/c8a7f5018f100fdbccde0a4067885948/transformed/jetified-play-services-basement-18.2.0/AndroidManifest.xml:21:9-23:69
-141            android:name="com.google.android.gms.version"
-141-->[com.google.android.gms:play-services-basement:18.2.0] /Users/kazitipu/.gradle/caches/transforms-3/c8a7f5018f100fdbccde0a4067885948/transformed/jetified-play-services-basement-18.2.0/AndroidManifest.xml:22:13-58
-142            android:value="@integer/google_play_services_version" /> <!-- The activities will be merged into the manifest of the hosting app. -->
-142-->[com.google.android.gms:play-services-basement:18.2.0] /Users/kazitipu/.gradle/caches/transforms-3/c8a7f5018f100fdbccde0a4067885948/transformed/jetified-play-services-basement-18.2.0/AndroidManifest.xml:23:13-66
-143        <activity
-143-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:5-271
-144            android:name="com.google.android.play.core.missingsplits.PlayCoreMissingSplitsActivity"
-144-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:15-102
-145            android:enabled="false"
-145-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:103-126
-146            android:exported="false"
-146-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:127-151
-147            android:launchMode="singleInstance"
-147-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:204-239
-148            android:process=":playcore_missing_splits_activity"
-148-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:152-203
-149            android:stateNotNeeded="true" />
-149-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:240-269
-150        <activity
-150-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:5-226
-151            android:name="com.google.android.play.core.common.PlayCoreDialogWrapperActivity"
-151-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:15-95
-152            android:enabled="false"
-152-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:96-119
-153            android:exported="false"
-153-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:120-144
-154            android:stateNotNeeded="true"
-154-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:145-174
-155            android:theme="@style/Theme.PlayCore.Transparent" /> <!-- The service will be merged into the manifest of the hosting app. -->
-155-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:175-224
-156        <service
-156-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:16:5-145
-157            android:name="com.google.android.play.core.assetpacks.AssetPackExtractionService"
-157-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:16:14-95
-158            android:enabled="false"
-158-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:16:96-119
-159            android:exported="true" />
-159-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/acf5ef12b5cff2fc654d82de2eeaf402/transformed/jetified-core-1.9.0/AndroidManifest.xml:16:120-143
-160    </application>
-161
-162</manifest>
+35            android:exported="true"
+35-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:18:9-32
+36            android:label="@string/app_name"
+36-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:15:9-41
+37            android:launchMode="singleTask"
+37-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:17:9-40
+38            android:windowSoftInputMode="adjustResize" >
+38-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:19:9-51
+39            <intent-filter>
+39-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:20:9-23:25
+40                <action android:name="android.intent.action.MAIN" />
+40-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:21:13-65
+40-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:21:21-62
+41
+42                <category android:name="android.intent.category.LAUNCHER" />
+42-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:22:13-73
+42-->/Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/android/app/src/main/AndroidManifest.xml:22:23-70
+43            </intent-filter>
+44        </activity>
+45
+46        <meta-data
+46-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:9-13:36
+47            android:name="app_data_collection_default_enabled"
+47-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-63
+48            android:value="true" />
+48-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-33
+49
+50        <service
+50-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:9-23:19
+51            android:name="com.google.firebase.components.ComponentDiscoveryService"
+51-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-84
+52            android:directBootAware="true"
+52-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:13-43
+53            android:exported="false" >
+53-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:18:13-37
+54            <meta-data
+54-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:20:13-22:85
+55                android:name="com.google.firebase.components:io.invertase.firebase.app.ReactNativeFirebaseAppRegistrar"
+55-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:21:17-120
+56                android:value="com.google.firebase.components.ComponentRegistrar" />
+56-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-82
+57            <meta-data
+57-->[com.google.firebase:firebase-firestore:24.8.1] /Users/kazitipu/.gradle/caches/transforms-3/4ea3ed00d2ad6724726e679a7b85709e/transformed/jetified-firebase-firestore-24.8.1/AndroidManifest.xml:17:13-19:85
+58                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+58-->[com.google.firebase:firebase-firestore:24.8.1] /Users/kazitipu/.gradle/caches/transforms-3/4ea3ed00d2ad6724726e679a7b85709e/transformed/jetified-firebase-firestore-24.8.1/AndroidManifest.xml:18:17-111
+59                android:value="com.google.firebase.components.ComponentRegistrar" />
+59-->[com.google.firebase:firebase-firestore:24.8.1] /Users/kazitipu/.gradle/caches/transforms-3/4ea3ed00d2ad6724726e679a7b85709e/transformed/jetified-firebase-firestore-24.8.1/AndroidManifest.xml:19:17-82
+60            <meta-data
+60-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/8c154b9a4511ab8b6d36a5eb8862c8cf/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:31:13-33:85
+61                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+61-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/8c154b9a4511ab8b6d36a5eb8862c8cf/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:32:17-139
+62                android:value="com.google.firebase.components.ComponentRegistrar" />
+62-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/8c154b9a4511ab8b6d36a5eb8862c8cf/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:33:17-82
+63            <meta-data
+63-->[com.google.firebase:firebase-installations:17.1.4] /Users/kazitipu/.gradle/caches/transforms-3/d0278cc5af503a3eacee0bf78b6b7fa0/transformed/jetified-firebase-installations-17.1.4/AndroidManifest.xml:15:13-17:85
+64                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+64-->[com.google.firebase:firebase-installations:17.1.4] /Users/kazitipu/.gradle/caches/transforms-3/d0278cc5af503a3eacee0bf78b6b7fa0/transformed/jetified-firebase-installations-17.1.4/AndroidManifest.xml:16:17-127
+65                android:value="com.google.firebase.components.ComponentRegistrar" />
+65-->[com.google.firebase:firebase-installations:17.1.4] /Users/kazitipu/.gradle/caches/transforms-3/d0278cc5af503a3eacee0bf78b6b7fa0/transformed/jetified-firebase-installations-17.1.4/AndroidManifest.xml:17:17-82
+66        </service>
+67
+68        <provider
+68-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:9-29:38
+69            android:name="io.invertase.firebase.app.ReactNativeFirebaseAppInitProvider"
+69-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:26:13-88
+70            android:authorities="com.cloudshopbd.reactnativefirebaseappinitprovider"
+70-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:27:13-86
+71            android:exported="false"
+71-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:13-37
+72            android:initOrder="99" />
+72-->[:react-native-firebase_app] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:29:13-35
+73        <provider
+73-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
+74            android:name="com.imagepicker.ImagePickerProvider"
+74-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-63
+75            android:authorities="com.cloudshopbd.imagepickerprovider"
+75-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-71
+76            android:exported="false"
+76-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
+77            android:grantUriPermissions="true" >
+77-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
+78            <meta-data
+78-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:70
+79                android:name="android.support.FILE_PROVIDER_PATHS"
+79-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+80                android:resource="@xml/imagepicker_provider_paths" />
+80-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-67
+81        </provider>
+82        <provider
+82-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
+83            android:name="cl.json.RNShareFileProvider"
+83-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-55
+84            android:authorities="com.cloudshopbd.rnshare.fileprovider"
+84-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-72
+85            android:exported="false"
+85-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
+86            android:grantUriPermissions="true" >
+86-->[:react-native-share] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-share/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
+87            <meta-data
+87-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:70
+88                android:name="android.support.FILE_PROVIDER_PATHS"
+88-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+89                android:resource="@xml/share_download_paths" />
+89-->[:react-native-image-picker] /Users/kazitipu/projects/cloudShopBD/cloudShopBD-react-native/cloudshopbd/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-67
+90        </provider>
+91        <provider
+91-->[com.google.firebase:firebase-common:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/6c08f0791271d362988a6e346ed0bae8/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:25:9-30:39
+92            android:name="com.google.firebase.provider.FirebaseInitProvider"
+92-->[com.google.firebase:firebase-common:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/6c08f0791271d362988a6e346ed0bae8/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:26:13-77
+93            android:authorities="com.cloudshopbd.firebaseinitprovider"
+93-->[com.google.firebase:firebase-common:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/6c08f0791271d362988a6e346ed0bae8/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:27:13-72
+94            android:directBootAware="true"
+94-->[com.google.firebase:firebase-common:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/6c08f0791271d362988a6e346ed0bae8/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:28:13-43
+95            android:exported="false"
+95-->[com.google.firebase:firebase-common:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/6c08f0791271d362988a6e346ed0bae8/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:29:13-37
+96            android:initOrder="100" />
+96-->[com.google.firebase:firebase-common:20.3.3] /Users/kazitipu/.gradle/caches/transforms-3/6c08f0791271d362988a6e346ed0bae8/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:30:13-36
+97
+98        <meta-data
+98-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /Users/kazitipu/.gradle/caches/transforms-3/c655369df5ffa8dcbffd754650a35ea2/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:11:9-13:43
+99            android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
+99-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /Users/kazitipu/.gradle/caches/transforms-3/c655369df5ffa8dcbffd754650a35ea2/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:12:13-84
+100            android:value="GlideModule" />
+100-->[com.github.bumptech.glide:okhttp3-integration:4.12.0] /Users/kazitipu/.gradle/caches/transforms-3/c655369df5ffa8dcbffd754650a35ea2/transformed/jetified-okhttp3-integration-4.12.0/AndroidManifest.xml:13:13-40
+101
+102        <activity
+102-->[com.google.android.gms:play-services-auth:20.3.0] /Users/kazitipu/.gradle/caches/transforms-3/a8a8dc3eab1f40c508e9e8ce46c6d640/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:23:9-27:75
+103            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+103-->[com.google.android.gms:play-services-auth:20.3.0] /Users/kazitipu/.gradle/caches/transforms-3/a8a8dc3eab1f40c508e9e8ce46c6d640/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:24:13-93
+104            android:excludeFromRecents="true"
+104-->[com.google.android.gms:play-services-auth:20.3.0] /Users/kazitipu/.gradle/caches/transforms-3/a8a8dc3eab1f40c508e9e8ce46c6d640/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:25:13-46
+105            android:exported="false"
+105-->[com.google.android.gms:play-services-auth:20.3.0] /Users/kazitipu/.gradle/caches/transforms-3/a8a8dc3eab1f40c508e9e8ce46c6d640/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:26:13-37
+106            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+106-->[com.google.android.gms:play-services-auth:20.3.0] /Users/kazitipu/.gradle/caches/transforms-3/a8a8dc3eab1f40c508e9e8ce46c6d640/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:27:13-72
+107        <!--
+108            Service handling Google Sign-In user revocation. For apps that do not integrate with
+109            Google Sign-In, this service will never be started.
+110        -->
+111        <service
+111-->[com.google.android.gms:play-services-auth:20.3.0] /Users/kazitipu/.gradle/caches/transforms-3/a8a8dc3eab1f40c508e9e8ce46c6d640/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:33:9-37:51
+112            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+112-->[com.google.android.gms:play-services-auth:20.3.0] /Users/kazitipu/.gradle/caches/transforms-3/a8a8dc3eab1f40c508e9e8ce46c6d640/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:34:13-89
+113            android:exported="true"
+113-->[com.google.android.gms:play-services-auth:20.3.0] /Users/kazitipu/.gradle/caches/transforms-3/a8a8dc3eab1f40c508e9e8ce46c6d640/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:35:13-36
+114            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+114-->[com.google.android.gms:play-services-auth:20.3.0] /Users/kazitipu/.gradle/caches/transforms-3/a8a8dc3eab1f40c508e9e8ce46c6d640/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:36:13-107
+115            android:visibleToInstantApps="true" />
+115-->[com.google.android.gms:play-services-auth:20.3.0] /Users/kazitipu/.gradle/caches/transforms-3/a8a8dc3eab1f40c508e9e8ce46c6d640/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:37:13-48
+116
+117        <activity
+117-->[com.google.android.gms:play-services-base:18.0.1] /Users/kazitipu/.gradle/caches/transforms-3/3dea004597f67de6f47bacd0c097ab68/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:9-22:45
+118            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+118-->[com.google.android.gms:play-services-base:18.0.1] /Users/kazitipu/.gradle/caches/transforms-3/3dea004597f67de6f47bacd0c097ab68/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:19-85
+119            android:exported="false"
+119-->[com.google.android.gms:play-services-base:18.0.1] /Users/kazitipu/.gradle/caches/transforms-3/3dea004597f67de6f47bacd0c097ab68/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:22:19-43
+120            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+120-->[com.google.android.gms:play-services-base:18.0.1] /Users/kazitipu/.gradle/caches/transforms-3/3dea004597f67de6f47bacd0c097ab68/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:21:19-78
+121
+122        <receiver
+122-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:29:9-33:20
+123            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+123-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:30:13-85
+124            android:enabled="true"
+124-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:31:13-35
+125            android:exported="false" >
+125-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:32:13-37
+126        </receiver>
+127
+128        <service
+128-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:35:9-38:40
+129            android:name="com.google.android.gms.measurement.AppMeasurementService"
+129-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:36:13-84
+130            android:enabled="true"
+130-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:37:13-35
+131            android:exported="false" />
+131-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:38:13-37
+132        <service
+132-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:39:9-43:72
+133            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+133-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:40:13-87
+134            android:enabled="true"
+134-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:41:13-35
+135            android:exported="false"
+135-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:42:13-37
+136            android:permission="android.permission.BIND_JOB_SERVICE" />
+136-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/kazitipu/.gradle/caches/transforms-3/2ba166fec12def1faf2211cd57c5a2d1/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:43:13-69
+137
+138        <meta-data
+138-->[com.google.android.gms:play-services-basement:18.1.0] /Users/kazitipu/.gradle/caches/transforms-3/e0b514707574ab98bc72d0497f91e7ff/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
+139            android:name="com.google.android.gms.version"
+139-->[com.google.android.gms:play-services-basement:18.1.0] /Users/kazitipu/.gradle/caches/transforms-3/e0b514707574ab98bc72d0497f91e7ff/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
+140            android:value="@integer/google_play_services_version" /> <!-- The activities will be merged into the manifest of the hosting app. -->
+140-->[com.google.android.gms:play-services-basement:18.1.0] /Users/kazitipu/.gradle/caches/transforms-3/e0b514707574ab98bc72d0497f91e7ff/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
+141        <activity
+141-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:5-271
+142            android:name="com.google.android.play.core.missingsplits.PlayCoreMissingSplitsActivity"
+142-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:15-102
+143            android:enabled="false"
+143-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:103-126
+144            android:exported="false"
+144-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:127-151
+145            android:launchMode="singleInstance"
+145-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:204-239
+146            android:process=":playcore_missing_splits_activity"
+146-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:152-203
+147            android:stateNotNeeded="true" />
+147-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:12:240-269
+148        <activity
+148-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:5-226
+149            android:name="com.google.android.play.core.common.PlayCoreDialogWrapperActivity"
+149-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:15-95
+150            android:enabled="false"
+150-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:96-119
+151            android:exported="false"
+151-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:120-144
+152            android:stateNotNeeded="true"
+152-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:145-174
+153            android:theme="@style/Theme.PlayCore.Transparent" /> <!-- The service will be merged into the manifest of the hosting app. -->
+153-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:13:175-224
+154        <service
+154-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:16:5-145
+155            android:name="com.google.android.play.core.assetpacks.AssetPackExtractionService"
+155-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:16:14-95
+156            android:enabled="false"
+156-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:16:96-119
+157            android:exported="true" />
+157-->[com.google.android.play:core:1.9.0] /Users/kazitipu/.gradle/caches/transforms-3/ac5c3d3c37c6819e39da8bb39d1ec1a9/transformed/jetified-core-1.9.0/AndroidManifest.xml:16:120-143
+158    </application>
+159
+160</manifest>

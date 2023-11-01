@@ -7,20 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:65158771737:android:6c51ec6985d0fb1e066688",
+        "mobilesdk_app_id": "1:65158771737:android:08440dd4bd943f9c066688",
         "android_client_info": {
           "package_name": "com.cloudshopbd"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "65158771737-um8ml7b3imbgm0iasshaurpt9b01tqmh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cloudshopbd",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
         {
           "client_id": "65158771737-t16114kjqgie041v951j37jifan4345i.apps.googleusercontent.com",
           "client_type": 3
@@ -37,6 +29,13 @@
             {
               "client_id": "65158771737-81snn6tchhuv4ctm8p9no5ekoggneas4.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "65158771737-3e2a35a3ophp3qngnr50jnkhsbds1i1c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cloudshopbd"
+              }
             }
           ]
         }

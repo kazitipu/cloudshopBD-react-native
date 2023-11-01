@@ -110,9 +110,9 @@ const styles = StyleSheet.create({
   categoryBox: {
     justifyContent: "center",
     alignItems: "center",
-    height: hp("10%"),
-    width: wp("19%"),
-    maxWidth: wp("21%"),
+    height: hp("9%"),
+    width: wp("18%"),
+    maxWidth: wp("19%"),
     marginHorizontal: wp("1.8%"),
     flex: 0.5,
     backgroundColor: Colors.white,
@@ -126,10 +126,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   imageView: {
-    flex: 0.9,
+    flex: 0.8,
     backgroundColor: Colors.ligth_white,
     // backgroundColor: Colors.themeYellow,
-    width: wp("18.5%"),
+    width: wp("15.5%"),
     borderTopStartRadius: wp("2%"),
     borderTopEndRadius: wp("2%"),
     marginTop: hp("1.4%"),
@@ -138,13 +138,12 @@ const styles = StyleSheet.create({
   image: {
     resizeMode: "contain",
     alignSelf: "center",
+    width: wp("13.5%"),
     height: hp("6%"),
-    width: wp("17.5%"),
   },
   infromationView: {
     flex: 0.2,
-    width: wp("17%"),
-    marginBottom: hp("1%"),
+    width: wp("15.5%"),
   },
   categoryName: {
     textAlign: "center",
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
   },
   categoryName2: {
     textAlign: "left",
-    fontSize: wp("4.5%"),
+    fontSize: wp("3.2%"),
     fontFamily: Fonts.Font_Bold,
   },
 });

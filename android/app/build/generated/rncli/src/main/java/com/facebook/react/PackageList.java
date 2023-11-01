@@ -17,12 +17,14 @@ import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 // @react-native-firebase/app
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
+// @react-native-firebase/firestore
+import io.invertase.firebase.firestore.ReactNativeFirebaseFirestorePackage;
 // @react-native-masked-view/masked-view
 import org.reactnative.maskedview.RNCMaskedViewPackage;
 // react-native-fast-image
 import com.dylanvann.fastimage.FastImageViewPackage;
 // react-native-gesture-handler
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 // react-native-image-picker
 import com.imagepicker.ImagePickerPackage;
 // react-native-in-app-review
@@ -89,6 +91,7 @@ public class PackageList {
       new AsyncStoragePackage(),
       new NetInfoPackage(),
       new ReactNativeFirebaseAppPackage(),
+      new ReactNativeFirebaseFirestorePackage(),
       new RNCMaskedViewPackage(),
       new FastImageViewPackage(),
       new RNGestureHandlerPackage(),

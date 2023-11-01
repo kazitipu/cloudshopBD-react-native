@@ -22,9 +22,6 @@
 
 #import "FIRDocumentReference.h"
 #import "FIRFirestoreErrors.h"
-
-#import "Firestore/Source/API/FIRAggregateField+Internal.h"
-#import "Firestore/Source/API/FIRAggregateQuery+Internal.h"
 #import "Firestore/Source/API/FIRDocumentReference+Internal.h"
 #import "Firestore/Source/API/FIRDocumentSnapshot+Internal.h"
 #import "Firestore/Source/API/FIRFieldPath+Internal.h"
@@ -43,10 +40,8 @@
 #include "Firestore/core/src/api/query_snapshot.h"
 #include "Firestore/core/src/api/source.h"
 #include "Firestore/core/src/core/bound.h"
-#include "Firestore/core/src/core/composite_filter.h"
 #include "Firestore/core/src/core/direction.h"
 #include "Firestore/core/src/core/field_filter.h"
-#include "Firestore/core/src/core/filter.h"
 #include "Firestore/core/src/core/firestore_client.h"
 #include "Firestore/core/src/core/listen_options.h"
 #include "Firestore/core/src/core/order_by.h"
@@ -60,14 +55,13 @@
 #include "Firestore/core/src/nanopb/nanopb_util.h"
 #include "Firestore/core/src/util/error_apple.h"
 #include "Firestore/core/src/util/exception.h"
+#include "Firestore/core/src/util/hard_assert.h"
 #include "Firestore/core/src/util/statusor.h"
 #include "Firestore/core/src/util/string_apple.h"
+#include "absl/memory/memory.h"
 #include "absl/strings/match.h"
 
 namespace nanopb = firebase::firestore::nanopb;
-using firebase::firestore::google_firestore_v1_ArrayValue;
-using firebase::firestore::google_firestore_v1_Value;
-using firebase::firestore::google_firestore_v1_Value_fields;
 using firebase::firestore::api::Firestore;
 using firebase::firestore::api::Query;
 using firebase::firestore::api::QueryListenerRegistration;
@@ -77,15 +71,17 @@ using firebase::firestore::api::SnapshotMetadata;
 using firebase::firestore::api::Source;
 using firebase::firestore::core::AsyncEventListener;
 using firebase::firestore::core::Bound;
-using firebase::firestore::core::CompositeFilter;
 using firebase::firestore::core::Direction;
 using firebase::firestore::core::EventListener;
 using firebase::firestore::core::FieldFilter;
-using firebase::firestore::core::Filter;
 using firebase::firestore::core::ListenOptions;
 using firebase::firestore::core::OrderBy;
+using firebase::firestore::core::OrderByList;
 using firebase::firestore::core::QueryListener;
 using firebase::firestore::core::ViewSnapshot;
+using firebase::firestore::google_firestore_v1_ArrayValue;
+using firebase::firestore::google_firestore_v1_Value;
+using firebase::firestore::google_firestore_v1_Value_fields;
 using firebase::firestore::model::DatabaseId;
 using firebase::firestore::model::DeepClone;
 using firebase::firestore::model::Document;
@@ -98,10 +94,10 @@ using firebase::firestore::model::ResourcePath;
 using firebase::firestore::model::TypeOrder;
 using firebase::firestore::nanopb::CheckedSize;
 using firebase::firestore::nanopb::MakeArray;
-using firebase::firestore::nanopb::MakeSharedMessage;
 using firebase::firestore::nanopb::MakeString;
 using firebase::firestore::nanopb::Message;
 using firebase::firestore::nanopb::SharedMessage;
+using firebase::firestore::nanopb::MakeSharedMessage;
 using firebase::firestore::util::MakeNSError;
 using firebase::firestore::util::MakeString;
 using firebase::firestore::util::StatusOr;
@@ -226,15 +222,6 @@ int32_t SaturatedLimitValue(NSInteger limit) {
       initWithRegistration:absl::make_unique<QueryListenerRegistration>(firestore->client(),
                                                                         std::move(async_listener),
                                                                         std::move(query_listener))];
-}
-
-- (FIRQuery *)queryWhereFilter:(FIRFilter *)filter {
-  Filter parsedFilter = [self parseFilter:filter];
-  if (parsedFilter.IsEmpty()) {
-    // Return the existing query if not adding any more filters (e.g. an empty composite filter).
-    return self;
-  }
-  return Wrap(_query.AddNewFilter(std::move(parsedFilter)));
 }
 
 - (FIRQuery *)queryWhereField:(NSString *)field isEqualTo:(id)value {
@@ -444,52 +431,43 @@ int32_t SaturatedLimitValue(NSInteger limit) {
 }
 
 - (FIRQuery *)queryStartingAtDocument:(FIRDocumentSnapshot *)snapshot {
-  Bound bound = [self boundFromSnapshot:snapshot isInclusive:YES];
+  Bound bound = [self boundFromSnapshot:snapshot isBefore:YES];
   return Wrap(_query.StartAt(std::move(bound)));
 }
 
 - (FIRQuery *)queryStartingAtValues:(NSArray *)fieldValues {
-  Bound bound = [self boundFromFieldValues:fieldValues isInclusive:YES];
+  Bound bound = [self boundFromFieldValues:fieldValues isBefore:YES];
   return Wrap(_query.StartAt(std::move(bound)));
 }
 
 - (FIRQuery *)queryStartingAfterDocument:(FIRDocumentSnapshot *)snapshot {
-  Bound bound = [self boundFromSnapshot:snapshot isInclusive:NO];
+  Bound bound = [self boundFromSnapshot:snapshot isBefore:NO];
   return Wrap(_query.StartAt(std::move(bound)));
 }
 
 - (FIRQuery *)queryStartingAfterValues:(NSArray *)fieldValues {
-  Bound bound = [self boundFromFieldValues:fieldValues isInclusive:NO];
+  Bound bound = [self boundFromFieldValues:fieldValues isBefore:NO];
   return Wrap(_query.StartAt(std::move(bound)));
 }
 
 - (FIRQuery *)queryEndingBeforeDocument:(FIRDocumentSnapshot *)snapshot {
-  Bound bound = [self boundFromSnapshot:snapshot isInclusive:NO];
+  Bound bound = [self boundFromSnapshot:snapshot isBefore:YES];
   return Wrap(_query.EndAt(std::move(bound)));
 }
 
 - (FIRQuery *)queryEndingBeforeValues:(NSArray *)fieldValues {
-  Bound bound = [self boundFromFieldValues:fieldValues isInclusive:NO];
+  Bound bound = [self boundFromFieldValues:fieldValues isBefore:YES];
   return Wrap(_query.EndAt(std::move(bound)));
 }
 
 - (FIRQuery *)queryEndingAtDocument:(FIRDocumentSnapshot *)snapshot {
-  Bound bound = [self boundFromSnapshot:snapshot isInclusive:YES];
+  Bound bound = [self boundFromSnapshot:snapshot isBefore:NO];
   return Wrap(_query.EndAt(std::move(bound)));
 }
 
 - (FIRQuery *)queryEndingAtValues:(NSArray *)fieldValues {
-  Bound bound = [self boundFromFieldValues:fieldValues isInclusive:YES];
+  Bound bound = [self boundFromFieldValues:fieldValues isBefore:NO];
   return Wrap(_query.EndAt(std::move(bound)));
-}
-
-- (FIRAggregateQuery *)count {
-  FIRAggregateField *countAF = [FIRAggregateField aggregateFieldForCount];
-  return [[FIRAggregateQuery alloc] initWithQueryAndAggregations:self aggregations:@[ countAF ]];
-}
-
-- (FIRAggregateQuery *)aggregate:(NSArray<FIRAggregateField *> *)aggregations {
-  return [[FIRAggregateQuery alloc] initWithQueryAndAggregations:self aggregations:aggregations];
 }
 
 #pragma mark - Private Methods
@@ -525,49 +503,15 @@ int32_t SaturatedLimitValue(NSInteger limit) {
   return absl::make_unique<Converter>(block);
 }
 
-- (Filter)parseFieldFilter:(FSTUnaryFilter *)unaryFilter {
-  auto describer = [&unaryFilter] {
-    return MakeString(NSStringFromClass([unaryFilter.value class]));
-  };
+// TODO(orquery): This method will become public API. Change visibility and add documentation.
+- (FIRQuery *)queryWhereFilter:(FIRFilter *)filter {
   Message<google_firestore_v1_Value> fieldValue =
-      [self parsedQueryValue:unaryFilter.value
-                 allowArrays:unaryFilter.unaryOp == FieldFilter::Operator::In ||
-                             unaryFilter.unaryOp == FieldFilter::Operator::NotIn];
-  Filter parsedFieldFilter = _query.ParseFieldFilter(
-      unaryFilter.fieldPath.internalValue, unaryFilter.unaryOp, std::move(fieldValue), describer);
-  return parsedFieldFilter;
-}
-
-- (Filter)parseCompositeFilter:(FSTCompositeFilter *)compositeFilter {
-  std::vector<Filter> filters;
-  for (FIRFilter *filter in compositeFilter.filters) {
-    Filter parsedFilter = [self parseFilter:filter];
-    if (!parsedFilter.IsEmpty()) {
-      filters.push_back(std::move(parsedFilter));
-    }
-  }
-
-  // For composite filters containing 1 filter, return the only filter.
-  // For example: AND(FieldFilter1) == FieldFilter1
-  if (filters.size() == 1u) {
-    return filters[0];
-  }
-
-  Filter parsedCompositeFilter =
-      CompositeFilter::Create(std::move(filters), compositeFilter.compOp);
-  return parsedCompositeFilter;
-}
-
-- (Filter)parseFilter:(FIRFilter *)filter {
-  if ([filter isKindOfClass:[FSTUnaryFilter class]]) {
-    FSTUnaryFilter *unaryFilter = (FSTUnaryFilter *)filter;
-    return [self parseFieldFilter:unaryFilter];
-  } else if ([filter isKindOfClass:[FSTCompositeFilter class]]) {
-    FSTCompositeFilter *compositeFilter = (FSTCompositeFilter *)filter;
-    return [self parseCompositeFilter:compositeFilter];
-  } else {
-    ThrowInvalidArgument("Parsing only supports Filter.UnaryFilter and Filter.CompositeFilter.");
-  }
+      [self parsedQueryValue:filter.value
+                 allowArrays:filter.op == FieldFilter::Operator::In ||
+                             filter.op == FieldFilter::Operator::NotIn];
+  auto describer = [&filter] { return MakeString(NSStringFromClass([filter.value class])); };
+  return Wrap(
+      _query.Filter(filter.fieldPath.internalValue, filter.op, std::move(fieldValue), describer));
 }
 
 /**
@@ -580,14 +524,14 @@ int32_t SaturatedLimitValue(NSInteger limit) {
  * the query or if any of the fields in the order by are an uncommitted server
  * timestamp.
  */
-- (Bound)boundFromSnapshot:(FIRDocumentSnapshot *)snapshot isInclusive:(BOOL)isInclusive {
+- (Bound)boundFromSnapshot:(FIRDocumentSnapshot *)snapshot isBefore:(BOOL)isBefore {
   if (![snapshot exists]) {
     ThrowInvalidArgument("Invalid query. You are trying to start or end a query using a document "
                          "that doesn't exist.");
   }
   const Document &document = *snapshot.internalDocument;
   const DatabaseId &databaseID = self.firestore.databaseID;
-  const std::vector<OrderBy> &order_bys = self.query.normalized_order_bys();
+  const OrderByList &order_bys = self.query.order_bys();
 
   SharedMessage<google_firestore_v1_ArrayValue> components{{}};
   components->values_count = CheckedSize(order_bys.size());
@@ -622,13 +566,13 @@ int32_t SaturatedLimitValue(NSInteger limit) {
       }
     }
   }
-  return Bound::FromValue(std::move(components), isInclusive);
+  return Bound::FromValue(std::move(components), isBefore);
 }
 
 /** Converts a list of field values to an Bound. */
-- (Bound)boundFromFieldValues:(NSArray<id> *)fieldValues isInclusive:(BOOL)isInclusive {
+- (Bound)boundFromFieldValues:(NSArray<id> *)fieldValues isBefore:(BOOL)isBefore {
   // Use explicit sort order because it has to match the query the user made
-  const std::vector<OrderBy> &explicitSortOrders = self.query.explicit_order_bys();
+  const OrderByList &explicitSortOrders = self.query.explicit_order_bys();
   if (fieldValues.count > explicitSortOrders.size()) {
     ThrowInvalidArgument("Invalid query. You are trying to start or end a query using more values "
                          "than were specified in the order by.");
@@ -667,7 +611,7 @@ int32_t SaturatedLimitValue(NSInteger limit) {
     }
   }
 
-  return Bound::FromValue(std::move(components), isInclusive);
+  return Bound::FromValue(std::move(components), isBefore);
 }
 
 @end
