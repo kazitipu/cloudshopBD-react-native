@@ -60,8 +60,6 @@ function NewProduct2(props) {
     if (products) {
       renderableProducts = products.products;
     }
-
-    console.log(renderableProducts);
   }
 
   return (

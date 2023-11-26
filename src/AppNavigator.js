@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Platform, StyleSheet, Image, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -53,7 +53,9 @@ import { Colors, GlobalStyles } from "@helpers";
 import { Badge } from "native-base";
 import Fonts from "./helpers/Fonts";
 import { _roundDimensions } from "./helpers/util";
-
+import { setCurrentUserRedux, setAdditionalDataRedux } from "./redux/Action";
+import auth from "@react-native-firebase/auth";
+import { createUserProfileDocument } from "./firebase/firebase.utils";
 const SettingStack = createStackNavigator();
 let cartCount = 0;
 
@@ -71,36 +73,6 @@ function SettingStackNavigation() {
 
 //Auth Stack
 const AuthStack = createStackNavigator();
-function AuthNavigator() {
-  return (
-    <AuthStack.Navigator initialRouteName="LoginScreen">
-      <AuthStack.Screen
-        name="LoginScreen"
-        component={LoginScreen}
-        options={{
-          headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-      />
-      <AuthStack.Screen
-        name="RegisterScreen"
-        component={RegisterScreen}
-        options={{
-          headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-      />
-      <AuthStack.Screen
-        name="ForgotPasswordScreen"
-        component={ForgotPasswordScreen}
-        options={{
-          headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-      />
-    </AuthStack.Navigator>
-  );
-}
 
 const BottomTab = createBottomTabNavigator();
 function MyTabs(props) {
@@ -206,7 +178,7 @@ function MyTabs(props) {
       />
       <BottomTab.Screen
         name="ProfileScreen"
-        component={authStatus == true ? ProfileScreen : AuthNavigator}
+        component={ProfileScreen}
         options={{
           headerShown: false,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -242,6 +214,68 @@ function MyTabs(props) {
 const Stack = createStackNavigator();
 function AppNavigator(props) {
   const { cartCount, authStatus } = props;
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+  console.log(props.additionalData);
+  // Handle user state changes
+  const additionalData = props.additionalData;
+  const onAuthStateChanged = async (user) => {
+    console.log(additionalData);
+    if (user) {
+      const userRef = await createUserProfileDocument(user, additionalData);
+
+      if (userRef) {
+        userRef.onSnapshot(async (snapShot) => {
+          await props.setCurrentUserRedux({
+            id: snapShot.id,
+            ...snapShot.data(),
+          });
+          // props.setAdditionalDataRedux({});
+          // requestUserPermission({ id: snapShot.id, ...snapShot.data() });
+        });
+        // const cartRef = firestore.doc(`carts/${userAuth.uid}`);
+        // cartRef.onSnapshot((snapShot) => {
+        //   if (snapShot.exists) {
+        //     setReduxCart(snapShot.data().cart);
+        //   }
+        // });
+        // const favouriteRef = firestore.doc(`favourites/${userAuth.uid}`);
+        // favouriteRef.onSnapshot((snapShot) => {
+        //   if (snapShot.exists) {
+        //     setReduxFavourite(snapShot.data().favourite);
+        //   }
+        // });
+        // const footPrintRef = firestore.doc(`footPrints/${userAuth.uid}`);
+        // footPrintRef.onSnapshot((snapShot) => {
+        //   if (snapShot.exists) {
+        //     setReduxFootPrint(snapShot.data().footPrint);
+        //   }
+        // });
+        // const wishlistRef = firestore.doc(`wishlists/${userAuth.uid}`);
+        // wishlistRef.onSnapshot((snapShot) => {
+        //   if (snapShot.exists) {
+        //     setReduxWishlist(snapShot.data().wishlist);
+        //   }
+        // });
+        // await getAllMessagesRedux(userAuth.uid);
+      }
+    } else {
+      props.setCurrentUserRedux({ displayName: "", email: "" });
+      // props.setAdditionalDataRedux({});
+      // setReduxCart([]);
+      // setReduxFavourite([]);
+      // setReduxFootPrint([]);
+      // setReduxWishlist([]);
+    }
+
+    if (initializing) setInitializing(false);
+  };
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen">
@@ -263,7 +297,23 @@ function AppNavigator(props) {
 
         <Stack.Screen
           name="LoginScreen"
-          component={AuthNavigator}
+          component={LoginScreen}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
+        />
+        <Stack.Screen
+          name="RegisterScreen"
+          component={RegisterScreen}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
+        />
+        <Stack.Screen
+          name="ForgotPasswordScreen"
+          component={ForgotPasswordScreen}
           options={{
             headerShown: false,
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -407,10 +457,15 @@ function mapStateToProps(state) {
   return {
     cartCount: state.cart.cartCount ? state.cart.cartCount : null,
     authStatus: state.auth.authStatus,
+    currentUser: state.auth.currentUser,
+    additionalData: state.auth.additionalData,
   };
 }
 
-export default connect(mapStateToProps, {})(AppNavigator);
+export default connect(mapStateToProps, {
+  setCurrentUserRedux,
+  setAdditionalDataRedux,
+})(AppNavigator);
 
 const styles = StyleSheet.create({
   bottomTabIcon: {

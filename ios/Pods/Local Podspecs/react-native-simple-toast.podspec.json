@@ -1,0 +1,28 @@
+{
+  "name": "react-native-simple-toast",
+  "version": "3.0.2",
+  "summary": "test",
+  "homepage": "https://github.com/vonovak/react-native-simple-toast#readme",
+  "license": "MIT",
+  "authors": {
+    "name": "Vojtech Novak",
+    "email": "vonovak@gmail.com",
+    "url": "https://github.com/vonovak"
+  },
+  "platforms": {
+    "ios": "11.0"
+  },
+  "source": {
+    "git": "https://github.com/vonovak/react-native-simple-toast.git",
+    "tag": "3.0.2"
+  },
+  "source_files": "ios/**/*.{h,m,mm}",
+  "dependencies": {
+    "Toast": [
+      "~> 4"
+    ],
+    "React-Core": [
+
+    ]
+  }
+}

@@ -20,23 +20,18 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     const createdAt = new Date();
     try {
       console.log("creating snapshot");
-
       const userCount = await incrementUserCountByOne();
-
       await userRef.set({
         userId: userCount < 10 ? `0${userCount}` : `${userCount}`,
         uid: userAuth.uid,
-        ...(displayName ? { displayName } : {}),
         email,
         createdAt,
         ...additionalData,
+        ...(displayName ? { displayName } : {}),
         myWallet: 0,
-        addresss: "",
-        company: "",
+        address: "",
         status: "Customer",
-        totalRecharge: 0,
       });
-      // }
     } catch (error) {
       console.log("error creating user", error.message);
     }

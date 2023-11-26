@@ -11,22 +11,26 @@ import com.facebook.react.shell.MainReactPackage;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+// @invertase/react-native-apple-authentication
+import com.RNAppleAuthentication.AppleAuthenticationAndroidPackage;
 // @react-native-community/async-storage
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-community/netinfo
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 // @react-native-firebase/app
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
+// @react-native-firebase/auth
+import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
 // @react-native-firebase/firestore
 import io.invertase.firebase.firestore.ReactNativeFirebaseFirestorePackage;
+// @react-native-google-signin/google-signin
+import com.reactnativegooglesignin.RNGoogleSigninPackage;
 // @react-native-masked-view/masked-view
 import org.reactnative.maskedview.RNCMaskedViewPackage;
 // react-native-fast-image
 import com.dylanvann.fastimage.FastImageViewPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
-// react-native-image-picker
-import com.imagepicker.ImagePickerPackage;
 // react-native-in-app-review
 import com.ibits.react_native_in_app_review.AppReviewPackage;
 // react-native-linear-gradient
@@ -88,14 +92,16 @@ public class PackageList {
   public ArrayList<ReactPackage> getPackages() {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
+      new AppleAuthenticationAndroidPackage(),
       new AsyncStoragePackage(),
       new NetInfoPackage(),
       new ReactNativeFirebaseAppPackage(),
+      new ReactNativeFirebaseAuthPackage(),
       new ReactNativeFirebaseFirestorePackage(),
+      new RNGoogleSigninPackage(),
       new RNCMaskedViewPackage(),
       new FastImageViewPackage(),
       new RNGestureHandlerPackage(),
-      new ImagePickerPackage(),
       new AppReviewPackage(),
       new LinearGradientPackage(),
       new RNRatePackage(),

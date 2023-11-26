@@ -38,9 +38,7 @@ const BottomSheet = ({
       {...otherProps}
     >
       {children}
-      <View style={styles.footer}>
-        <Button label={"Proceed to checkout"} onPress={onButtonPress} />
-      </View>
+    
     </RBSheet>
   );
 };

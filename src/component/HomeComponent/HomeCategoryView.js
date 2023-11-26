@@ -29,7 +29,7 @@ const HomeCategoryView = (props) => {
   loadImage = false;
 
   return (
-    <View>
+    <View style={{ marginBottom: 10 }}>
       <View style={styles.catHeading}>
         <Text style={GlobalStyles.boxHeading}>Top Categories</Text>
         <TouchableOpacity
@@ -91,22 +91,21 @@ const styles = StyleSheet.create({
     marginTop: hp("1%"),
   },
   catBox: {
-    height: hp("12.5%"),
-    width: wp("15%"),
     marginHorizontal: wp("1%"),
-    borderRadius: 5,
+    width: hp("7%"),
   },
   imageContainer: {
     backgroundColor: Colors.light_white,
-    height: hp("7..5%"),
+    height: hp("7%"),
+    width: hp("7%"),
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: "gainsboro",
   },
   imageView: {
     resizeMode: "contain",
     alignSelf: "center",
-    height: hp("7..5%"),
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: "gainsboro",
+    height: hp("6.5%"),
     width: "100%",
     height: "100%",
   },

@@ -73,22 +73,36 @@ function HomeScreen(props) {
       <OtrixHeader customStyles={{ backgroundColor: Colors.white }}>
         <TouchableOpacity
           style={styles.headerLeft}
-          onPress={() => props.navigation.navigate("ProfileScreen")}
+          onPress={() => {
+            if (props.currentUser && props.currentUser.uid) {
+              props.navigation.navigate("ProfileScreen");
+            } else {
+              props.navigation.navigate("LoginScreen");
+            }
+          }}
         >
-          {authStatus ? (
-            <Avatar
-              ml="3"
-              size="sm"
-              style={styles.avatarImg}
-              source={avatarImg}
-            ></Avatar>
-          ) : (
+          {props.currentUser && props.currentUser.uid ? (
             <Avatar
               ml="3"
               size="sm"
               style={styles.avatarImg}
               source={avatarImg2}
             ></Avatar>
+          ) : (
+            <View
+              style={{
+                borderWidth: 1,
+                borderRadius: 7,
+                borderStyle: "solid",
+                paddingLeft: 8,
+                paddingRight: 8,
+                paddingTop: 4,
+                paddingBottom: 4,
+                borderColor: "red",
+              }}
+            >
+              <Text style={{ fontSize: wp("3%"), color: "red" }}>Login</Text>
+            </View>
           )}
         </TouchableOpacity>
         <View style={styles.headerCenter}>
@@ -201,6 +215,7 @@ function mapStateToProps(state) {
     wishlistCount: state.wishlist.wishlistCount,
     banners: state.mainScreenInit.banners,
     homeCategories: state.mainScreenInit.homeCategories,
+    currentUser: state.auth.currentUser,
   };
 }
 
@@ -232,6 +247,7 @@ const styles = StyleSheet.create({
     flex: 0.75,
     justifyContent: "center",
     alignItems: "center",
+    marginLeft: 10,
   },
   headingTxt: {
     fontFamily: Fonts.Font_Bold,
@@ -239,7 +255,6 @@ const styles = StyleSheet.create({
     color: Colors.themeColor,
   },
   headerLeft: {
-    flex: 0.15,
     justifyContent: "flex-start",
     alignItems: "flex-start",
   },
@@ -253,5 +268,7 @@ const styles = StyleSheet.create({
     height: hp("7%"),
     width: wp("7%"),
     resizeMode: "contain",
+    borderColor: "red",
+    borderWidth: 1,
   },
 });

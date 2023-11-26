@@ -130,6 +130,18 @@ export function doLogout() {
     payload: {},
   };
 }
+export function setCurrentUserRedux(user) {
+  return {
+    type: "SET_CURRENT_USER",
+    payload: user,
+  };
+}
+export function setAdditionalDataRedux(data) {
+  return {
+    type: "SET_ADDITIONAL_DATA",
+    payload: data,
+  };
+}
 
 export const getAllTopCategoriesRedux = () => async (dispatch) => {
   const allCats = await getAllTopCategories();

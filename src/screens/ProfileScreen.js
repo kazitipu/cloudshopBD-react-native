@@ -20,12 +20,17 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import MatIcon from "react-native-vector-icons/MaterialIcons";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import Toast from "react-native-root-toast";
-import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import Toast from "react-native-simple-toast";
+import auth from "@react-native-firebase/auth";
 
 function ProfileScreen(props) {
   const [state, setState] = React.useState({ profileImage: "" });
 
+  useEffect(() => {
+    if (!props.currentUser.uid) {
+      props.navigation.navigate("LoginScreen");
+    }
+  }, []);
   const openImagePicker = async (res) => {
     setState({
       ...state,
@@ -39,22 +44,7 @@ function ProfileScreen(props) {
   return (
     <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
       <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.imageView}
-          onPress={() =>
-            launchImageLibrary(
-              {
-                mediaType: "photo",
-                includeBase64: false,
-                maxHeight: 400,
-                maxWidth: 400,
-              },
-              (response) => {
-                openImagePicker(response);
-              }
-            )
-          }
-        >
+        <TouchableOpacity style={styles.imageView} onPress={() => {}}>
           {profileImage != "" ? (
             <Image source={{ uri: profileImage }} style={styles.image}></Image>
           ) : (
@@ -67,23 +57,6 @@ function ProfileScreen(props) {
       </View>
 
       {/* Header */}
-      <View
-        style={{
-          flexDirection: "row",
-          position: "absolute",
-          marginTop: hp("2%"),
-        }}
-      >
-        <TouchableOpacity
-          style={[
-            GlobalStyles.headerLeft,
-            { zIndex: 999999999, flex: 0.9, alignItems: "flex-start" },
-          ]}
-          onPress={() => props.navigation.goBack()}
-        >
-          <Text style={GlobalStyles.headingTxt}> My Profile</Text>
-        </TouchableOpacity>
-      </View>
 
       {/* Content Start from here */}
       <OtrixContent customStyles={styles.contentView}>
@@ -170,16 +143,12 @@ function ProfileScreen(props) {
         <TouchableOpacity
           style={styles.listView}
           onPress={() => {
-            props.doLogout(),
-              Toast.show("Successfully Logout", {
-                duration: 2000,
-                position: Toast.positions.CENTER,
-                shadow: true,
-                animation: true,
-                hideOnPress: true,
-                delay: 0,
-              }),
-              props.navigation.navigate("HomeScreen");
+            auth()
+              .signOut()
+              .then(() => {
+                Toast.show("Successfully Loggged out!"),
+                  props.navigation.navigate("HomeScreen");
+              });
           }}
         >
           <View style={styles.leftSide}>
@@ -200,6 +169,7 @@ function ProfileScreen(props) {
 function mapStateToProps(state) {
   return {
     cartData: state.cart.cartData,
+    currentUser: state.auth.currentUser,
   };
 }
 

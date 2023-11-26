@@ -267,7 +267,7 @@ function ProductDetailScreen(props) {
               <View style={{ marginTop: 2 }}>
                 {product.selectedCategories.map((cat) => (
                   <Text style={{ color: "gray", fontSize: wp("3%") }}>
-                    {cat.name}
+                    {cat.name},
                   </Text>
                 ))}
               </View>

@@ -46,7 +46,7 @@ function LatestProducts(props) {
   };
 
   const { wishlistArr, latestProducts } = props;
-  console.log(latestProducts);
+
   return (
     <>
       <View style={styles.catHeading}>

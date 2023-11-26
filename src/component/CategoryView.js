@@ -48,7 +48,6 @@ function CategoryView(props) {
                 backgroundColor: "black",
                 padding: wp("0.3%"),
                 marginLeft: 10,
-
                 marginTop: 3,
                 marginBottom: 3,
               }}
@@ -110,7 +109,6 @@ const styles = StyleSheet.create({
   categoryBox: {
     justifyContent: "center",
     alignItems: "center",
-    height: hp("9%"),
     width: wp("18%"),
     maxWidth: wp("19%"),
     marginHorizontal: wp("1.8%"),
@@ -128,8 +126,9 @@ const styles = StyleSheet.create({
   imageView: {
     flex: 0.8,
     backgroundColor: Colors.ligth_white,
-    // backgroundColor: Colors.themeYellow,
-    width: wp("15.5%"),
+
+    width: wp("13.5%"),
+    height: wp("13.5%"),
     borderTopStartRadius: wp("2%"),
     borderTopEndRadius: wp("2%"),
     marginTop: hp("1.4%"),
@@ -139,11 +138,16 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     alignSelf: "center",
     width: wp("13.5%"),
-    height: hp("6%"),
+    height: wp("13.5%"),
+    borderWidth: 1,
+    borderColor: "gainsboro",
+    borderRadius: 5,
   },
   infromationView: {
     flex: 0.2,
     width: wp("15.5%"),
+    marginTop: -4,
+    paddingBottom: 4,
   },
   categoryName: {
     textAlign: "center",
