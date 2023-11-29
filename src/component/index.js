@@ -21,6 +21,7 @@ export { default as SizeContainerComponent } from "./ProductCompnent/SizeContain
 export { default as ListProductView } from "./ProductCompnent/ListProductView";
 export { default as RatingComponent } from "./ProductCompnent/RatingComponent";
 export { default as CartView } from "./CartComponent/CartView";
+export { default as OrderView } from "./CartComponent/OrderView";
 export { default as WishListView } from "./CartComponent/WishlistView.js";
 export { default as AddAdressComponent } from "./CartComponent/AddAdressComponent";
 export { default as EditAddressComponent } from "./CartComponent/EditAddressComponent";

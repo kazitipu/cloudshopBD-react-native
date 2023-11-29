@@ -15,7 +15,6 @@ import {
   RegisterScreen,
   ForgotPasswordScreen,
   CategoryScreen,
-  CartScreen,
   HomeCartScreen,
   ProfileScreen,
   ProductListScreen,
@@ -53,9 +52,18 @@ import { Colors, GlobalStyles } from "@helpers";
 import { Badge } from "native-base";
 import Fonts from "./helpers/Fonts";
 import { _roundDimensions } from "./helpers/util";
-import { setCurrentUserRedux, setAdditionalDataRedux } from "./redux/Action";
+import {
+  setCurrentUserRedux,
+  setAdditionalDataRedux,
+  setReduxCart,
+  setFreeShippingRedux,
+} from "./redux/Action";
 import auth from "@react-native-firebase/auth";
-import { createUserProfileDocument } from "./firebase/firebase.utils";
+import firestore from "@react-native-firebase/firestore";
+import {
+  createUserProfileDocument,
+  getFreeShipping,
+} from "./firebase/firebase.utils";
 const SettingStack = createStackNavigator();
 let cartCount = 0;
 
@@ -120,62 +128,7 @@ function MyTabs(props) {
           ),
         }}
       />
-      <BottomTab.Screen
-        name="CartScreen"
-        component={CartScreen}
-        options={{
-          headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          tabBarIcon: ({ focused, tintColor }) => (
-            <View style={styles.cartIconView}>
-              <Image
-                square
-                source={focused ? bottomCart : bottomCart}
-                style={[
-                  styles.bottomTabIcon,
-                  {
-                    top: cartCount > 9 ? hp("0.8%") : hp("0.2%"),
-                    right: wp("1%"),
-                    height: wp("7%"),
-                    width: wp("7%"),
-                  },
-                ]}
-              />
-              {cartCount > 0 && (
-                <Badge
-                  style={[
-                    GlobalStyles.badge,
-                    styles.count,
-                    {
-                      height:
-                        cartCount > 9
-                          ? _roundDimensions()._height * 0.039
-                          : _roundDimensions()._height * 0.032,
-                      width:
-                        cartCount > 9
-                          ? _roundDimensions()._height * 0.039
-                          : _roundDimensions()._height * 0.032,
-                      borderRadius: _roundDimensions()._borderRadius,
-                      right: cartCount > 9 ? wp("0.3") : wp("1.2%"),
-                      top: cartCount > 9 ? hp("0.1%") : hp("0.6%"),
-                    },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      GlobalStyles.badgeText,
-                      styles.countText,
-                      { fontSize: cartCount > 9 ? wp("2.4%") : wp("3%") },
-                    ]}
-                  >
-                    {cartCount}
-                  </Text>
-                </Badge>
-              )}
-            </View>
-          ),
-        }}
-      />
+
       <BottomTab.Screen
         name="ProfileScreen"
         component={ProfileScreen}
@@ -221,6 +174,8 @@ function AppNavigator(props) {
   const additionalData = props.additionalData;
   const onAuthStateChanged = async (user) => {
     console.log(additionalData);
+    let data = await getFreeShipping();
+    props.setFreeShippingRedux(data.value);
     if (user) {
       const userRef = await createUserProfileDocument(user, additionalData);
 
@@ -233,12 +188,12 @@ function AppNavigator(props) {
           // props.setAdditionalDataRedux({});
           // requestUserPermission({ id: snapShot.id, ...snapShot.data() });
         });
-        // const cartRef = firestore.doc(`carts/${userAuth.uid}`);
-        // cartRef.onSnapshot((snapShot) => {
-        //   if (snapShot.exists) {
-        //     setReduxCart(snapShot.data().cart);
-        //   }
-        // });
+        const cartRef = firestore().doc(`carts/${user.uid}`);
+        cartRef.onSnapshot((snapShot) => {
+          if (snapShot.exists) {
+            props.setReduxCart(snapShot.data().cart);
+          }
+        });
         // const favouriteRef = firestore.doc(`favourites/${userAuth.uid}`);
         // favouriteRef.onSnapshot((snapShot) => {
         //   if (snapShot.exists) {
@@ -262,7 +217,7 @@ function AppNavigator(props) {
     } else {
       props.setCurrentUserRedux({ displayName: "", email: "" });
       // props.setAdditionalDataRedux({});
-      // setReduxCart([]);
+      setReduxCart([]);
       // setReduxFavourite([]);
       // setReduxFootPrint([]);
       // setReduxWishlist([]);
@@ -273,6 +228,7 @@ function AppNavigator(props) {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+
     return subscriber; // unsubscribe on unmount
   }, []);
 
@@ -465,6 +421,8 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   setCurrentUserRedux,
   setAdditionalDataRedux,
+  setReduxCart,
+  setFreeShippingRedux,
 })(AppNavigator);
 
 const styles = StyleSheet.create({
@@ -474,8 +432,8 @@ const styles = StyleSheet.create({
   },
   tabbarStyle: {
     backgroundColor: Colors.white,
-    height: Platform.isPad === true ? wp("10%") : wp("15%"),
-    paddingTop: Platform.isPad == true ? 0 : wp("1%"),
+    height: Platform.isPad === true ? wp("10%") : wp("16%"),
+    paddingTop: Platform.isPad == true ? 0 : wp("3%"),
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 0.3 },
     shadowOpacity: 0.3,

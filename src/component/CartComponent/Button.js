@@ -8,10 +8,7 @@ import { scale } from "react-native-size-matters";
 const styles = StyleSheet.create({
   container: {
     padding: scale(12),
-    alignItems: "center",
     borderRadius: scale(100),
-    flexDirection: "row",
-    justifyContent: "center",
     minWidth: "100%",
   },
   ghost: {
@@ -41,7 +38,7 @@ const Button = ({
     <LinearGradient
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
-      colors={["#ff6d71", "#EC345B", "#ea0031"]}
+      colors={["#ea0031", "#EC345B", "#ea0031"]}
       style={StyleSheet.flatten([styles.container])}
     >
       {children && children}

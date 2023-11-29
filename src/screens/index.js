@@ -5,7 +5,7 @@ export { default as LoginScreen } from "./LoginScreen.js";
 export { default as RegisterScreen } from "./RegisterScreen.js";
 export { default as ForgotPasswordScreen } from "./ForgotPasswordScreen.js";
 export { default as CategoryScreen } from "./CategoryScreen.js";
-export { default as CartScreen } from "./CartScreen.js";
+
 export { default as HomeCartScreen } from "./HomeCartScreen.js";
 export { default as ProfileScreen } from "./ProfileScreen.js";
 export { default as ProductListScreen } from "./ProductListScreen.js";

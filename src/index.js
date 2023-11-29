@@ -27,20 +27,6 @@ let store = createStore(
 sagaMiddleware.run(sagas);
 let persistor = persistStore(store);
 const App = () => {
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    console.log(user);
-    if (initializing) setInitializing(false);
-  }
-
-  // useEffect(() => {
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
   return (
     <Provider store={store}>
       <NativeBaseProvider>

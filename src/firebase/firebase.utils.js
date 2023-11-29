@@ -253,6 +253,15 @@ const getDay = () => {
   }
   return day;
 };
+export const getFreeShipping = async () => {
+  const productRef = firestore().doc(`freeShipping/freeShipping`);
+  try {
+    const product = await productRef.get();
+    return product.data();
+  } catch (error) {
+    alert(error);
+  }
+};
 export const makePayment = async (
   total,
   invoicesToPay,
@@ -818,6 +827,133 @@ export const setBookingArrayOfUser = async (bookingObj) => {
     alert(error);
   }
 };
+export const addToCart = async (cartObj, user) => {
+  if (!user.id) {
+    return [];
+  }
+  const cartRef = firestore().doc(`carts/${user.id}`);
+  const snapShot = await cartRef.get();
+  if (!snapShot.exists) {
+    try {
+      await cartRef.set({
+        cart: [cartObj],
+      });
+      const updatedSnapshot = await cartRef.get();
+      return updatedSnapshot.data().cart;
+    } catch (error) {
+      console.log("error creating cartProduct", error.message);
+      return [];
+    }
+  } else {
+    if (cartObj.selectedVariation) {
+      if (
+        snapShot
+          .data()
+          .cart.findIndex((cart) => cart.productId === cartObj.productId) !== -1
+      ) {
+        if (
+          snapShot
+            .data()
+            .cart.findIndex(
+              (cart) =>
+                cart.selectedVariation.id === cartObj.selectedVariation.id
+            ) !== -1
+        ) {
+          await cartRef.update({
+            cart: snapShot.data().cart.map((cart) => {
+              if (cart.selectedVariation.id === cartObj.selectedVariation.id) {
+                return {
+                  ...cart,
+                  quantity:
+                    parseInt(cart.quantity) + parseInt(cartObj.quantity),
+                };
+              } else {
+                return cart;
+              }
+            }),
+          });
+          const updatedSnapshot = await cartRef.get();
+          return updatedSnapshot.data().cart;
+        } else {
+          await cartRef.update({
+            cart: [...snapShot.data().cart, cartObj],
+          });
+          const updatedSnapshot = await cartRef.get();
+          return updatedSnapshot.data().cart;
+        }
+      } else {
+        await cartRef.update({
+          cart: [...snapShot.data().cart, cartObj],
+        });
+        const updatedSnapshot = await cartRef.get();
+        return updatedSnapshot.data().cart;
+      }
+    } else {
+      if (
+        snapShot
+          .data()
+          .cart.findIndex((cart) => cart.productId === cartObj.productId) !== -1
+      ) {
+        await cartRef.update({
+          cart: snapShot.data().cart.map((cart) => {
+            if (cart.productId == cartObj.productId) {
+              return {
+                ...cart,
+                quantity: parseInt(cart.quantity) + parseInt(cartObj.quantity),
+              };
+            } else {
+              return cart;
+            }
+          }),
+        });
+        const updatedSnapshot = await cartRef.get();
+        return updatedSnapshot.data().cart;
+      } else {
+        await cartRef.update({
+          cart: [...snapShot.data().cart, cartObj],
+        });
+        const updatedSnapshot = await cartRef.get();
+        return updatedSnapshot.data().cart;
+      }
+    }
+  }
+};
+export const removeFromCart = async (item, user) => {
+  if (!user.id) {
+    return [];
+  }
+  const cartRef = firestore().doc(`carts/${user.id}`);
+  const snapShot = await cartRef.get();
+
+  if (item.selectedVariation && item.selectedVariation.id) {
+    await cartRef.update({
+      cart: snapShot.data().cart.filter((cartItem) => {
+        if (
+          cartItem.selectedVariation &&
+          cartItem.selectedVariation.id == item.selectedVariation.id
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      }),
+    });
+    const updatedSnapshot = await cartRef.get();
+    return updatedSnapshot.data().cart;
+  } else {
+    await cartRef.update({
+      cart: snapShot.data().cart.filter((cartItem) => {
+        if (cartItem.productId == item.productId) {
+          return false;
+        } else {
+          return true;
+        }
+      }),
+    });
+    const updatedSnapshot = await cartRef.get();
+    return updatedSnapshot.data().cart;
+  }
+};
 
 // Orders
 export const updateOrder = async (orderObj) => {
@@ -828,6 +964,18 @@ export const updateOrder = async (orderObj) => {
     });
     const updatedOrder = await orderRef.get();
     return updatedOrder.data();
+  } catch (error) {
+    alert(error);
+  }
+};
+export const updateCart = async (cartData, currentUser) => {
+  const cartRef = firestore().doc(`carts/${currentUser.id}`);
+  try {
+    await cartRef.update({
+      cart: cartData,
+    });
+    const updatedCart = await cartRef.get();
+    return updatedCart.data();
   } catch (error) {
     alert(error);
   }

@@ -9,6 +9,8 @@ import {
   getSingleCategoryProducts,
   getAllCategories,
   getSingleProduct,
+  addToCart,
+  removeFromCart,
 } from "../../firebase/firebase.utils";
 export function requestInit(user) {
   return {
@@ -28,16 +30,6 @@ export function successInt(navigateScreen) {
   };
 }
 
-export function addToCart(id, quantity) {
-  return {
-    type: types.ADD_TO_CART,
-    payload: {
-      id,
-      quantity,
-    },
-  };
-}
-
 export function addToWishList(data) {
   return {
     type: types.ADD_TO_WISHLIST,
@@ -47,29 +39,11 @@ export function addToWishList(data) {
   };
 }
 
-export function successCart(data) {
-  return {
-    type: types.SUCCESS_CART,
-    payload: {
-      cartData: data,
-    },
-  };
-}
-
 export function successWishlist(data) {
   return {
     type: types.SUCCESS_WISHLIST,
     payload: {
       wishlistData: data,
-    },
-  };
-}
-
-export function removeFromCart(id) {
-  return {
-    type: types.REMOVE_CART,
-    payload: {
-      id,
     },
   };
 }
@@ -148,6 +122,44 @@ export const getAllTopCategoriesRedux = () => async (dispatch) => {
   dispatch({
     type: "GET_ALL_TOP_CATEGORIES",
     payload: allCats,
+  });
+};
+export const addToCartRedux = (cartObj, currentUser) => async (dispatch) => {
+  const cartData = await addToCart(cartObj, currentUser);
+  dispatch({
+    type: "ADD_TO_CART",
+    payload: cartData,
+  });
+};
+export const removeFromCartRedux = (item, currentUser) => async (dispatch) => {
+  const cartData = await removeFromCart(item, currentUser);
+  dispatch({
+    type: "REMOVE_FROM_CART",
+    payload: cartData,
+  });
+};
+export const setReduxCart = (cartData) => async (dispatch) => {
+  dispatch({
+    type: "SET_REDUX_CART",
+    payload: cartData,
+  });
+};
+export const incrementQuantityRedux = (item) => async (dispatch) => {
+  dispatch({
+    type: "INCREMENT_QUANTITY",
+    payload: item,
+  });
+};
+export const decrementQuantityRedux = (item) => async (dispatch) => {
+  dispatch({
+    type: "DECREMENT_QUANTITY",
+    payload: item,
+  });
+};
+export const setFreeShippingRedux = (value) => async (dispatch) => {
+  dispatch({
+    type: "SET_FREE_SHIPPING",
+    payload: value,
   });
 };
 

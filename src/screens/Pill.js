@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import { scale } from "react-native-size-matters";
 import Icon from "react-native-vector-icons/Feather";
-import Colors from "../../helpers/Colors";
+
+import Colors from "../helpers/Colors";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 
 const styles = StyleSheet.create({
@@ -15,36 +16,31 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   pill: {
-    paddingVertical: scale(3),
-    paddingHorizontal: scale(4),
-    backgroundColor: "#ff8084",
+    paddingVertical: scale(5),
+    paddingHorizontal: scale(8),
+    backgroundColor: "#ec345b",
   },
   left: {
-    borderTopLeftRadius: scale(4),
-    borderBottomLeftRadius: scale(4),
+    borderTopLeftRadius: scale(5),
+    borderBottomLeftRadius: scale(5),
   },
   right: {
-    borderTopRightRadius: scale(4),
-    borderBottomRightRadius: scale(4),
+    borderTopRightRadius: scale(5),
+    borderBottomRightRadius: scale(5),
   },
   value: {
-    paddingVertical: scale(3),
-    paddingHorizontal: scale(1),
-    minWidth: widthPercentageToDP("7%"),
-    maxWidth: widthPercentageToDP("7%"),
+    paddingVertical: scale(5),
+    paddingHorizontal: scale(8),
     borderLeftWidth: StyleSheet.hairlineWidth,
     borderRightWidth: StyleSheet.hairlineWidth,
     borderColor: Colors.gray50,
+    minWidth: widthPercentageToDP("10%"),
+    maxWidth: widthPercentageToDP("10%"),
+    textAlign: "center",
   },
 });
 
-const Pill = ({
-  sku,
-  decrementQuantity,
-  incrementQuantity,
-  skus,
-  quantity,
-}) => {
+const Pill = ({ sku, decrementQuantity, incrementQuantity, quantity }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -58,7 +54,7 @@ const Pill = ({
       </TouchableOpacity>
       <View style={styles.value}>
         <Text
-          style={{ fontSize: widthPercentageToDP("2.5%"), textAlign: "center" }}
+          style={{ fontSize: widthPercentageToDP("2.8%"), textAlign: "center" }}
         >
           {quantity}
         </Text>

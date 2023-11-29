@@ -21,6 +21,7 @@ import {
   AddAdressComponent,
   EditAddressComponent,
   PaymentSuccessComponent,
+  OrderView,
 } from "@component";
 import {
   widthPercentageToDP as wp,
@@ -38,6 +39,7 @@ import DummyAddress from "@component/items/DummyAddress";
 import GradientButton from "../component/CartComponent/Button";
 import Delivery from "./delivery.png";
 import CashOnDelivery from "./cashonDelivery.png";
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 function CheckoutScreen(props) {
   const [state, setState] = React.useState({
     loading: true,
@@ -54,38 +56,6 @@ function CheckoutScreen(props) {
     selectedPaymentMethod: 4,
     paymentSuccessModal: false,
   });
-
-  const calculateCart = () => {
-    let cartProducts = props.cartData;
-    let cartItems = [];
-    let sumAmount = 0;
-
-    //find and create array
-    cartProducts &&
-      cartProducts.length > 0 &&
-      cartProducts.forEach(function (item, index) {
-        let findedProduct = ProductListDummy.filter(
-          (product) => product.id == item.product_id
-        );
-        cartItems.push({
-          quantity: item.quantity,
-          name: findedProduct[0].name,
-          price: findedProduct[0].price,
-          image: findedProduct[0].image,
-          id: findedProduct[0].id,
-        });
-        let amt = parseInt(findedProduct[0].price.replace("$", ""));
-        sumAmount += amt * item.quantity;
-      });
-
-    setState({
-      ...state,
-      noRecord: cartProducts.length > 0 ? false : true,
-      loading: false,
-      cartProducts: cartItems,
-      sumAmount: sumAmount,
-    });
-  };
 
   const storeAddress = (addressData) => {
     let newID = "" + Math.floor(Math.random() * 10000) + 1;
@@ -157,10 +127,6 @@ function CheckoutScreen(props) {
     props.proceedCheckout();
   };
 
-  useEffect(() => {
-    calculateCart();
-  }, []);
-
   const {
     cartProducts,
     loading,
@@ -174,7 +140,7 @@ function CheckoutScreen(props) {
     selectedPaymentMethod,
     paymentSuccessModal,
   } = state;
-  const { totalAmt } = props.route.params;
+  const { sumAmount } = props.route.params;
 
   return (
     <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
@@ -274,7 +240,7 @@ function CheckoutScreen(props) {
             </View>
           </View>
         </View>
-        <View style={{ display: "flex", flexDirection: "row", marginTop: 20 }}>
+        <View style={{ display: "flex", flexDirection: "row", marginTop: 5 }}>
           <TextInput
             editable
             multiline
@@ -387,6 +353,44 @@ function CheckoutScreen(props) {
             </View>
           </View>
         </View>
+        <OtrixDivider size={"sm"} />
+        <View style={styles.box}>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              backgroundColor: "#ffe6ec",
+              padding: 10,
+              paddingTop: 7,
+              paddingBottom: 7,
+              justifyContent: "space-between",
+            }}
+          >
+            <View style={{ display: "flex", flexDirection: "row" }}>
+              <FontAwesomeIcon
+                name={"list-alt"}
+                color={"#ec345b"}
+                style={{ fontSize: wp("4.5%") }}
+              />
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: "#ec345b",
+                  fontSize: wp("4.1%"),
+                }}
+              >
+                {"   "}
+                Order Details
+              </Text>
+            </View>
+          </View>
+
+          <OrderView
+            navigation={props.navigation}
+            products={props.cartData}
+            sumAmount={sumAmount}
+          />
+        </View>
       </OtrixContent>
 
       <View
@@ -400,16 +404,71 @@ function CheckoutScreen(props) {
           minWidth: "100%",
         }}
       >
-        <GradientButton
-          label={"PLACE ORDER"}
-          onPress={() => {
-            setState({
-              ...state,
-              paymentSuccessModal: true,
-            });
-          }}
-        />
+        <GradientButton label={"PLACE ORDER"} onPress={() => {}} />
       </View>
+      {props.cartData.length > 0 && (
+        <View
+          style={{
+            position: "absolute",
+            bottom: -20,
+            padding: 10,
+            backgroundColor: Colors.light_white,
+            display: "flex",
+            flexDirection: "row",
+            minWidth: "100%",
+          }}
+        >
+          <GradientButton
+            children={
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    fontSize: wp("3.1%"),
+                  }}
+                >
+                  Total ৳ {sumAmount}
+                </Text>
+                <View
+                  style={{
+                    height: "100%",
+                    width: 2,
+                    backgroundColor: "white",
+                  }}
+                ></View>
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    fontSize: wp("3.1%"),
+                  }}
+                >
+                  Place Order{" "}
+                  <Text style={{ marginTop: -5 }}>
+                    <FontAwesomeIcon name={"arrow-right"} />
+                  </Text>
+                </Text>
+              </View>
+            }
+            onPress={() => {
+              setState({
+                ...state,
+                paymentSuccessModal: true,
+              });
+              // props.navigation.navigate("CheckoutScreen", {
+              //   sumAmount,
+              // });
+            }}
+          />
+        </View>
+      )}
 
       {/* Payment Modal  */}
       <Modal visible={paymentSuccessModal} transparent={true}>

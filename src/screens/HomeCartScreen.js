@@ -21,7 +21,9 @@ import ProductListDummy from "@component/items/ProductListDummy";
 import Icon from "react-native-vector-icons/Ionicons";
 import Fonts from "@helpers/Fonts";
 import GradientButton from "../component/CartComponent/Button";
-function CheckoutScreen(props) {
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
+import { updateCart } from "../firebase/firebase.utils";
+function CartScreen(props) {
   const [state, setState] = React.useState({
     loading: true,
     cartArr: [],
@@ -30,7 +32,6 @@ function CheckoutScreen(props) {
     isApplied: false,
     validCode: false,
     couponCode: null,
-    noRecord: false,
   });
 
   const applyCouponCode = () => {
@@ -60,44 +61,49 @@ function CheckoutScreen(props) {
 
   const calculateCart = () => {
     let cartProducts = props.cartData;
-    let cartItems = ProductListDummy;
-    let sumAmount = 2000;
+    let sumAmount = 0;
 
     //find and create array
-    // cartProducts && cartProducts.length > 0 && cartProducts.forEach(function (item, index) {
-    //     let findedProduct = ProductListDummy.filter(product => product.id == item.product_id);
-    //     cartItems.push({
-    //         quantity: item.quantity,
-    //         name: findedProduct[0].name,
-    //         price: findedProduct[0].price,
-    //         image: findedProduct[0].image,
-    //         id: findedProduct[0].id
-    //     });
-
-    // });
+    cartProducts &&
+      cartProducts.length > 0 &&
+      cartProducts.forEach(function (item, index) {
+        let price = getPrice2(item);
+        sumAmount += parseInt(price) * item.quantity;
+      });
 
     setState({
       ...state,
-      noRecord: cartItems.length > 0 ? false : true,
       loading: false,
-      cartProducts: cartItems,
+      cartProducts: cartProducts,
       sumAmount: sumAmount,
     });
+  };
+  const getPrice2 = (product) => {
+    if (product.selectedVariation.id) {
+      if (product.selectedVariation.salePrice == 0) {
+        return product.selectedVariation.price;
+      } else {
+        return product.selectedVariation.salePrice;
+      }
+    } else {
+      if (product.product) {
+        if (product.product.salePrice == 0) {
+          return product.product.price;
+        } else {
+          return product.product.salePrice;
+        }
+      } else {
+        return 0;
+      }
+    }
   };
 
   useEffect(() => {
     calculateCart();
-  }, []);
+  }, [props.cartData]);
 
-  const {
-    cartProducts,
-    sumAmount,
-    couponCode,
-    loading,
-    isApplied,
-    validCode,
-    noRecord,
-  } = state;
+  const { cartProducts, sumAmount, couponCode, loading, isApplied, validCode } =
+    state;
   return (
     <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
       {/* Header */}
@@ -129,16 +135,17 @@ function CheckoutScreen(props) {
         }}
       >
         {/* Cart Component Start from here */}
-        {!noRecord && !loading && (
+        {!loading && props.cartData.length > 0 && (
           <CartView
             navigation={props.navigation}
-            products={cartProducts}
+            products={props.cartData}
             deleteItem={onDeleteItem}
             decrementItem={decrement}
             incrementItem={increment}
+            sumAmount={sumAmount}
           />
         )}
-        {!loading && noRecord && (
+        {!loading && props.cartData.length == 0 && (
           <View style={styles.noRecord}>
             <Text style={styles.emptyTxt}>Cart is empty!</Text>
             <Button
@@ -168,28 +175,66 @@ function CheckoutScreen(props) {
         )}
       </OtrixContent>
 
-      <View
-        style={{
-          position: "absolute",
-          bottom: -10,
-          padding: 10,
-          backgroundColor: Colors.light_white,
-          display: "flex",
-          flexDirection: "row",
-          minWidth: "100%",
-        }}
-      >
-        <GradientButton
-          label={"PROCEED TO CHECKOUT"}
-          onPress={() => {
-            props.navigation.navigate("CheckoutScreen", {
-              totalAmt: validCode
-                ? "$" + parseFloat(sumAmount - 50)
-                : "$" + sumAmount,
-            });
+      {props.cartData.length > 0 && (
+        <View
+          style={{
+            position: "absolute",
+            bottom: -20,
+            padding: 10,
+            backgroundColor: Colors.light_white,
+            display: "flex",
+            flexDirection: "row",
+            minWidth: "100%",
           }}
-        />
-      </View>
+        >
+          <GradientButton
+            children={
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    fontSize: wp("3.1%"),
+                  }}
+                >
+                  Total ৳ {sumAmount}
+                </Text>
+                <View
+                  style={{
+                    height: "100%",
+                    width: 2,
+                    backgroundColor: "white",
+                  }}
+                ></View>
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    fontSize: wp("3.1%"),
+                  }}
+                >
+                  Go to Checkout{" "}
+                  <Text style={{ marginTop: -5 }}>
+                    <FontAwesomeIcon name={"arrow-right"} />
+                  </Text>
+                </Text>
+              </View>
+            }
+            onPress={() => {
+              updateCart(props.cartData)
+              props.navigation.navigate("CheckoutScreen", {
+                sumAmount,
+              });
+            }}
+          />
+        </View>
+      )}
     </OtrixContainer>
   );
 }
@@ -204,7 +249,7 @@ export default connect(mapStateToProps, {
   removeFromCart,
   decrementQuantity,
   incrementQuantity,
-})(CheckoutScreen);
+})(CartScreen);
 
 const styles = StyleSheet.create({
   checkoutView: {

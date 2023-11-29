@@ -8,6 +8,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   useWindowDimensions,
+  ActivityIndicator,
 } from "react-native";
 import { connect } from "react-redux";
 import {
@@ -39,9 +40,14 @@ import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 import ImageViewer from "react-native-image-zoom-viewer";
 import Stars from "react-native-stars";
-import { getSingleProductRedux } from "../redux/Action";
+import { getSingleProductRedux, addToCartRedux } from "../redux/Action";
 import BottomSheet from "../component/CartComponent/BottomSheet";
 import GradientButton from "../component/CartComponent/Button";
+import cloudshopBD from "./cloudshopBd.png";
+
+import Pill from "./Pill";
+import { scale } from "react-native-size-matters";
+import Toast from "react-native-simple-toast";
 const COLORS = ["#3ad35c", Colors.themeColor, "#efcd19", "#ff1e1a"];
 
 function ProductDetailScreen(props) {
@@ -55,25 +61,20 @@ function ProductDetailScreen(props) {
     showZoom: false,
     zoomImages: [],
     msg: "",
+    render: false,
+    variation: null,
+    quantity: 1,
+    loader: true,
   });
   const sheetRef = useRef(null);
   const { loading, selectedColor, productCount, zoomImages, showZoom, msg } =
     state;
-
-  const _CartData = () => {
-    // setState({ ...state, fetchCart: false })
-  };
 
   const showOutofStock = () => {
     setTimeout(() => {
       setState({ ...state, msg: "" });
     }, 2500);
     setState({ ...state, msg: "Product out of stock" });
-  };
-
-  const _addToCart = () => {
-    setState({ ...state, fetchCart: true, msg: "" });
-    props.addToCart(productDetail.id, productCount);
   };
 
   useEffect(() => {
@@ -88,7 +89,78 @@ function ProductDetailScreen(props) {
     });
   }, []);
 
-  const { cartCount, product } = props;
+  useEffect(() => {
+    const { product } = props;
+    let obj = {};
+    console.log(product);
+    if (
+      product &&
+      product.savedAttributes &&
+      product.savedAttributes.length > 0
+    ) {
+      product.savedAttributes.map((attribute, index) => {
+        if (attribute.selectedTerms.length > 0) {
+          obj["selectedTerm" + index] = attribute.selectedTerms[0];
+        }
+      });
+    }
+    let variation = getVariation(obj);
+
+    setState({
+      ...state,
+      ...obj,
+      variation,
+      loading: false,
+    });
+  }, [product]);
+
+  useEffect(() => {
+    const { product } = props;
+    let obj = {};
+    if (
+      state.render &&
+      product &&
+      product.savedAttributes &&
+      product.savedAttributes.length > 0
+    ) {
+      for (var key of Object.keys(state)) {
+        if (key.includes("selectedTerm")) {
+          obj[key] = state[key];
+        }
+      }
+      let variation = getVariation(obj);
+
+      setState({
+        ...state,
+        ...obj,
+        variation,
+        render: false,
+        loading: false,
+      });
+    }
+  }, [state.render]);
+
+  const getVariation = (obj) => {
+    const { product } = props;
+    let selectedVariation = {};
+    if (product && product.displayedVariations.length > 0) {
+      product.displayedVariations.map((vari) => {
+        let combinationIdArray = vari.combination.map((combination) => {
+          return combination.id;
+        });
+        let ids = [];
+        for (var key of Object.keys(obj)) {
+          ids.push(obj[key].id);
+        }
+
+        if (combinationIdArray.sort().join(",") === ids.sort().join(",")) {
+          selectedVariation = vari;
+        }
+      });
+    }
+    return selectedVariation;
+  };
+  const { cartData, product } = props;
   let source = {};
   if (product) {
     source = {
@@ -106,8 +178,185 @@ function ProductDetailScreen(props) {
     } else {
       images = [...product.pictures];
     }
-    console.log(product.selectedCategories[0]);
   }
+
+  const getPrice = (product) => {
+    console.log(state.variation);
+    if (state.variation && state.variation.id) {
+      console.log(state.variation);
+      if (state.variation.salePrice == 0) {
+        return (
+          <View style={styles.productPrice}>
+            <Text style={styles.productPrice}>৳ {state.variation.price}</Text>
+            <Text
+              style={{
+                ...styles.productPrice,
+                textDecorationLine: "line-through",
+                color: "white",
+                fontSize: wp("3.7%"),
+              }}
+            >
+              ৳ {state.variation.price}
+            </Text>
+          </View>
+        );
+      } else {
+        return (
+          <View style={styles.productPrice}>
+            <Text style={styles.productPrice}>
+              ৳ {state.variation.salePrice}
+            </Text>
+            <Text
+              style={{
+                ...styles.productPrice,
+                textDecorationLine: "line-through",
+                color: "gray",
+                fontSize: wp("3.7%"),
+              }}
+            >
+              ৳ {state.variation.price}
+            </Text>
+          </View>
+        );
+      }
+    } else {
+      if (product.salePrice == 0) {
+        return (
+          <View style={styles.productPrice}>
+            <Text style={styles.productPrice}> ৳ {product.price}</Text>
+            <Text
+              style={{
+                ...styles.productPrice,
+                textDecorationLine: "line-through",
+                color: "white",
+                fontSize: wp("3.7%"),
+              }}
+            >
+              ৳ {product.price}
+            </Text>
+          </View>
+        );
+      } else {
+        return (
+          <View style={styles.productPrice}>
+            <Text style={styles.productPrice}> ৳ {product.salePrice}</Text>
+            <Text
+              style={{
+                ...styles.productPrice,
+                textDecorationLine: "line-through",
+                color: "gray",
+                fontSize: wp("3.7%"),
+              }}
+            >
+              ৳ {product.price}
+            </Text>
+          </View>
+        );
+      }
+    }
+  };
+  const getPrice2 = (product) => {
+    if (state.variation && state.variation.id) {
+      if (state.variation.salePrice == 0) {
+        return state.variation.price;
+      } else {
+        return state.variation.salePrice;
+      }
+    } else {
+      if (product) {
+        if (product.salePrice == 0) {
+          return product.price;
+        } else {
+          return product.salePrice;
+        }
+      } else {
+        return 0;
+      }
+    }
+  };
+
+  const getTimeRemaining = () => {
+    const date = new Date();
+    const endtime = `${date.toLocaleString("default", {
+      month: "long",
+    })} ${date.getDate()} ${date.getFullYear()} 23:59:59 GMT+0600`;
+
+    const total = Date.parse(endtime) - Date.parse(new Date());
+    const seconds = Math.floor((total / 1000) % 60);
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+    const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+    const days = Math.floor(total / (1000 * 60 * 60 * 24));
+    return (
+      <View style={{ maxWidth: "95%", width: "95%" }}>
+        <Text
+          style={{
+            color: "#292929",
+            marginLeft: 5,
+            fontSize: wp("3.2%"),
+          }}
+        >
+          Order in The Next{" "}
+          <Text
+            style={{
+              textDecorationLine: "underline",
+              color: "#ff8084",
+              fontWeight: "bold",
+              fontSize: wp("3.2%"),
+            }}
+          >
+            {hours} hours {minutes} minutes
+          </Text>{" "}
+          to get it by{" "}
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: wp("3.2%"),
+            }}
+          >
+            {date.toLocaleString("default", { month: "long" })}{" "}
+            {date.getDate() + 2}, {date.getFullYear()}
+          </Text>
+          .
+        </Text>
+      </View>
+    );
+  };
+
+  const calculateCart = () => {
+    let cartProducts = props.cartData;
+    let sumAmount = 0;
+
+    //find and create array
+    cartProducts &&
+      cartProducts.length > 0 &&
+      cartProducts.forEach(function (item, index) {
+        let price = getPrice3(item);
+        sumAmount += parseInt(price) * item.quantity;
+      });
+
+    return sumAmount;
+  };
+  const getPrice3 = (product) => {
+    if (product.selectedVariation.id) {
+      if (product.selectedVariation.salePrice == 0) {
+        return product.selectedVariation.price;
+      } else {
+        return product.selectedVariation.salePrice;
+      }
+    } else {
+      if (product.product) {
+        if (product.product.salePrice == 0) {
+          return product.product.price;
+        } else {
+          return product.product.salePrice;
+        }
+      } else {
+        return 0;
+      }
+    }
+  };
+
+  console.log(state);
 
   return (
     <OtrixContainer customStyles={{ backgroundColor: "white" }}>
@@ -170,36 +419,35 @@ function ProductDetailScreen(props) {
               )}
 
               <TouchableOpacity
-                style={{ alignSelf: "flex-end" }}
+                style={{ alignSelf: "flex-end", marginBottom: -6 }}
                 onPress={() => props.navigation.navigate("HomeCartScreen")}
               >
                 <Image source={bottomCart} style={styles.menuImage} />
-                {cartCount > 0 && (
-                  <Badge
+
+                <Badge
+                  style={[
+                    GlobalStyles.badge,
+                    {
+                      left: wp("4.4%"),
+                      top: hp("1.1%"),
+                      height: cartData.length > 9 ? 30 : 24,
+                      width: cartData.length > 9 ? 30 : 24,
+                      backgroundColor: "#ffe0e1",
+                    },
+                  ]}
+                >
+                  <Text
                     style={[
-                      GlobalStyles.badge,
+                      GlobalStyles.badgeText,
                       {
-                        left: wp("4.4%"),
-                        top: -hp("1.4%"),
-                        height: cartCount > 9 ? 28 : 24,
-                        width: cartCount > 9 ? 28 : 24,
-                        backgroundColor: Colors.white,
+                        color: Colors.themeColor,
+                        fontSize: cartData.length > 9 ? wp("2.5%") : wp("3%"),
                       },
                     ]}
                   >
-                    <Text
-                      style={[
-                        GlobalStyles.badgeText,
-                        {
-                          color: Colors.themeColor,
-                          fontSize: cartCount > 9 ? wp("2.5%") : wp("3%"),
-                        },
-                      ]}
-                    >
-                      {cartCount}
-                    </Text>
-                  </Badge>
-                )}
+                    {cartData.length}
+                  </Text>
+                </Badge>
               </TouchableOpacity>
             </View>
           </View>
@@ -274,12 +522,10 @@ function ProductDetailScreen(props) {
               <OtrixDivider size={"sm"} />
               {/* Price Container*/}
               <View style={styles.subContainer}>
-                <Text style={styles.productPrice}>
-                  ৳ {product.salePrice || product.price}
-                </Text>
+                {getPrice(product)}
                 <View style={styles.starView}>
                   <Stars
-                    default={5}
+                    default={0}
                     count={5}
                     half={true}
                     starSize={45}
@@ -306,24 +552,40 @@ function ProductDetailScreen(props) {
                     }
                     disabled={true}
                   />
-                  <Text style={styles.reviewTxt}>(10 Reviews)</Text>
+                  <Text style={styles.reviewTxt}>(0 Reviews)</Text>
                 </View>
               </View>
               <OtrixDivider size={"sm"} />
               <View>
                 <TouchableWithoutFeedback>
-                  <Image
-                    source={{
-                      uri: "https://cloudshopbd.com/wp-content/uploads/2020/09/Untitled-300x300.png",
-                    }}
-                    style={{
-                      width: 100,
-                      height: 100,
-                      borderColor: "gainsboro",
-                      borderWidth: 2,
-                      borderRadius: 5,
-                    }}
-                  />
+                  {product.selectedBrands.length > 0 &&
+                  product.selectedBrands[0].logo &&
+                  product.selectedBrands[0].logo !=
+                    "/static/media/plus image.3dff302b.jpeg" ? (
+                    <Image
+                      source={{
+                        uri: product.selectedBrands[0].logo,
+                      }}
+                      style={{
+                        width: wp("18%"),
+                        height: wp("18%"),
+                        borderColor: "gainsboro",
+                        borderWidth: 2,
+                        borderRadius: 5,
+                      }}
+                    />
+                  ) : (
+                    <Image
+                      source={cloudshopBD}
+                      style={{
+                        width: wp("20%"),
+                        height: wp("18%"),
+                        borderColor: "gainsboro",
+                        borderWidth: 2,
+                        borderRadius: 5,
+                      }}
+                    />
+                  )}
                 </TouchableWithoutFeedback>
               </View>
               <OtrixDivider size={"md"} />
@@ -354,37 +616,7 @@ function ProductDetailScreen(props) {
                       style={[styles.myStarStyle2]}
                     />
                   </Text>
-                  <View style={{ maxWidth: "95%", width: "95%" }}>
-                    <Text
-                      style={{
-                        color: "#292929",
-                        marginLeft: 5,
-                        fontSize: wp("3.2%"),
-                      }}
-                    >
-                      Order in The Next{" "}
-                      <Text
-                        style={{
-                          textDecorationLine: "underline",
-                          color: "#ff8084",
-                          fontWeight: "bold",
-                          fontSize: wp("3.2%"),
-                        }}
-                      >
-                        06 hours 09 minutes
-                      </Text>{" "}
-                      to get it by{" "}
-                      <Text
-                        style={{
-                          fontWeight: "bold",
-                          fontSize: wp("3.2%"),
-                        }}
-                      >
-                        October 23, 2023
-                      </Text>
-                      .
-                    </Text>
-                  </View>
+                  {getTimeRemaining()}
                 </View>
                 <View
                   style={{
@@ -417,24 +649,68 @@ function ProductDetailScreen(props) {
                         fontSize: wp("3.2%"),
                       }}
                     >
-                      ৳ 915.00{" "}
+                      Tk {props.freeShipping}{" "}
                     </Text>
                     to get Free Shipping.
                   </Text>
                 </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: 7,
+                  }}
+                >
+                  <Text
+                    style={{
+                      paddingTop: scale(10),
+                      fontSize: wp("3.2%"),
+                      color: "gray",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {getPrice2(product)} * {state.quantity}
+                  </Text>
+                  <Pill
+                    decrementQuantity={() => {
+                      setState({
+                        ...state,
+                        quantity: state.quantity == 1 ? 1 : state.quantity - 1,
+                      });
+                    }}
+                    incrementQuantity={() => {
+                      setState({
+                        ...state,
+                        quantity: state.quantity + 1,
+                      });
+                    }}
+                    quantity={state.quantity}
+                  />
+                </View>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    color: "black",
+                    fontSize: wp("3.2%"),
+                    marginTop: -5,
+                  }}
+                >
+                  Total: ৳ {parseFloat(getPrice2(product)) * state.quantity}
+                </Text>
               </View>
               {/* Color */}
               <OtrixDivider size={"md"} />
               <View style={GlobalStyles.horizontalLine}></View>
               {product.savedAttributes.length > 0 &&
-                product.savedAttributes.map((attribute) => (
+                product.savedAttributes.map((attribute, index) => (
                   <>
                     <OtrixDivider size={"sm"} />
                     <View>
                       <Text
-                        style={[styles.headingTxt, { fontSize: wp("3.4%") }]}
+                        style={[styles.headingTxt, { fontSize: wp("3.2%") }]}
                       >
-                        {attribute.name}
+                        Choose {attribute.name}
                       </Text>
                       <View
                         style={{
@@ -446,22 +722,48 @@ function ProductDetailScreen(props) {
                           alignItems: "flex-start",
                         }}
                       >
-                        {attribute.selectedTerms.map((term) => (
-                          <View
-                            style={{
-                              padding: wp("3.6%"),
-                              borderColor: "gray",
-                              borderWidth: 1,
-                              borderRadius: 5,
-                              margin: 7,
-                              marginLeft: 0,
-                            }}
-                          >
-                            <Text style={{ color: "gray", fontSize: wp("3%") }}>
-                              {term.name}
-                            </Text>
-                          </View>
-                        ))}
+                        {attribute.selectedTerms.map((term) => {
+                          return (
+                            <TouchableOpacity
+                              onPress={() => {
+                                setState({
+                                  ...state,
+                                  ["selectedTerm" + index]: term,
+                                  render: true,
+                                });
+                              }}
+                            >
+                              <View
+                                style={{
+                                  padding: wp("3%"),
+                                  borderColor:
+                                    state["selectedTerm" + index] &&
+                                    state["selectedTerm" + index].id == term.id
+                                      ? "#EC345B"
+                                      : "gray",
+                                  borderWidth: 1,
+                                  borderRadius: 5,
+                                  margin: 7,
+                                  marginLeft: 0,
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    color:
+                                      state["selectedTerm" + index] &&
+                                      state["selectedTerm" + index].id ==
+                                        term.id
+                                        ? "#EC345B"
+                                        : "gray",
+                                    fontSize: wp("3%"),
+                                  }}
+                                >
+                                  {term.name}
+                                </Text>
+                              </View>
+                            </TouchableOpacity>
+                          );
+                        })}
                       </View>
                     </View>
                   </>
@@ -568,15 +870,103 @@ function ProductDetailScreen(props) {
               backgroundColor: "white",
               display: "flex",
               flexDirection: "row",
+
               minWidth: "100%",
             }}
           >
-            <GradientButton
-              label={"ADD TO CART"}
-              onPress={() => {
-                sheetRef.current.open();
-              }}
-            />
+            {props.currentUser && props.currentUser.id ? (
+              <GradientButton
+                // label={"ADD TO CART ->"}
+                onPress={async () => {
+                  let cartObj = {
+                    quantity: state.quantity,
+                    productId: props.product.id,
+                    product: props.product,
+                    selectedVariation: state.variation ? state.variation : null,
+                  };
+
+                  sheetRef.current.open();
+                  setState({
+                    ...state,
+                    loader: true,
+                  });
+                  Toast.show("item added to cart.");
+                  await props.addToCartRedux(cartObj, props.currentUser);
+                  setState({
+                    ...state,
+                    loader: false,
+                  });
+                }}
+                children={
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: wp("3.1%"),
+                      }}
+                    >
+                      Total ৳ {parseFloat(getPrice2(product)) * state.quantity}
+                    </Text>
+                    <View
+                      style={{
+                        height: "100%",
+                        width: 2,
+                        backgroundColor: "white",
+                      }}
+                    ></View>
+                    <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: wp("3.1%"),
+                      }}
+                    >
+                      Add to cart{" "}
+                      <Text style={{ marginTop: -5 }}>
+                        <FontAwesomeIcon name={"arrow-right"} />
+                      </Text>
+                    </Text>
+                  </View>
+                }
+              />
+            ) : (
+              <GradientButton
+                // label={"ADD TO CART ->"}
+                onPress={() => {
+                  props.navigation.navigate("LoginScreen");
+                  Toast.show("Please login or create account to order.");
+                }}
+                children={
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: wp("3.1%"),
+                      }}
+                    >
+                      Please Login or Create account to order{" "}
+                      <Text style={{ marginTop: -5 }}>
+                        <FontAwesomeIcon name={"arrow-right"} />
+                      </Text>
+                    </Text>
+                  </View>
+                }
+              />
+            )}
           </View>
         </>
       ) : null}
@@ -594,50 +984,114 @@ function ProductDetailScreen(props) {
       )}
 
       <BottomSheet sheetRef={sheetRef} buttonText="Confirm" height={hp("80%")}>
-        <View style={styles.sheet}>
+        {state.loader ? (
           <View
             style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 10,
-              paddingBottom: 15,
+              height: "100%",
+              width: "100%",
+              backgroundColor: "white",
             }}
           >
-            <Text weight="medium" style={styles.select}>
-              YOUR SHOPPING CART
-            </Text>
-            <TouchableOpacity
-              style={[
-                GlobalStyles.headerLeft,
-                { zIndex: 999999999, flex: 0.9, alignItems: "flex-end" },
-              ]}
-              onPress={() => sheetRef.current.close()}
-            >
-              <MaterialIconsIcon name="close" style={styles.close} />
-            </TouchableOpacity>
+            <View style={[styles.container2, styles.horizontal]}>
+              <ActivityIndicator size="small" color="gray" />
+            </View>
           </View>
-          <ScrollView style={{ marginBottom: 35 }}>
-            <CartView
-              navigation={props.navigation}
-              products={ProductListDummy}
-              bottomSheet={true}
-            />
-          </ScrollView>
-        </View>
-        <View
-          style={{
-            position: "absolute",
-            bottom: 20,
-            padding: 10,
-            backgroundColor: "white",
-            display: "flex",
-            flexDirection: "row",
-            minWidth: "100%",
-          }}
-        >
-          <GradientButton label={"VIEW CART"} />
-        </View>
+        ) : (
+          <>
+            <View style={styles.sheet}>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginTop: 10,
+                  paddingBottom: 15,
+                }}
+              >
+                <Text weight="medium" style={styles.select}>
+                  YOUR SHOPPING CART
+                </Text>
+
+                <TouchableOpacity
+                  style={[
+                    GlobalStyles.headerLeft,
+                    { zIndex: 999999999, flex: 0.9, alignItems: "flex-end" },
+                  ]}
+                  onPress={() => sheetRef.current.close()}
+                >
+                  <MaterialIconsIcon name="close" style={styles.close} />
+                </TouchableOpacity>
+              </View>
+              <ScrollView style={{ marginBottom: 35 }}>
+                <CartView
+                  navigation={props.navigation}
+                  products={cartData}
+                  bottomSheet={true}
+                  sumAmount={calculateCart()}
+                />
+              </ScrollView>
+            </View>
+
+            <View
+              style={{
+                position: "absolute",
+                bottom: 20,
+                padding: 10,
+                backgroundColor: "white",
+                display: "flex",
+                flexDirection: "row",
+                minWidth: "100%",
+              }}
+            >
+              <GradientButton
+                onPress={() => {
+                  sheetRef.current.close();
+                  setTimeout(() => {
+                    props.navigation.navigate("HomeCartScreen");
+                  }, 400);
+                }}
+                children={
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: wp("3.1%"),
+                      }}
+                    >
+                      Total ৳ {calculateCart()}
+                    </Text>
+                    <View
+                      style={{
+                        height: "100%",
+                        width: 2,
+                        backgroundColor: "white",
+                      }}
+                    ></View>
+                    <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: wp("3.1%"),
+                      }}
+                    >
+                      View cart{" "}
+                      <Text style={{ marginTop: -5 }}>
+                        <FontAwesomeIcon name={"arrow-right"} />
+                      </Text>
+                    </Text>
+                  </View>
+                }
+              />
+            </View>
+          </>
+        )}
       </BottomSheet>
     </OtrixContainer>
   );
@@ -645,14 +1099,18 @@ function ProductDetailScreen(props) {
 
 function mapStateToProps(state) {
   return {
-    cartCount: state.cart.cartCount,
+    cartData: state.cart.cartData,
     product: state.products.productObj,
+    currentUser: state.auth.currentUser,
+    freeShipping: state.cart.freeShipping,
   };
 }
 
-export default connect(mapStateToProps, { addToCart, getSingleProductRedux })(
-  ProductDetailScreen
-);
+export default connect(mapStateToProps, {
+  addToCart,
+  getSingleProductRedux,
+  addToCartRedux,
+})(ProductDetailScreen);
 
 const styles = StyleSheet.create({
   productDetailView: {
@@ -896,5 +1354,14 @@ const styles = StyleSheet.create({
     fontSize: wp("4.5%"),
     color: Colors.black_text,
     marginHorizontal: wp("34%"),
+  },
+  container2: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  horizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10,
   },
 });
