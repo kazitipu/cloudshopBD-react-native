@@ -20,6 +20,11 @@ export default (state = initialState, action) => {
         ...state,
         currentUser: payload,
       };
+    case "UPDATE_ADDRESSBOOK":
+      return {
+        ...state,
+        currentUser: payload,
+      };
     case "SET_ADDITIONAL_DATA":
       return {
         ...state,

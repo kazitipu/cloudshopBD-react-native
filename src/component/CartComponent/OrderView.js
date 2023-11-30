@@ -86,270 +86,7 @@ function CartView(props) {
   };
   return (
     <>
-      <View style={{ ...styles.cartContent2 }}>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            backgroundColor: "",
-          }}
-        >
-          <Image source={truck} style={styles.truck}></Image>
-          <Text
-            style={{
-              color: "#ff8084",
-              fontSize: wp("3.4%"),
-              marginTop: wp("3.5%"),
-              fontWeight: "bold",
-            }}
-          >
-            {sumAmount > freeShipping
-              ? "You will get free shipping."
-              : `spend ৳ ${
-                  parseInt(freeShipping) - parseInt(sumAmount)
-                } more get Free Shipping.`}
-          </Text>
-        </View>
-      </View>
-      {props.bottomSheet ? null : (
-        <View style={{ ...styles.cartContent2 }}>
-          <Text
-            style={{
-              marginTop: 10,
-              color: "#666",
-              textDecorationLine: "underline",
-              marginBottom: 7,
-              fontSize: wp("3.3%"),
-            }}
-          >
-            Have voucher code?
-          </Text>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-
-              marginBottom: 12,
-            }}
-          >
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeNumber}
-              value={number}
-              placeholder="Enter voucher code"
-              placeholderTextColor={"#ff8084"}
-            />
-            <View style={styles.input2}>
-              <Text style={{ color: "white" }}>Apply</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              padding: 15,
-              backgroundColor: "#fffbfc",
-              borderWidth: 1,
-              borderColor: "#ff8084",
-              borderStyle: "dashed",
-              borderRadius: 5,
-            }}
-          >
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-              }}
-            >
-              <Image source={tk} style={styles.image2}></Image>
-              <Text style={{ color: "#ff8084", fontSize: wp("3.4%") }}>
-                You are saving{" "}
-                <Text
-                  style={{
-                    color: "#ff8084",
-                    fontWeight: "bold",
-                    fontSize: wp("3%"),
-                  }}
-                >
-                  ৳ 184432
-                </Text>{" "}
-                in this order.
-              </Text>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                marginTop: 7,
-              }}
-            >
-              <Image source={tk} style={styles.image2}></Image>
-              <Text style={{ color: "#ff8084", fontSize: wp("3.4%") }}>
-                You will receive{" "}
-                <Text
-                  style={{
-                    color: "#ff8084",
-                    fontWeight: "bold",
-                    fontSize: wp("3%"),
-                  }}
-                >
-                  ৳ 100
-                </Text>{" "}
-                cashback after delivery.
-              </Text>
-            </View>
-          </View>
-          <OtrixDivider size={"sm"} />
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: 3,
-              marginTop: 3,
-            }}
-          >
-            <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
-              Subtotal
-            </Text>
-            <Text
-              style={{
-                color: "#666",
-                fontWeight: "bold",
-                fontSize: wp("2.8%"),
-              }}
-            >
-              ৳ {props.sumAmount}
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: 3,
-            }}
-          >
-            <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
-              Discount applied
-            </Text>
-            <Text
-              style={{
-                color: "#666",
-                fontWeight: "bold",
-                fontSize: wp("2.8%"),
-              }}
-            >
-              -৳ 0
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: 3,
-            }}
-          >
-            <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
-              Rounding off
-            </Text>
-            <Text
-              style={{
-                color: "#666",
-                fontSize: wp("2.8%"),
-                fontWeight: "bold",
-              }}
-            >
-              -৳ 0
-            </Text>
-          </View>
-          <OtrixDivider size={"sm"} />
-          <View
-            style={{
-              padding: 15,
-              backgroundColor: "#fffbfc",
-              borderWidth: 1,
-              borderColor: "#ff8084",
-              borderStyle: "dashed",
-              borderRadius: 5,
-            }}
-          >
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: wp("3%"),
-                  color: "white",
-                  fontWeight: "bold",
-                  padding: 3,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  backgroundColor: "#ff8084",
-                }}
-              >
-                Regular Delivery
-              </Text>
-              <Text
-                style={{
-                  fontSize: wp("3.6%"),
-                  color: "#ff8084",
-                  fontWeight: "bold",
-                }}
-              >
-                Free
-              </Text>
-            </View>
-            <Text style={{ color: "#555", fontSize: wp("2.9%"), marginTop: 4 }}>
-              12-48 hours delivery (Inside Dhaka)
-            </Text>
-          </View>
-          <OtrixDivider size={"sm"} />
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: 10,
-            }}
-          >
-            <Text
-              style={{
-                color: "#e67a7d",
-                fontWeight: "bold",
-                fontSize: wp("3.4%"),
-              }}
-            >
-              Amount Payable
-            </Text>
-            <Text
-              style={{
-                color: "#e67a7d",
-                fontWeight: "bold",
-                fontSize: wp("3.4%"),
-              }}
-            >
-              ৳ {props.sumAmount}
-            </Text>
-          </View>
-        </View>
-      )}
       <View style={styles.cartContent2}>
-        <Text
-          style={{
-            color: "#444",
-            marginBottom: 10,
-          }}
-        >
-          Your total cart products ({cartProduct.length})
-        </Text>
         {cartProduct.length > 0 &&
           cartProduct.map((item, index) => (
             <View
@@ -401,7 +138,7 @@ function CartView(props) {
                         </Text>
                       ))}
 
-                  <View style={{ marginTop: 6 }}>
+                  <View>
                     {item.selectedVariation &&
                       item.selectedVariation.id &&
                       item.selectedVariation.combination.map((comb, index) => (
@@ -451,25 +188,6 @@ function CartView(props) {
                     ৳ {getPrice2(item)}
                   </Text>
                 </View>
-
-                <Pill
-                  decrementQuantity={() => {
-                    props.decrementQuantityRedux(item);
-                  }}
-                  incrementQuantity={() => {
-                    props.incrementQuantityRedux(item);
-                  }}
-                  quantity={item.quantity}
-                />
-                <TouchableOpacity
-                  onPress={() => {
-                    props.removeFromCartRedux(item, props.currentUser);
-                    Toast.show("Removed from cart.");
-                  }}
-                  style={{ marginTop: 60 }}
-                >
-                  <MatIcon name="trash" style={styles.delete} />
-                </TouchableOpacity>
               </View>
             </View>
           ))}
@@ -537,14 +255,9 @@ const styles = StyleSheet.create({
   },
   cartContent2: {
     backgroundColor: Colors.white,
-    shadowColor: "grey",
-    shadowOffset: { width: 0, height: 0.4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    elevation: 6,
     padding: 10,
-    borderRadius: wp("3%"),
     margin: 4,
+    paddingTop: 0,
   },
   cartBox: {
     flexDirection: "row",
@@ -582,6 +295,7 @@ const styles = StyleSheet.create({
   infromationView: {
     flex: 0.75,
     alignItems: "flex-start",
+    marginTop: -5,
   },
   name: {
     color: "#474747",
@@ -592,6 +306,7 @@ const styles = StyleSheet.create({
     color: Colors.link_color,
     fontSize: wp("3.5%"),
     fontFamily: Fonts.Font_Bold,
+    marginTop: -5,
   },
   plusminus: {
     justifyContent: "center",
@@ -614,7 +329,6 @@ const styles = StyleSheet.create({
     flex: 0.3,
     alignItems: "flex-end",
     marginRight: 10,
-    marginTop: 5,
   },
 
   delete: {

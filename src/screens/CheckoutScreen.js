@@ -29,7 +29,7 @@ import {
 } from "react-native-responsive-screen";
 import { GlobalStyles, Colors } from "@helpers";
 import { _roundDimensions } from "@helpers/util";
-import { proceedCheckout } from "@actions";
+
 import ProductListDummy from "@component/items/ProductListDummy";
 import PaymentMethodsDummy from "@component/items/PaymentMethodsDummy";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -40,6 +40,8 @@ import GradientButton from "../component/CartComponent/Button";
 import Delivery from "./delivery.png";
 import CashOnDelivery from "./cashonDelivery.png";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
+import MatIcon from "react-native-vector-icons/MaterialCommunityIcons";
+
 function CheckoutScreen(props) {
   const [state, setState] = React.useState({
     loading: true,
@@ -123,10 +125,6 @@ function CheckoutScreen(props) {
     });
   };
 
-  const _proceedCheckout = () => {
-    props.proceedCheckout();
-  };
-
   const {
     cartProducts,
     loading,
@@ -141,7 +139,11 @@ function CheckoutScreen(props) {
     paymentSuccessModal,
   } = state;
   const { sumAmount } = props.route.params;
-
+  const { currentUser } = props;
+  let shippingAddress = null;
+  if (currentUser && currentUser.address && currentUser.address.length > 0) {
+    shippingAddress = currentUser.address.find((addr) => addr.defaultShipping);
+  }
   return (
     <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
       {/* Header */}
@@ -192,53 +194,130 @@ function CheckoutScreen(props) {
               Delivery Address
             </Text>
           </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              flex: 1,
-              marginTop: 15,
-              paddingBottom: 20,
-            }}
-          >
-            <View style={{ flex: 0.2 }}>
-              <Image
-                source={Delivery}
-                style={{ height: 40, width: "100%" }}
-                resizeMode="contain"
-              />
-            </View>
-            <View style={{ flex: 0.6 }}>
-              <Text style={styles.text}>Kazi Tipu</Text>
-              <Text style={styles.text}>+8801641103558</Text>
-              <Text style={styles.text}>
-                431/12,Bakshibagh,Malibagh,Dhaka City,Dhaka
-              </Text>
-              <Text style={styles.text}>kazi.tipu.nxt@gmail.com</Text>
-            </View>
-
-            <View style={{ flex: 0.2, paddingRight: 15 }}>
+          {props.currentUser &&
+          props.currentUser.address &&
+          props.currentUser.address.length > 0 ? (
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                flex: 1,
+                marginTop: 15,
+                paddingBottom: 20,
+              }}
+            >
               <View
                 style={{
-                  padding: 5,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  backgroundColor: "#fff0f4",
-                  borderRadius: 7,
+                  flex: 0.2,
                 }}
               >
-                <Text
+                <Image
+                  source={Delivery}
+                  style={{ height: 30, width: "100%" }}
+                  resizeMode="contain"
+                />
+                <View
                   style={{
-                    color: "#ff8084",
-
+                    backgroundColor:
+                      shippingAddress.addressType == "Home"
+                        ? "green"
+                        : shippingAddress.addressType == "Office"
+                        ? "blue"
+                        : "darkorange",
+                    padding: 5,
+                    paddingTop: 2,
+                    paddingBottom: 2,
+                    alignSelf: "center",
+                    marginTop: 7,
                     fontSize: wp("3%"),
+                    borderRadius: 3,
                   }}
                 >
-                  Change
+                  <Text
+                    style={{
+                      fontSize: wp("2.8%"),
+                      color: "white",
+                    }}
+                  >
+                    {shippingAddress.addressType}
+                  </Text>
+                </View>
+              </View>
+              <View style={{ flex: 0.6 }}>
+                <Text style={styles.text}>{shippingAddress.fullName}</Text>
+                <Text style={styles.text}>{shippingAddress.mobileNo}</Text>
+                <Text style={styles.text}>{shippingAddress.address}</Text>
+                <Text style={styles.text}>
+                  {shippingAddress.district},{shippingAddress.division}
                 </Text>
               </View>
+
+              <View style={{ flex: 0.2, paddingRight: 15 }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    props.navigation.navigate("ManageAddressScreen");
+                  }}
+                >
+                  <View
+                    style={{
+                      padding: 5,
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      backgroundColor: "#fff0f4",
+                      borderRadius: 7,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#ff8084",
+
+                        fontSize: wp("3%"),
+                      }}
+                    >
+                      Change
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          ) : (
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                flex: 1,
+                marginTop: 15,
+                paddingBottom: 20,
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  props.navigation.navigate("AddAddressScreen");
+                }}
+              >
+                <View
+                  style={{
+                    padding: 5,
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    backgroundColor: "#fff0f4",
+                    borderRadius: 7,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#ff8084",
+
+                      fontSize: wp("3%"),
+                    }}
+                  >
+                    + Add Shipping Address
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
         <View style={{ display: "flex", flexDirection: "row", marginTop: 5 }}>
           <TextInput
@@ -299,7 +378,7 @@ function CheckoutScreen(props) {
                 fontSize: wp("4.1%"),
               }}
             >
-              ৳ 1290
+              ৳ {sumAmount}
             </Text>
           </View>
           <View style={{ marginTop: 10, padding: 10 }}>
@@ -311,8 +390,9 @@ function CheckoutScreen(props) {
                 padding: 5,
               }}
             >
-              Spend <Text style={{ fontWeight: "bold" }}>Tk 1500</Text> to get
-              free home delivery.
+              Spend{" "}
+              <Text style={{ fontWeight: "bold" }}>৳ {props.freeShipping}</Text>{" "}
+              to get free home delivery.
             </Text>
           </View>
           <View
@@ -345,6 +425,7 @@ function CheckoutScreen(props) {
                   style={{
                     color: "white",
                     fontWeight: "bold",
+                    textAlign: "center",
                   }}
                 >
                   CASH ON DELIVERY
@@ -354,7 +435,7 @@ function CheckoutScreen(props) {
           </View>
         </View>
         <OtrixDivider size={"sm"} />
-        <View style={styles.box}>
+        <View style={{ ...styles.box, marginBottom: 70 }}>
           <View
             style={{
               display: "flex",
@@ -403,9 +484,7 @@ function CheckoutScreen(props) {
           flexDirection: "row",
           minWidth: "100%",
         }}
-      >
-        <GradientButton label={"PLACE ORDER"} onPress={() => {}} />
-      </View>
+      ></View>
       {props.cartData.length > 0 && (
         <View
           style={{
@@ -489,10 +568,12 @@ function CheckoutScreen(props) {
 function mapStateToProps(state) {
   return {
     cartData: state.cart.cartData,
+    currentUser: state.auth.currentUser,
+    freeShipping: state.cart.freeShipping,
   };
 }
 
-export default connect(mapStateToProps, { proceedCheckout })(CheckoutScreen);
+export default connect(mapStateToProps, {})(CheckoutScreen);
 
 const styles = StyleSheet.create({
   box: {

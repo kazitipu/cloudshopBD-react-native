@@ -11,6 +11,8 @@ import {
   getSingleProduct,
   addToCart,
   removeFromCart,
+  updateUserAddress,
+  updateShippingAddress,
 } from "../../firebase/firebase.utils";
 export function requestInit(user) {
   return {
@@ -144,6 +146,22 @@ export const setReduxCart = (cartData) => async (dispatch) => {
     payload: cartData,
   });
 };
+export const updateUserAddressRedux =
+  (currentUser, address) => async (dispatch) => {
+    const updatedUser = await updateUserAddress(currentUser, address);
+    dispatch({
+      type: "UPDATE_ADDRESSBOOK",
+      payload: updatedUser,
+    });
+  };
+export const updateShippingAddressRedux =
+  (currentUser, address) => async (dispatch) => {
+    const updatedUser = await updateShippingAddress(currentUser, address);
+    dispatch({
+      type: "UPDATE_ADDRESSBOOK",
+      payload: updatedUser,
+    });
+  };
 export const incrementQuantityRedux = (item) => async (dispatch) => {
   dispatch({
     type: "INCREMENT_QUANTITY",

@@ -26,7 +26,7 @@ function PaymentSuccessComponent(props) {
           <OtrixDivider size={"lg"} />
           <Text style={styles.paymentDescTxt}>
             Your order is confirmed you will receive an order confirmation call/
-            email/SMS shortly with the expected delivery date your items.
+            email/SMS shortly with the expected delivery date.
           </Text>
 
           <View
@@ -40,7 +40,25 @@ function PaymentSuccessComponent(props) {
             }}
           >
             <GradientButton
-              label={"Continue shopping"}
+              children={
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "white",
+                      fontWeight: "bold",
+                      fontSize: wp("3.1%"),
+                    }}
+                  >
+                    Continue Shopping
+                  </Text>
+                </View>
+              }
               onPress={() => {
                 props.setPaymentSuccessModal(false);
                 props.navigation.navigate("HomeScreen");
@@ -58,7 +76,25 @@ function PaymentSuccessComponent(props) {
             }}
           >
             <GradientButton2
-              label={"View Orders"}
+              children={
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "white",
+                      fontWeight: "bold",
+                      fontSize: wp("3.1%"),
+                    }}
+                  >
+                    View Orders
+                  </Text>
+                </View>
+              }
               onPress={() => {
                 props.setPaymentSuccessModal(false);
                 props.navigation.navigate("OrderScreen");

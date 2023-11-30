@@ -212,13 +212,60 @@ export const uploadPaymentRequestExpress = async (paymentObj) => {
   }
 };
 
-export const updateUser = async (currentUser) => {
+export const updateUserAddress = async (currentUser, address) => {
+  if (!currentUser.uid) {
+    return null;
+  }
+  const userRef = firestore().doc(`users/${currentUser.uid}`);
+  const snapShot = await userRef.get();
+  console.log(snapShot.data());
+  try {
+    if (address.defaultShipping) {
+      userRef.update({
+        address:
+          snapShot.data().address && snapShot.data().address.length > 0
+            ? [
+                address,
+                ...snapShot.data().address.map((addr) => {
+                  if (addr.defaultShipping) {
+                    return { ...addr, defaultShipping: false };
+                  } else {
+                    return addr;
+                  }
+                }),
+              ]
+            : [address],
+      });
+    } else {
+      userRef.update({
+        address:
+          snapShot.data().address && snapShot.data().address.length > 0
+            ? [address, ...snapShot.data().address]
+            : [address],
+      });
+    }
+  } catch (error) {
+    alert(error);
+  }
+  const updatedSnapShot = await userRef.get();
+  return updatedSnapShot.data();
+};
+export const updateShippingAddress = async (currentUser, address) => {
+  if (!currentUser.uid) {
+    return null;
+  }
   const userRef = firestore().doc(`users/${currentUser.uid}`);
   const snapShot = await userRef.get();
   console.log(snapShot.data());
   try {
     userRef.update({
-      ...currentUser,
+      address: snapShot.data().address.map((addr) => {
+        if (address.id == addr.id) {
+          return { ...addr, defaultShipping: true };
+        } else {
+          return{ ...addr, defaultShipping: false };
+        }
+      }),
     });
   } catch (error) {
     alert(error);
@@ -970,15 +1017,13 @@ export const updateOrder = async (orderObj) => {
 };
 export const updateCart = async (cartData, currentUser) => {
   const cartRef = firestore().doc(`carts/${currentUser.id}`);
-  try {
+ 
     await cartRef.update({
       cart: cartData,
     });
     const updatedCart = await cartRef.get();
     return updatedCart.data();
-  } catch (error) {
-    alert(error);
-  }
+  
 };
 export const updateToMyParcelOfUser = async (orderObj) => {
   console.log("update to my parcel of user is called");

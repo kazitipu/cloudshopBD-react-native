@@ -23,7 +23,7 @@ import {
 } from "react-native-responsive-screen";
 import { GlobalStyles, Colors } from "@helpers";
 import { _roundDimensions } from "@helpers/util";
-import { proceedCheckout } from "@actions";
+import { updateShippingAddressRedux } from "@actions";
 import MatIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicon from "react-native-vector-icons/Ionicons";
@@ -123,7 +123,7 @@ function ManageAddressScreen(props) {
     editAddressData,
     step,
   } = state;
-
+  const { currentUser } = props;
   return (
     <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
       {/* Header */}
@@ -149,305 +149,255 @@ function ManageAddressScreen(props) {
 
       {/* Address Content start from here */}
 
-      <>
-        <View style={styles.addressContent}>
-          {/*horizontal address* */}
-          <ScrollView
-            style={styles.addressBox}
-            showsHorizontalScrollIndicator={false}
-            vertical={true}
+      <View style={styles.addressContent}>
+        {/*horizontal address* */}
+        <ScrollView
+          style={styles.addressBox}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          vertical={true}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
           >
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate("AddAddressScreen");
               }}
             >
+              <View
+                style={{
+                  backgroundColor: "#ffedf1",
+                  padding: 13,
+                  borderRadius: 5,
+                  borderStyle: "dotted",
+                  borderWidth: 1,
+                  borderColor: "#ff8084",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
+                <MatIcon name="plus" color={"#ec345b"} size={wp("5.5%")} />
+                <Text style={{ color: "#ec345b", marginTop: 3 }}>
+                  {" "}
+                  Add New Address
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              marginTop: 10,
+              marginBottom: 10,
+              height: 1,
+              widht: "100%",
+              backgroundColor: "gainsboro",
+            }}
+          ></View>
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#ec345b",
+              fontWeight: "bold",
+              padding: 0,
+            }}
+          >
+            OR
+          </Text>
+          <View
+            style={{
+              marginTop: 10,
+              marginBottom: 10,
+              height: 1,
+              widht: "100%",
+              backgroundColor: "gainsboro",
+            }}
+          ></View>
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#555",
+
+              padding: 5,
+            }}
+          >
+            Choose Shipping Address
+          </Text>
+          {currentUser.address &&
+            currentUser.address.length > 0 &&
+            currentUser.address.map((shippingAddress) => (
               <TouchableOpacity
+                key={shippingAddress.id}
                 onPress={() => {
-                  props.navigation.navigate("AddAddressScreen");
+                  if (!shippingAddress.defaultShipping) {
+                    props.updateShippingAddressRedux(currentUser, {
+                      ...shippingAddress,
+                      defaultShipping: true,
+                    });
+                  }
+                  props.navigation.goBack();
                 }}
               >
                 <View
                   style={{
-                    backgroundColor: "#ffedf1",
-                    padding: 13,
-                    borderRadius: 5,
-                    borderStyle: "dotted",
+                    ...styles.box,
+                    backgroundColor: shippingAddress.defaultShipping
+                      ? "#fffafb"
+                      : "white",
                     borderWidth: 1,
-                    borderColor: "#ff8084",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
+                    borderColor: shippingAddress.defaultShipping
+                      ? "#ff99af"
+                      : "white",
                   }}
                 >
-                  <MatIcon name="plus" color={"#ec345b"} size={wp("5.5%")} />
-                  <Text style={{ color: "#ec345b", marginTop: 3 }}>
-                    {" "}
-                    Add New Address
-                  </Text>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      flex: 1,
+                      marginTop: 15,
+                      paddingBottom: 20,
+                    }}
+                  >
+                    <View
+                      style={{
+                        flex: 0.2,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Entypo
+                        name={"location"}
+                        color={"#ec345b"}
+                        style={{ fontSize: wp("6.5%") }}
+                      />
+                      <View
+                        style={{
+                          backgroundColor:
+                            shippingAddress.addressType == "Home"
+                              ? "green"
+                              : shippingAddress.addressType == "Office"
+                              ? "blue"
+                              : "darkorange",
+                          padding: 5,
+                          paddingTop: 2,
+                          paddingBottom: 2,
+                          alignSelf: "center",
+                          marginTop: 7,
+                          fontSize: wp("3%"),
+                          borderRadius: 3,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: wp("2.8%"),
+                            color: "white",
+                          }}
+                        >
+                          {shippingAddress.addressType}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={{ flex: 0.5 }}>
+                      <Text style={styles.text}>
+                        {shippingAddress.fullName}
+                      </Text>
+                      <Text style={styles.text}>
+                        {shippingAddress.mobileNo}
+                      </Text>
+                      <Text style={styles.text}>{shippingAddress.address}</Text>
+                      <Text style={styles.text}>
+                        {shippingAddress.district},{shippingAddress.division}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        flex: 0.3,
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "flex-end",
+                        marginRight: 6,
+                      }}
+                    >
+                      {!shippingAddress.defaultShipping && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            props.navigation.navigate("AddAddressScreen");
+                          }}
+                          style={{
+                            marginRight: 8,
+                          }}
+                        >
+                          <View
+                            style={{
+                              padding: 5,
+                              paddingLeft: 15,
+                              paddingRight: 15,
+                              backgroundColor: "#fff0f4",
+                              borderRadius: 7,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: "#ff8084",
+
+                                fontSize: wp("3%"),
+                              }}
+                            >
+                              Edit
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      )}
+                      {!shippingAddress.defaultShipping && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            props.navigation.navigate("AddAddressScreen");
+                          }}
+                        >
+                          <Ionicon
+                            name={"trash"}
+                            color={"#ec345b"}
+                            style={{ fontSize: wp("5.2%") }}
+                          />
+                        </TouchableOpacity>
+                      )}
+                      {shippingAddress.defaultShipping && (
+                        <View
+                          style={{
+                            marginTop: 7,
+                            backgroundColor: "#0092ac",
+                            alignSelf: "flex-start",
+                            padding: 5,
+                            paddingTop: 3,
+                            paddingBottom: 3,
+                            borderRadius: 4,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: wp("2.3%"),
+                              fontWeight: "bold",
+                              color: "white",
+                            }}
+                          >
+                            Shipping Address
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  </View>
                 </View>
               </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                marginTop: 10,
-                marginBottom: 10,
-                height: 1,
-                widht: "100%",
-                backgroundColor: "gainsboro",
-              }}
-            ></View>
-            <View style={styles.box}>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  flex: 1,
-                  marginTop: 15,
-                  paddingBottom: 20,
-                }}
-              >
-                <View
-                  style={{
-                    flex: 0.2,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Entypo
-                    name={"location"}
-                    color={"#ec345b"}
-                    style={{ fontSize: wp("6.5%") }}
-                  />
-                  <View
-                    style={{
-                      backgroundColor: "green",
-                      padding: 5,
-                      paddingTop: 2,
-                      paddingBottom: 2,
-                      alignSelf: "center",
-                      marginTop: 7,
-                      fontSize: wp("3%"),
-                      borderRadius: 3,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: wp("2.8%"),
-                        color: "white",
-                      }}
-                    >
-                      Home
-                    </Text>
-                  </View>
-                </View>
-                <View style={{ flex: 0.6 }}>
-                  <Text style={styles.text}>Kazi Tipu</Text>
-                  <Text style={styles.text}>+8801641103558</Text>
-                  <Text style={styles.text}>
-                    431/12,Bakshibagh,Malibagh,Dhaka City,Dhaka
-                  </Text>
-                </View>
-
-                <View style={{ flex: 0.2, paddingRight: 15 }}>
-                  <View
-                    style={{
-                      padding: 5,
-                      paddingLeft: 10,
-                      paddingRight: 10,
-                      backgroundColor: "#fff0f4",
-                      borderRadius: 7,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "#ff8084",
-                        textAlign: "center",
-                        fontSize: wp("3%"),
-                      }}
-                    >
-                      Edit
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-            <View style={styles.box}>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  flex: 1,
-                  marginTop: 15,
-                  paddingBottom: 20,
-                }}
-              >
-                <View
-                  style={{
-                    flex: 0.2,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Entypo
-                    name={"location"}
-                    color={"#ec345b"}
-                    style={{ fontSize: wp("6.5%") }}
-                  />
-                  <View
-                    style={{
-                      backgroundColor: "blue",
-                      padding: 5,
-                      paddingTop: 2,
-                      paddingBottom: 2,
-                      alignSelf: "center",
-                      marginTop: 7,
-                      fontSize: wp("3%"),
-                      borderRadius: 3,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: wp("2.8%"),
-                        color: "white",
-                      }}
-                    >
-                      Office
-                    </Text>
-                  </View>
-                </View>
-                <View style={{ flex: 0.6 }}>
-                  <Text style={styles.text}>Kazi Tipu</Text>
-                  <Text style={styles.text}>+8801641103558</Text>
-                  <Text style={styles.text}>
-                    431/12,Bakshibagh,Malibagh,Dhaka City,Dhaka
-                  </Text>
-                </View>
-
-                <View style={{ flex: 0.2, paddingRight: 15 }}>
-                  <View
-                    style={{
-                      padding: 5,
-                      paddingLeft: 10,
-                      paddingRight: 10,
-                      backgroundColor: "#fff0f4",
-                      borderRadius: 7,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "#ff8084",
-                        textAlign: "center",
-                        fontSize: wp("3%"),
-                      }}
-                    >
-                      Edit
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-            <View style={styles.box}>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  flex: 1,
-                  marginTop: 15,
-                  paddingBottom: 20,
-                }}
-              >
-                <View
-                  style={{
-                    flex: 0.2,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Entypo
-                    name={"location"}
-                    color={"#ec345b"}
-                    style={{ fontSize: wp("6.5%") }}
-                  />
-                  <View
-                    style={{
-                      backgroundColor: "darkorange",
-                      padding: 5,
-                      paddingTop: 2,
-                      paddingBottom: 2,
-                      alignSelf: "center",
-                      marginTop: 7,
-                      fontSize: wp("3%"),
-                      borderRadius: 3,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: wp("2.8%"),
-                        color: "white",
-                      }}
-                    >
-                      Village
-                    </Text>
-                  </View>
-                </View>
-                <View style={{ flex: 0.6 }}>
-                  <Text style={styles.text}>Kazi Tipu</Text>
-                  <Text style={styles.text}>+8801641103558</Text>
-                  <Text style={styles.text}>
-                    431/12,Bakshibagh,Malibagh,Dhaka City,Dhaka
-                  </Text>
-                  <View
-                    style={{
-                      marginTop: 7,
-                      backgroundColor: "#0092ac",
-                      alignSelf: "flex-start",
-                      padding: 5,
-                      paddingTop: 3,
-                      paddingBottom: 3,
-                      borderRadius: 4,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: wp("2.7%"),
-                        fontWeight: "bold",
-                        color: "white",
-                      }}
-                    >
-                      Shipping Address
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={{ flex: 0.2, paddingRight: 15 }}>
-                  <View
-                    style={{
-                      padding: 5,
-                      paddingLeft: 10,
-                      paddingRight: 10,
-                      backgroundColor: "#fff0f4",
-                      borderRadius: 7,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "#ff8084",
-                        textAlign: "center",
-                        fontSize: wp("3%"),
-                      }}
-                    >
-                      Edit
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </ScrollView>
-        </View>
-      </>
+            ))}
+        </ScrollView>
+      </View>
 
       {/* Add Address Screen */}
     </OtrixContainer>
@@ -457,10 +407,11 @@ function ManageAddressScreen(props) {
 function mapStateToProps(state) {
   return {
     cartData: state.cart.cartData,
+    currentUser: state.auth.currentUser,
   };
 }
 
-export default connect(mapStateToProps, { proceedCheckout })(
+export default connect(mapStateToProps, { updateShippingAddressRedux })(
   ManageAddressScreen
 );
 
@@ -472,11 +423,12 @@ const styles = StyleSheet.create({
     marginLeft: wp("5%"),
   },
   addressBox: {
-    marginLeft: wp("5%"),
-    marginRight: wp("2.5%"),
+    marginLeft: wp("3%"),
+    marginRight: wp("3%"),
     flex: 1,
     height: "auto",
     borderRadius: wp("2%"),
+    marginBottom: 100,
   },
   deliveryBox: {
     marginHorizontal: wp("1.5%"),
@@ -505,7 +457,7 @@ const styles = StyleSheet.create({
   editView: { justifyContent: "flex-start" },
   addressContent: {
     flexDirection: "row",
-    height: hp("70%"),
+    height: hp("96%"),
   },
   box: {
     backgroundColor: Colors.white,

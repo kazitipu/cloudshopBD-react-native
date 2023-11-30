@@ -227,7 +227,7 @@ function CartScreen(props) {
               </View>
             }
             onPress={() => {
-              updateCart(props.cartData)
+              updateCart(props.cartData, props.currentUser);
               props.navigation.navigate("CheckoutScreen", {
                 sumAmount,
               });
@@ -242,6 +242,7 @@ function CartScreen(props) {
 function mapStateToProps(state) {
   return {
     cartData: state.cart.cartData,
+    currentUser: state.auth.currentUser,
   };
 }
 
