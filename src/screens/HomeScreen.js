@@ -35,6 +35,7 @@ import { _roundDimensions } from "@helpers/util";
 import { _addToWishlist, logfunction } from "@helpers/FunctionHelper";
 import { getAllHomeScreenCategoriesRedux } from "../redux/Action";
 import { bottomCart, checkround2, close } from "@common";
+
 function HomeScreen(props) {
   const [state, setState] = React.useState({
     notificationCount: 9,
@@ -77,9 +78,18 @@ function HomeScreen(props) {
   return (
     <OtrixContainer customStyles={{ backgroundColor: Colors.white }}>
       {/* Header */}
-      <OtrixHeader customStyles={{ backgroundColor: Colors.white }}>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+
+          paddingRight: 25,
+          paddingLeft: 10,
+        }}
+      >
         <TouchableOpacity
-          style={styles.headerLeft}
           onPress={() => {
             if (props.currentUser && props.currentUser.uid) {
               props.navigation.navigate("ProfileScreen");
@@ -90,7 +100,7 @@ function HomeScreen(props) {
         >
           {props.currentUser && props.currentUser.uid ? (
             <Avatar
-              ml="3"
+              ml="1"
               size="sm"
               style={styles.avatarImg}
               source={avatarImg2}
@@ -106,73 +116,63 @@ function HomeScreen(props) {
                 paddingTop: 4,
                 paddingBottom: 4,
                 borderColor: "red",
-                marginLeft: 3,
               }}
             >
-              <Text style={{ fontSize: wp("2.7%"), color: "red" }}>Login</Text>
+              <Text style={{ fontSize: wp("2.8%"), color: "red" }}>Login</Text>
             </View>
           )}
         </TouchableOpacity>
-        <View style={styles.headerCenter}>
-          <Image source={cloudshopBD} style={styles.cloudshopBDIcon}></Image>
-        </View>
 
-        {!loading && (
-          <View
-            style={[
-              GlobalStyles.headerRight,
-              {
-                zIndex: 999999999,
-                flex: 0.3,
-                backgroundColor: "transparent",
-                alignItems: "flex-end",
-              },
-            ]}
+        <Image source={cloudshopBD} style={styles.cloudshopBDIcon}></Image>
+
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <TouchableOpacity style={{ ...styles.FavCircle, marginRight: 5 }}>
+            <FontAwesomeIcon
+              name="heart"
+              style={{ fontSize: wp("3.8%") }}
+              color={Colors.white}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{ marginBottom: -5 }}
+            onPress={() => props.navigation.navigate("HomeCartScreen")}
           >
-            <TouchableOpacity
-              style={[styles.FavCircle, { left: wp("8%"), top: 0 }]}
-            >
-              <FontAwesomeIcon
-                name="heart"
-                style={{ ...GlobalStyles.FavIcon, fontSize: wp("3.8%") }}
-                color={Colors.white}
-              />
-            </TouchableOpacity>
+            <Image source={bottomCart} style={styles.menuImage} />
 
-            <TouchableOpacity
-              style={{ alignSelf: "flex-end", marginBottom: -6 }}
-              onPress={() => props.navigation.navigate("HomeCartScreen")}
+            <Badge
+              style={[
+                GlobalStyles.badge,
+                {
+                  left: wp("4.4%"),
+                  top: hp(".5%"),
+                  height: cartData.length > 9 ? 30 : 24,
+                  width: cartData.length > 9 ? 30 : 24,
+                  backgroundColor: "#ffe0e1",
+                },
+              ]}
             >
-              <Image source={bottomCart} style={styles.menuImage} />
-
-              <Badge
+              <Text
                 style={[
-                  GlobalStyles.badge,
+                  GlobalStyles.badgeText,
                   {
-                    left: wp("4.4%"),
-                    top: hp(".5%"),
-                    height: cartData.length > 9 ? 30 : 24,
-                    width: cartData.length > 9 ? 30 : 24,
-                    backgroundColor: "#ffe0e1",
+                    color: Colors.themeColor,
+                    fontSize: cartData.length > 9 ? wp("2.5%") : wp("3%"),
                   },
                 ]}
               >
-                <Text
-                  style={[
-                    GlobalStyles.badgeText,
-                    {
-                      color: Colors.themeColor,
-                      fontSize: cartData.length > 9 ? wp("2.5%") : wp("3%"),
-                    },
-                  ]}
-                >
-                  {cartData.length}
-                </Text>
-              </Badge>
-            </TouchableOpacity>
-          </View>
-        )}
-      </OtrixHeader>
+                {cartData.length}
+              </Text>
+            </Badge>
+          </TouchableOpacity>
+        </View>
+      </View>
 
       {loading ? (
         <HomeSkeleton />
@@ -253,65 +253,47 @@ export default connect(mapStateToProps, {
 const styles = StyleSheet.create({
   FavCircle: {
     backgroundColor: "#ffdcde",
-    height: _roundDimensions()._height * 0.032,
-    width: _roundDimensions()._height * 0.032,
+    height: _roundDimensions()._height * 0.03,
+    width: _roundDimensions()._height * 0.03,
     borderRadius: _roundDimensions()._borderRadius,
-    position: "absolute",
-    top: hp("1.2%"),
-    left: wp("32%"),
     justifyContent: "center",
-    alignItems: "flex-end",
-    overflow: "hidden",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 0.1 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 1,
-    justifyContent: "center",
     alignItems: "center",
-    marginTop: 5,
   },
   menuImage: {
-    width: wp("6%"),
-    height: hp("6%"),
+    width: wp("5.5%"),
+    height: hp("5.5%"),
     resizeMode: "contain",
     tintColor: Colors.themeColor,
   },
-  headerRight: {
-    marginRight: wp("2%"),
-    justifyContent: "center",
-    alignItems: "center",
-  },
+
   heartIcon: {
-    width: wp("6.5%"),
-    height: hp("6.5%"),
+    width: wp("5%"),
+    height: hp("5%"),
     resizeMode: "contain",
     tintColor: Colors.custom_pink,
   },
   cloudshopBDIcon: {
     width: wp("65%"),
-    height: wp("20%"),
+    height: wp("18%"),
     resizeMode: "cover",
-    marginLeft: 20,
-  },
-  headerCenter: {
-    justifyContent: "center",
-    alignItems: "center",
     alignSelf: "center",
-    flex: 0.6,
-    marginLeft: wp("18%"),
+    alignContent: "center",
+    margin: "auto",
+    alignItems: "center",
+    marginRight: -wp("12%"),
   },
+
   headingTxt: {
     fontFamily: Fonts.Font_Bold,
     fontSize: wp("6.5%"),
     color: Colors.themeColor,
   },
-  headerLeft: {
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    flex: 0.1,
-    marginLeft: 10,
-  },
+
   bannerStyle: {
     resizeMode: "contain",
     width: wp("100%"),
@@ -319,8 +301,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   avatarImg: {
-    height: wp("6%"),
-    width: wp("6%"),
+    height: wp("4.5%"),
+    width: wp("4.5%"),
     resizeMode: "contain",
     borderColor: "red",
     borderWidth: 1,

@@ -50,9 +50,11 @@ function LatestProducts(props) {
   return (
     <>
       <View style={styles.catHeading}>
-        <Text style={GlobalStyles.boxHeading}>Latest Products</Text>
+        <Text style={{ ...GlobalStyles.boxHeading, flex: 0.7 }}>
+          Latest Products
+        </Text>
         <TouchableOpacity
-          style={{ flex: 0.5 }}
+          style={{ flex: 0.3 }}
           onPress={() =>
             props.navigation.navigate("ProductListScreen", {
               title: "Latest Products",

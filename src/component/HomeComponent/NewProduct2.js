@@ -67,9 +67,11 @@ function NewProduct2(props) {
       {renderableProducts.length > 0 && (
         <>
           <View style={styles.catHeading}>
-            <Text style={GlobalStyles.boxHeading}>{props.category.name}</Text>
+            <Text style={{ ...GlobalStyles.boxHeading, flex: 0.7 }}>
+              {props.category.name}
+            </Text>
             <TouchableOpacity
-              style={{ flex: 0.5 }}
+              style={{ flex: 0.3 }}
               onPress={() =>
                 props.navigation.navigate("ProductListScreen", {
                   title: props.category.name,

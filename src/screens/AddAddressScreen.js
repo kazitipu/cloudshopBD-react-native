@@ -47,7 +47,18 @@ function ManageAddressScreen(props) {
     defaultShipping: false,
   });
 
-  useEffect(() => {}, []);
+  const { selectedAddress } =
+    props.route && props.route.params
+      ? props.route.params
+      : { selectedAddress: null };
+  console.log(selectedAddress);
+  useEffect(() => {
+    if (selectedAddress) {
+      setState({
+        ...selectedAddress,
+      });
+    }
+  }, [selectedAddress]);
 
   const toggleSwitch = () => {
     setState({
@@ -79,7 +90,7 @@ function ManageAddressScreen(props) {
         <View style={[GlobalStyles.headerCenter, { flex: 1 }]}>
           <Text style={{ ...GlobalStyles.headingTxt, fontSize: wp("4.5%") }}>
             {" "}
-            Add Shipping Address
+            {selectedAddress ? "Edit" : "Add"} Shipping Address
           </Text>
         </View>
       </OtrixHeader>
@@ -462,6 +473,16 @@ function ManageAddressScreen(props) {
         }}
       >
         <GradientButton
+          onPress={async () => {
+            await props.updateUserAddressRedux(props.currentUser, {
+              ...state,
+              id:
+                selectedAddress && selectedAddress.id
+                  ? selectedAddress.id
+                  : new Date().getTime().toString(),
+            });
+            props.navigation.goBack();
+          }}
           children={
             <View
               style={{
@@ -474,13 +495,6 @@ function ManageAddressScreen(props) {
               <Text style={{ color: "white", fontWeight: "bold" }}>Save</Text>
             </View>
           }
-          onPress={async () => {
-            await props.updateUserAddressRedux(props.currentUser, {
-              ...state,
-              id: new Date().getTime().toString(),
-            });
-            props.navigation.goBack();
-          }}
         />
       </View>
       {/* Add Address Screen */}

@@ -32,11 +32,15 @@ import Delivery from "./delivery.png";
 import CashOnDelivery from "./cashonDelivery.png";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicon from "react-native-vector-icons/Ionicons";
+import { getAllOrdersRedux } from "../redux/Action/general";
 function OrderScreen(props) {
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const { currentUser } = props;
+    props.getAllOrdersRedux(currentUser.uid);
+  }, []);
   const [tab, setTab] = useState(0);
-  const { navigation } = props;
-
+  const { navigation, orders } = props;
+  console.log(orders);
   return (
     <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
       {/* Header */}
@@ -86,178 +90,231 @@ function OrderScreen(props) {
         </View>
       </View>
       <OtrixContent>
-        <TouchableOpacity
-          onPress={() => {
-            props.navigation.navigate("OrderDetailScreen");
-          }}
-        >
-          <View style={styles.box}>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                flex: 1,
-                marginTop: 5,
+        {orders && orders.length > 0 ? (
+          orders.map((order) => (
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate("OrderDetailScreen", {
+                  order: order,
+                });
               }}
             >
-              <View style={{ flex: 0.85 }}>
-                <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
-                  Flat-6a,431/12 Malibagh, Bakshibagh, Dhaka....
-                </Text>
-                <Text
+              <View style={styles.box}>
+                <View
                   style={{
-                    backgroundColor: "#ec345b",
-                    color: "white",
-                    fontSize: wp("2.4%"),
-                    padding: 2,
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                    fontWeight: "bold",
-                    alignSelf: "flex-start",
-                    marginTop: 3,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    flex: 1,
+                    marginTop: 5,
                   }}
                 >
-                  Regular Delivery
-                </Text>
-              </View>
-              <View
-                style={{ flex: 0.15, alignItems: "flex-end", marginRight: 10 }}
-              >
-                <Entypo
-                  name={"location"}
-                  color={"#ec345b"}
-                  style={{ fontSize: wp("6%") }}
-                />
-              </View>
-            </View>
+                  <View style={{ flex: 0.85 }}>
+                    <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
+                      {
+                        order.currentUser.address.find(
+                          (address) => address.defaultShipping
+                        ).address
+                      }
+                      ,
+                      {
+                        order.currentUser.address.find(
+                          (address) => address.defaultShipping
+                        ).district
+                      }
+                      ,
+                      {
+                        order.currentUser.address.find(
+                          (address) => address.defaultShipping
+                        ).division
+                      }
+                    </Text>
+                    <Text
+                      style={{
+                        backgroundColor: "cadetblue",
+                        color: "white",
+                        fontSize: wp("2.4%"),
+                        padding: 2,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        fontWeight: "bold",
+                        alignSelf: "flex-start",
+                        marginTop: 3,
+                      }}
+                    >
+                      Regular Delivery
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 0.15,
+                      alignItems: "flex-end",
+                      marginRight: 10,
+                    }}
+                  >
+                    <Entypo
+                      name={"location"}
+                      color={"#ec345b"}
+                      style={{ fontSize: wp("6%") }}
+                    />
+                  </View>
+                </View>
 
-            <View
-              style={{
-                width: "100%",
-                height: 1,
-                backgroundColor: "gainsboro",
-                marginTop: 10,
-                marginBottom: 5,
-              }}
-            ></View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: 5,
-              }}
-            >
-              <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
-                Order ID
-              </Text>
-              <Text
-                style={{
-                  fontSize: wp("3%"),
-                  color: "#777",
-                  fontWeight: "bold",
-                }}
-              >
-                #57399
-              </Text>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: 5,
-              }}
-            >
-              <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>Date</Text>
-              <Text style={{ fontSize: wp("3%"), color: "#777" }}>
-                26 oct 2023
-              </Text>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: 5,
-              }}
-            >
-              <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
-                Status
-              </Text>
-              <View
-                style={{
-                  alignSelf: "flex-end",
-                  backgroundColor: "red",
-                  padding: 5,
-                  borderRadius: 7,
-                }}
-              >
-                <Text
+                <View
                   style={{
-                    fontSize: wp("2.8%"),
-                    color: "white",
+                    width: "100%",
+                    height: 1,
+                    backgroundColor: "gainsboro",
+                    marginTop: 10,
+                    marginBottom: 5,
+                  }}
+                ></View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: 5,
                   }}
                 >
-                  Cancelled
-                </Text>
+                  <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
+                    Order ID
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: wp("3%"),
+                      color: "#777",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    #{order.id}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: 5,
+                  }}
+                >
+                  <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
+                    Date
+                  </Text>
+                  <Text style={{ fontSize: wp("3%"), color: "#777" }}>
+                    {new Date(Number(order.id)).toLocaleDateString()}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: 5,
+                  }}
+                >
+                  <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
+                    Status
+                  </Text>
+                  <View
+                    style={{
+                      alignSelf: "flex-end",
+                      backgroundColor:
+                        order.orderStatus == "Processing"
+                          ? "#1B75D0"
+                          : order.orderStatus == "Confirmed"
+                          ? "orange"
+                          : order.orderStatus == "Delivering"
+                          ? "darkorange"
+                          : order.orderStatus == "Delivered"
+                          ? "green"
+                          : "red",
+                      padding: 5,
+                      borderRadius: 7,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: wp("2.8%"),
+                        color: "white",
+                      }}
+                    >
+                      {order.orderStatus}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: wp("3%"),
+                      color: "#777",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Amount Payable
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: wp("3%"),
+                      color: "#777",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    ৳{" "}
+                    {order.subTotal +
+                      order.deliveryCharge -
+                      order.discountApplied -
+                      (order.couponApplied ? order.couponApplied.discount : 0)}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    marginTop: 15,
+                    marginBottom: 10,
+                    padding: 10,
+                    paddingTop: 8,
+                    paddingBottom: 8,
+                    backgroundColor: "#dcefff",
+                    borderRadius: 6,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#005dac",
+                      fontWeight: "bold",
+                      fontSize: wp("3.3%"),
+                    }}
+                  >
+                    Order Again
+                  </Text>
+                </View>
               </View>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: 5,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: wp("3%"),
-                  color: "#777",
-                  fontWeight: "bold",
-                }}
-              >
-                Amount Payable
-              </Text>
-              <Text
-                style={{
-                  fontSize: wp("3%"),
-                  color: "#777",
-                  fontWeight: "bold",
-                }}
-              >
-                Tk431061
-              </Text>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                marginTop: 15,
-                marginBottom: 10,
-                padding: 10,
-                paddingTop: 8,
-                paddingBottom: 8,
-                backgroundColor: "#dcefff",
-                borderRadius: 6,
-              }}
-            >
-              <Text
-                style={{
-                  color: "#005dac",
-                  fontWeight: "bold",
-                  fontSize: wp("3.3%"),
-                }}
-              >
-                Order Again
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.box}>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#777",
+              textAlignVertical: "center",
+              marginTop: 20,
+              fontWeight: "bold",
+            }}
+          >
+            Sorry You do not have any orders.
+          </Text>
+        )}
+        {/* <View style={styles.box}>
           <View
             style={{
               display: "flex",
@@ -709,7 +766,7 @@ function OrderScreen(props) {
               Order Again
             </Text>
           </View>
-        </View>
+        </View> */}
       </OtrixContent>
     </OtrixContainer>
   );
@@ -718,10 +775,14 @@ function OrderScreen(props) {
 function mapStateToProps(state) {
   return {
     cartData: state.cart.cartData,
+    orders: state.cart.orders,
+    currentUser: state.auth.currentUser,
   };
 }
 
-export default connect(mapStateToProps, { proceedCheckout })(OrderScreen);
+export default connect(mapStateToProps, { proceedCheckout, getAllOrdersRedux })(
+  OrderScreen
+);
 
 const styles = StyleSheet.create({
   tab: {

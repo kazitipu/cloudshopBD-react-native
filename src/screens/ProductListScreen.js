@@ -41,6 +41,7 @@ import {
   getAllCategoriesRedux,
   getAllLatestProductsRedux,
 } from "../redux/Action";
+import { fontSize } from "styled-system";
 
 function ProductListScreen(props) {
   const { item } = props.route.params;
@@ -155,7 +156,9 @@ function ProductListScreen(props) {
   return (
     <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
       {/* Header */}
-      <OtrixHeader customStyles={{ backgroundColor: Colors.light_white }}>
+      <OtrixHeader
+        customStyles={{ backgroundColor: Colors.light_white, marginTop: -15 }}
+      >
         <TouchableOpacity
           style={GlobalStyles.headerLeft}
           onPress={() => props.navigation.goBack()}
@@ -163,7 +166,9 @@ function ProductListScreen(props) {
           <OtirxBackButton />
         </TouchableOpacity>
         <View style={[GlobalStyles.headerCenter]}>
-          <Text style={GlobalStyles.headingTxt}>{title}</Text>
+          <Text style={{ ...GlobalStyles.headingTxt, fontSize: wp("4.5%") }}>
+            {title}
+          </Text>
         </View>
         <TouchableOpacity
           style={GlobalStyles.headerRight}
@@ -172,10 +177,29 @@ function ProductListScreen(props) {
           <Image source={filter} style={styles.filter} />
         </TouchableOpacity>
       </OtrixHeader>
+      {/* <OtrixHeader
+        customStyles={{
+          backgroundColor: Colors.light_white,
+          height: Platform.OS === "ios" ? wp("13%") : wp("10%"),
+        }}
+      >
+        <TouchableOpacity
+          style={{ ...GlobalStyles.headerLeft }}
+          onPress={() => props.navigation.goBack()}
+        >
+          <OtirxBackButton />
+        </TouchableOpacity>
+        <View style={[GlobalStyles.headerCenter, { flex: 1 }]}>
+          <Text style={{ ...GlobalStyles.headingTxt, fontSize: wp("4.5%") }}>
+            {" "}
+            {title}
+          </Text>
+        </View>
+      </OtrixHeader> */}
 
       {/* Filter */}
       {result.length > 0 && item !== "Latest Products" ? (
-        <View style={{ height: hp("6%") }}>
+        <View style={{ height: hp("6%"), marginTop: -15 }}>
           <ScrollView
             style={{ flexDirection: "row", marginHorizontal: wp("1%") }}
             horizontal={true}
@@ -267,8 +291,8 @@ const styles = StyleSheet.create({
   },
 
   filter: {
-    height: _roundDimensions()._height * 0.028,
-    width: _roundDimensions()._height * 0.028,
+    height: _roundDimensions()._height * 0.024,
+    width: _roundDimensions()._height * 0.024,
   },
   bannerStyle: {
     resizeMode: "contain",

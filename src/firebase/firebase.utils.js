@@ -221,26 +221,50 @@ export const updateUserAddress = async (currentUser, address) => {
   console.log(snapShot.data());
   try {
     if (address.defaultShipping) {
-      userRef.update({
+      await userRef.update({
         address:
           snapShot.data().address && snapShot.data().address.length > 0
-            ? [
-                address,
-                ...snapShot.data().address.map((addr) => {
-                  if (addr.defaultShipping) {
-                    return { ...addr, defaultShipping: false };
-                  } else {
-                    return addr;
-                  }
-                }),
-              ]
+            ? snapShot.data().address.find((addr) => addr.id == address.id)
+              ? [
+                  ...snapShot.data().address.map((addr) => {
+                    if (addr.id == address.id) {
+                      return address;
+                    } else {
+                      if (addr.defaultShipping) {
+                        return { ...addr, defaultShipping: false };
+                      } else {
+                        return addr;
+                      }
+                    }
+                  }),
+                ]
+              : [
+                  address,
+                  ...snapShot.data().address.map((addr) => {
+                    if (addr.defaultShipping) {
+                      return { ...addr, defaultShipping: false };
+                    } else {
+                      return addr;
+                    }
+                  }),
+                ]
             : [address],
       });
     } else {
-      userRef.update({
+      await userRef.update({
         address:
           snapShot.data().address && snapShot.data().address.length > 0
-            ? [address, ...snapShot.data().address]
+            ? snapShot.data().address.find((addr) => addr.id == address.id)
+              ? [
+                  ...snapShot.data().address.map((addr) => {
+                    if (addr.id == address.id) {
+                      return address;
+                    } else {
+                      return addr;
+                    }
+                  }),
+                ]
+              : [address, ...snapShot.data().address]
             : [address],
       });
     }
@@ -248,7 +272,7 @@ export const updateUserAddress = async (currentUser, address) => {
     alert(error);
   }
   const updatedSnapShot = await userRef.get();
-  return updatedSnapShot.data();
+  return { ...updatedSnapShot.data(), id: updatedSnapShot.data().uid };
 };
 export const updateShippingAddress = async (currentUser, address) => {
   if (!currentUser.uid) {
@@ -258,12 +282,12 @@ export const updateShippingAddress = async (currentUser, address) => {
   const snapShot = await userRef.get();
   console.log(snapShot.data());
   try {
-    userRef.update({
+    await userRef.update({
       address: snapShot.data().address.map((addr) => {
         if (address.id == addr.id) {
           return { ...addr, defaultShipping: true };
         } else {
-          return{ ...addr, defaultShipping: false };
+          return { ...addr, defaultShipping: false };
         }
       }),
     });
@@ -271,7 +295,30 @@ export const updateShippingAddress = async (currentUser, address) => {
     alert(error);
   }
   const updatedSnapShot = await userRef.get();
-  return updatedSnapShot.data();
+  return { ...updatedSnapShot.data(), id: updatedSnapShot.data().uid };
+};
+export const deleteAddress = async (currentUser, address) => {
+  if (!currentUser.uid) {
+    return null;
+  }
+  const userRef = firestore().doc(`users/${currentUser.uid}`);
+  const snapShot = await userRef.get();
+  console.log(snapShot.data());
+  try {
+    await userRef.update({
+      address: snapShot.data().address.filter((addr) => {
+        if (address.id == addr.id) {
+          return false;
+        } else {
+          return true;
+        }
+      }),
+    });
+  } catch (error) {
+    alert(error);
+  }
+  const updatedSnapShot = await userRef.get();
+  return { ...updatedSnapShot.data(), id: updatedSnapShot.data().uid };
 };
 const getDay = () => {
   const t = new Date();
@@ -439,6 +486,22 @@ export const uploadRechargeRequest = async (rechargeObj) => {
     alert(error);
   }
 };
+export const matchCoupon = async (number) => {
+  const couponsRef = firestore()
+    .collection("coupons")
+    .where("name", "==", number);
+  const coupons = await couponsRef.get();
+  let couponsArray = [];
+  coupons.forEach((doc) => {
+    couponsArray.push(doc.data());
+  });
+  let coupon = couponsArray[0];
+  if (coupon) {
+    return coupon;
+  } else {
+    return null;
+  }
+};
 
 export const getAllTopCategories = async () => {
   const topCategoryCollectionRef = firestore()
@@ -485,6 +548,15 @@ export const getAllCategories = async () => {
     return productsArray;
   } catch (error) {
     alert(error);
+  }
+};
+export const getAllOrders = async (userId) => {
+  const orderRef = firestore().doc(`orders/${userId}`);
+  const order = await orderRef.get();
+  if (order.exists) {
+    return order.data().orders;
+  } else {
+    return [];
   }
 };
 
@@ -965,6 +1037,35 @@ export const addToCart = async (cartObj, user) => {
     }
   }
 };
+export const addToOrder = async (orderObj) => {
+  if (!orderObj.currentUser.id) {
+    return [];
+  }
+  const cartRef = firestore().doc(`carts/${orderObj.currentUser.id}`);
+  const cart = await cartRef.get();
+  // first empty the cart
+  if (cart.exists) {
+    await cartRef.update({
+      cart: [],
+    });
+  }
+  const orderRef = firestore().doc(`orders/${orderObj.currentUser.id}`);
+  const snapShot = await orderRef.get();
+  // first empty the cart
+  if (snapShot.data()) {
+    await orderRef.update({
+      orders: [orderObj, ...snapShot.data().orders],
+    });
+    const updatedSnapshot = await orderRef.get();
+    return updatedSnapshot.data();
+  } else {
+    await orderRef.set({
+      orders: [orderObj],
+    });
+    const updatedSnapshot = await orderRef.get();
+    return updatedSnapshot.data();
+  }
+};
 export const removeFromCart = async (item, user) => {
   if (!user.id) {
     return [];
@@ -1017,13 +1118,12 @@ export const updateOrder = async (orderObj) => {
 };
 export const updateCart = async (cartData, currentUser) => {
   const cartRef = firestore().doc(`carts/${currentUser.id}`);
- 
-    await cartRef.update({
-      cart: cartData,
-    });
-    const updatedCart = await cartRef.get();
-    return updatedCart.data();
-  
+
+  await cartRef.update({
+    cart: cartData,
+  });
+  const updatedCart = await cartRef.get();
+  return updatedCart.data();
 };
 export const updateToMyParcelOfUser = async (orderObj) => {
   console.log("update to my parcel of user is called");

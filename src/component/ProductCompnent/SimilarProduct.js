@@ -17,7 +17,7 @@ import { StackActions } from "@react-navigation/native";
 import { connect } from "react-redux";
 function SimilarProduct(props) {
   const { item, wishlistArr } = props;
-  console.log(item);
+
   const [result, setResult] = useState([]);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function SimilarProduct(props) {
   useEffect(() => {
     if (item && result.length > 0) {
       let categories = result.map((cat) => cat.id);
-      console.log(categories);
+
       props.getSimilarCategoryProductsRedux(categories.slice(0, 10));
     }
   }, [result]);
@@ -36,7 +36,6 @@ function SimilarProduct(props) {
     if (props.categories.length > 0 && item) {
       let results = getAllChildCategories(item);
       setResult([item, ...results]);
-      console.log(results);
     }
   }, [props.categories, item]);
   const navigateToDetailPage = (data) => {
@@ -68,8 +67,6 @@ function SimilarProduct(props) {
     }
     return results;
   };
-
-  console.log(props.products);
 
   return (
     <>

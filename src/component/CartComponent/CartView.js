@@ -26,14 +26,20 @@ import {
   incrementQuantityRedux,
   decrementQuantityRedux,
   removeFromCartRedux,
+  setTotalRedux,
+  setCouponRedux,
 } from "../../redux/Action/general";
 import Toast from "react-native-simple-toast";
+import { matchCoupon } from "../../firebase/firebase.utils";
 function CartView(props) {
   let cartProduct = props.products;
   let sumAmount = props.sumAmount;
+  let actualOrder = props.actualOrder;
   let freeShipping = props.freeShipping;
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState("");
+  const [showCoupon, setShowCoupon] = React.useState(false);
+  const [coupon, setCoupon] = React.useState(null);
 
   const PriceQuantity = (price, quantity) => {
     let amt = parseFloat(price.replace("$", ""));
@@ -84,6 +90,40 @@ function CartView(props) {
       }
     }
   };
+  const getTotal = (sumAmount) => {
+    let total = 0;
+    if (coupon) {
+      if (sumAmount < freeShipping) {
+        total =
+          coupon.discountType == "cash"
+            ? sumAmount + 70 - coupon.discountAmount
+            : sumAmount +
+              70 -
+              parseInt(sumAmount * (coupon.discountAmount / 100));
+        props.setTotalRedux(total);
+        return total;
+      } else {
+        total =
+          coupon.discountType == "cash"
+            ? sumAmount - coupon.discountAmount
+            : sumAmount - parseInt(sumAmount * (coupon.discountAmount / 100));
+        props.setTotalRedux(total);
+        return total;
+      }
+    } else {
+      if (sumAmount < freeShipping) {
+        total = sumAmount + 70;
+        props.setTotalRedux(total);
+        return total;
+      } else {
+        total = sumAmount;
+        props.setTotalRedux(total);
+        return total;
+      }
+    }
+  };
+
+  let { currentUser } = props;
   return (
     <>
       <View style={{ ...styles.cartContent2 }}>
@@ -108,46 +148,109 @@ function CartView(props) {
               ? "You will get free shipping."
               : `spend ৳ ${
                   parseInt(freeShipping) - parseInt(sumAmount)
-                } more get Free Shipping.`}
+                } more to get Free Shipping.`}
           </Text>
         </View>
       </View>
       {props.bottomSheet ? null : (
         <View style={{ ...styles.cartContent2 }}>
-          <Text
-            style={{
-              marginTop: 10,
-              color: "#666",
-              textDecorationLine: "underline",
-              marginBottom: 7,
-              fontSize: wp("3.3%"),
+          <TouchableOpacity
+            onPress={() => {
+              setShowCoupon(!showCoupon);
             }}
           >
-            Have voucher code?
-          </Text>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
+            <Text
+              style={{
+                marginTop: 10,
+                color: "#666",
+                textDecorationLine: "underline",
+                marginBottom: 7,
+                fontSize: wp("3.3%"),
+              }}
+            >
+              Have coupon code?
+            </Text>
+          </TouchableOpacity>
+          {showCoupon && (
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
 
-              marginBottom: 12,
-            }}
-          >
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeNumber}
-              value={number}
-              placeholder="Enter voucher code"
-              placeholderTextColor={"#ff8084"}
-            />
-            <View style={styles.input2}>
-              <Text style={{ color: "white" }}>Apply</Text>
+                marginBottom: 12,
+              }}
+            >
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeNumber}
+                value={number}
+                placeholder="Enter coupon code"
+                placeholderTextColor={"#ff8084"}
+              />
+
+              <View style={styles.input2}>
+                <TouchableOpacity
+                  onPress={async () => {
+                    let matchedCoupon = await matchCoupon(number);
+                    if (matchedCoupon) {
+                      if (
+                        Date.parse(matchedCoupon.expirationDate) <
+                        Date.parse(new Date().toDateString())
+                      ) {
+                        props.setCouponRedux(null);
+                        setCoupon(null);
+                        return Toast.show(
+                          `${number} Coupon code was expired at ${matchedCoupon.expirationDate}`
+                        );
+                      }
+                      if (
+                        currentUser &&
+                        currentUser.coupons &&
+                        currentUser.coupons.length > 0 &&
+                        currentUser.coupons.find(
+                          (coupon) => coupon.id == matchedCoupon.id
+                        ) &&
+                        currentUser.coupons.find(
+                          (coupon) => coupon.id == matchedCoupon.id
+                        ).usageLimit >= matchedCoupon.usageLimit
+                      ) {
+                        props.setCouponRedux(null);
+                        setCoupon(null);
+                        return Toast.show(
+                          `you've reaced the maximum usage limit of coupon ${number}.`
+                        );
+                      }
+                      if (matchedCoupon.minimumOrder > sumAmount) {
+                        props.setCouponRedux(null);
+                        setCoupon(null);
+                        return Toast.show(
+                          `Please Order at least ${matchedCoupon.minimumOrder}Tk to use this Coupon ${number} `
+                        );
+                      }
+
+                      props.setCouponRedux(matchedCoupon);
+                      setCoupon(matchedCoupon);
+                      return Toast.show(
+                        `Coupon code ${number} has been applied to your order.`
+                      );
+                    } else {
+                      props.setCouponRedux(null);
+                      setCoupon(null);
+                      return Toast.show(
+                        `${number} is not a valid coupon code.`
+                      );
+                    }
+                  }}
+                >
+                  <Text style={{ color: "white" }}>Apply</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          )}
           <View
             style={{
-              padding: 15,
+              padding: 9,
               backgroundColor: "#fffbfc",
               borderWidth: 1,
               borderColor: "#ff8084",
@@ -172,32 +275,9 @@ function CartView(props) {
                     fontSize: wp("3%"),
                   }}
                 >
-                  ৳ 184432
+                  ৳ {actualOrder - sumAmount}
                 </Text>{" "}
                 in this order.
-              </Text>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                marginTop: 7,
-              }}
-            >
-              <Image source={tk} style={styles.image2}></Image>
-              <Text style={{ color: "#ff8084", fontSize: wp("3.4%") }}>
-                You will receive{" "}
-                <Text
-                  style={{
-                    color: "#ff8084",
-                    fontWeight: "bold",
-                    fontSize: wp("3%"),
-                  }}
-                >
-                  ৳ 100
-                </Text>{" "}
-                cashback after delivery.
               </Text>
             </View>
           </View>
@@ -221,7 +301,7 @@ function CartView(props) {
                 fontSize: wp("2.8%"),
               }}
             >
-              ৳ {props.sumAmount}
+              ৳ {actualOrder}
             </Text>
           </View>
           <View
@@ -242,9 +322,35 @@ function CartView(props) {
                 fontSize: wp("2.8%"),
               }}
             >
-              -৳ 0
+              -৳ {actualOrder - sumAmount}
             </Text>
           </View>
+          {coupon && (
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 3,
+              }}
+            >
+              <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
+                Coupon applied ({coupon.name})
+              </Text>
+              <Text
+                style={{
+                  color: "#666",
+                  fontWeight: "bold",
+                  fontSize: wp("2.8%"),
+                }}
+              >
+                -৳{" "}
+                {coupon.discountType == "cash"
+                  ? coupon.discountAmount
+                  : parseInt(sumAmount * (coupon.discountAmount / 100))}
+              </Text>
+            </View>
+          )}
           <View
             style={{
               display: "flex",
@@ -304,11 +410,30 @@ function CartView(props) {
                   fontWeight: "bold",
                 }}
               >
-                Free
+                {sumAmount > freeShipping ? "Free" : "৳ 70"}
               </Text>
             </View>
             <Text style={{ color: "#555", fontSize: wp("2.9%"), marginTop: 4 }}>
               12-48 hours delivery (Inside Dhaka)
+            </Text>
+            <Text style={{ color: "#555", fontSize: wp("2.9%") }}>
+              1-5 days delivery (Outside Dhaka)
+            </Text>
+            <Text
+              style={{
+                marginTop: 10,
+                alignSelf: "flex-start",
+                color: "white",
+                fontWeight: "bold",
+                fontSize: wp("2.6%"),
+                backgroundColor: "cadetblue",
+                padding: 10,
+                paddingTop: 2,
+                paddingBottom: 2,
+                paddingLeft: 4,
+              }}
+            >
+              ! Order above ৳ {freeShipping} to get free delivery.
             </Text>
           </View>
           <OtrixDivider size={"sm"} />
@@ -336,7 +461,7 @@ function CartView(props) {
                 fontSize: wp("3.4%"),
               }}
             >
-              ৳ {props.sumAmount}
+              ৳ {getTotal(sumAmount)}
             </Text>
           </View>
         </View>
@@ -489,6 +614,8 @@ export default connect(mapStateToProps, {
   incrementQuantityRedux,
   decrementQuantityRedux,
   removeFromCartRedux,
+  setTotalRedux,
+  setCouponRedux,
 })(CartView);
 const styles = StyleSheet.create({
   categoryText: {

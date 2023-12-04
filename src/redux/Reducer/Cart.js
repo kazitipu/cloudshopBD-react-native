@@ -3,7 +3,10 @@ import { logfunction } from "../../helpers/FunctionHelper";
 
 const initialState = {
   cartData: [],
+  orders: [],
   freeShipping: 0,
+  total: 0,
+  coupon: null,
 };
 export default (state = initialState, action) => {
   const { payload } = action;
@@ -14,6 +17,17 @@ export default (state = initialState, action) => {
         ...state,
         cartData: payload,
       };
+    case "ADD_TO_ORDER":
+      return {
+        ...state,
+        orders: payload,
+        cartData: [],
+      };
+    case "GET_ALL_ORDERS":
+      return {
+        ...state,
+        orders: payload,
+      };
     case "REMOVE_FROM_CART":
       return {
         ...state,
@@ -23,6 +37,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         cartData: payload,
+      };
+    case "SET_TOTAL_REDUX":
+      return {
+        ...state,
+        total: payload,
+      };
+    case "SET_COUPON_REDUX":
+      return {
+        ...state,
+        coupon: payload,
       };
     case "SET_FREE_SHIPPING":
       return {

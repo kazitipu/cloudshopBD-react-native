@@ -23,12 +23,56 @@ import truck from "./truck.png";
 import { borderStyle } from "styled-system";
 function CartView(props) {
   let cartProduct = props.products;
+  let order = props.order;
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState("");
   const PriceQuantity = (price, quantity) => {
     let amt = parseFloat(price.replace("$", ""));
     let qty = parseInt(quantity);
     return "$" + amt;
+  };
+  const singleProductTotal = (product) => {
+    let total = parseInt(getPrice2(product)) * product.quantity;
+    return total;
+  };
+
+  const getPrice2 = (product) => {
+    if (product.selectedVariation.id) {
+      if (product.selectedVariation.salePrice == 0) {
+        return product.selectedVariation.price;
+      } else {
+        return product.selectedVariation.salePrice;
+      }
+    } else {
+      if (product.product) {
+        if (product.product.salePrice == 0) {
+          return product.product.price;
+        } else {
+          return product.product.salePrice;
+        }
+      } else {
+        return 0;
+      }
+    }
+  };
+  const getPrice3 = (product) => {
+    if (product.selectedVariation.id) {
+      if (product.selectedVariation.salePrice == 0) {
+        return "";
+      } else {
+        return `৳ ${product.selectedVariation.price}`;
+      }
+    } else {
+      if (product.product) {
+        if (product.product.salePrice == 0) {
+          return "";
+        } else {
+          return `৳ ${product.product.price}`;
+        }
+      } else {
+        return 0;
+      }
+    }
   };
   return (
     <>
@@ -48,31 +92,70 @@ function CartView(props) {
                 ...styles.cartContent,
                 borderBottomWidth: index + 1 == cartProduct.length ? 0 : 1,
               }}
-              key={item.id}
+              key={
+                item.selectedVariation && item.selectedVariation.id
+                  ? item.selectedVariation.id
+                  : item.productId
+              }
             >
               <View style={styles.cartBox}>
                 <View style={styles.imageView}>
-                  <Image source={item.image} style={styles.image}></Image>
+                  <Image
+                    source={{
+                      uri:
+                        item.selectedVariation &&
+                        item.selectedVariation.id &&
+                        item.selectedVariation.pictures &&
+                        item.selectedVariation.pictures.length > 0
+                          ? item.selectedVariation.pictures[0]
+                          : item.product.pictures[0],
+                    }}
+                    style={styles.image}
+                  ></Image>
                 </View>
                 <View style={styles.infromationView}>
                   <TouchableOpacity
                     style={{ padding: 4, paddingLeft: 0, paddingBottom: 0 }}
                     onPress={() =>
                       props.navigation.navigate("ProductDetailScreen", {
-                        id: item.id,
+                        id: item.productId,
                       })
                     }
                   >
-                    <Text style={styles.name}>Beauty Glazed Lip Mud</Text>
+                    <Text style={styles.name}>
+                      {item.product.name.slice(0, 25)}...
+                    </Text>
                   </TouchableOpacity>
-                  <Text style={styles.categoryText}>Eye shadow</Text>
-                  <Text style={styles.categoryText}>Lip gloss</Text>
+                  {item.product.selectedCategories &&
+                    item.product.selectedCategories.length > 0 &&
+                    item.product.selectedCategories
+                      .slice(0, 2)
+                      .map((cat, index) => (
+                        <Text key={index} style={styles.categoryText}>
+                          {cat.name}
+                        </Text>
+                      ))}
+
                   <View style={{ marginTop: 6 }}>
-                    <Text style={styles.variantText}>Shades: White</Text>
-                    <Text style={styles.variantText}>Color: Blue</Text>
+                    {item.selectedVariation &&
+                      item.selectedVariation.id &&
+                      item.selectedVariation.combination.map((comb, index) => (
+                        <Text key={index} style={styles.variantText}>
+                          {item.product.savedAttributes.find(
+                            (attr) => attr.id == comb.parentId
+                          )
+                            ? item.product.savedAttributes.find(
+                                (attr) => attr.id == comb.parentId
+                              ).name
+                            : ""}
+                          : {comb.name}
+                        </Text>
+                      ))}
                   </View>
                   <View>
-                    <Text style={styles.variantText}>Total:৳ 3500 (10pc)</Text>
+                    <Text style={styles.variantText}>
+                      Total:৳ {singleProductTotal(item)} ({item.quantity}pc)
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -80,9 +163,19 @@ function CartView(props) {
                 <View
                   style={{
                     display: "flex",
-                    flexDirection: "column",
+                    flexDirection: "row",
                   }}
                 >
+                  <Text
+                    style={{
+                      fontSize: wp("2.3%"),
+                      textDecorationLine: "line-through",
+                      color: "gray",
+                      marginTop: 3,
+                    }}
+                  >
+                    {getPrice3(item)}{" "}
+                  </Text>
                   <Text
                     style={{
                       color: "#ff8084",
@@ -90,225 +183,237 @@ function CartView(props) {
                       fontWeight: "bold",
                     }}
                   >
-                    ৳ 350
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: wp("3.1%"),
-                      textDecorationLine: "line-through",
-                      color: "gray",
-                      marginTop: 3,
-                    }}
-                  >
-                    ৳ 450{" "}
+                    ৳ {getPrice2(item)}
                   </Text>
                 </View>
               </View>
             </View>
           ))}
       </View>
-      {props.bottomSheet ? null : (
-        <View style={{ ...styles.cartContent2 }}>
-          <View
-            style={{
-              padding: 15,
-              backgroundColor: "#fffbfc",
-              borderWidth: 1,
-              borderColor: "#ff8084",
-              borderStyle: "dashed",
-              borderRadius: 5,
-            }}
-          >
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-              }}
-            >
-              <Image source={tk} style={styles.image2}></Image>
-              <Text style={{ color: "#ff8084", fontSize: wp("3%") }}>
-                {" "}
-                You have saved{" "}
-                <Text
-                  style={{
-                    color: "#ff8084",
-                    fontWeight: "bold",
-                    fontSize: wp("3%"),
-                  }}
-                >
-                  Tk184432
-                </Text>{" "}
-                in this order.
-              </Text>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                marginTop: 7,
-              }}
-            >
-              <Image source={tk} style={styles.image2}></Image>
-              <Text style={{ color: "#ff8084", fontSize: wp("3%") }}>
-                {" "}
-                You will receive{" "}
-                <Text
-                  style={{
-                    color: "#ff8084",
-                    fontWeight: "bold",
-                    fontSize: wp("3%"),
-                  }}
-                >
-                  Tk100
-                </Text>{" "}
-                cashback after delivery.
-              </Text>
-            </View>
-          </View>
-          <OtrixDivider size={"sm"} />
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: 5,
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
-              Order ID
-            </Text>
-            <Text
-              style={{
-                color: "#666",
-                fontWeight: "bold",
-                fontSize: wp("2.8%"),
-              }}
-            >
-              #345672
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: 5,
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
-              Ordered at
-            </Text>
-            <Text
-              style={{
-                color: "#666",
-                fontWeight: "bold",
-                fontSize: wp("2.8%"),
-              }}
-            >
-              26 Oct 2023, 03:00 PM
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: 5,
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
-              Subtotal
-            </Text>
-            <Text
-              style={{
-                color: "#666",
-                fontWeight: "bold",
-                fontSize: wp("2.8%"),
-              }}
-            >
-              Tk 6506660
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: 5,
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
-              Discount applied
-            </Text>
-            <Text
-              style={{
-                color: "#666",
-                fontWeight: "bold",
-                fontSize: wp("2.8%"),
-              }}
-            >
-              -Tk 6506660
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: 5,
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
-              Rounding off
-            </Text>
-            <Text
-              style={{
-                color: "#666",
-                fontSize: wp("2.8%"),
-                fontWeight: "bold",
-              }}
-            >
-              -Tk 0.85
-            </Text>
-          </View>
 
+      <View style={{ ...styles.cartContent2 }}>
+        <View
+          style={{
+            padding: 15,
+            backgroundColor: "#fffbfc",
+            borderWidth: 1,
+            borderColor: "#ff8084",
+            borderStyle: "dashed",
+            borderRadius: 5,
+          }}
+        >
           <View
             style={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: 10,
-              marginTop: 5,
+              justifyContent: "flex-start",
             }}
           >
-            <Text
-              style={{
-                color: "#666",
-                fontWeight: "bold",
-                fontSize: wp("3.4%"),
-              }}
-            >
-              Amount Payable
-            </Text>
-            <Text
-              style={{
-                color: "#666",
-                fontWeight: "bold",
-                fontSize: wp("3.4%"),
-              }}
-            >
-              Tk 17850
+            <Image source={tk} style={styles.image2}></Image>
+            <Text style={{ color: "#ff8084", fontSize: wp("3%") }}>
+              {" "}
+              You have saved{" "}
+              <Text
+                style={{
+                  color: "#ff8084",
+                  fontWeight: "bold",
+                  fontSize: wp("3%"),
+                }}
+              >
+                ৳ {props.actualOrder - props.sumAmount}
+              </Text>{" "}
+              in this order.
             </Text>
           </View>
         </View>
-      )}
+        <OtrixDivider size={"sm"} />
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 5,
+            marginTop: 5,
+          }}
+        >
+          <Text style={{ color: "#444", fontSize: wp("3.2%") }}>Order ID</Text>
+          <Text
+            style={{
+              color: "#666",
+              fontWeight: "bold",
+              fontSize: wp("2.8%"),
+            }}
+          >
+            #{order.id}
+          </Text>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 5,
+            marginTop: 5,
+          }}
+        >
+          <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
+            Ordered at
+          </Text>
+          <Text
+            style={{
+              color: "#666",
+              fontWeight: "bold",
+              fontSize: wp("2.8%"),
+            }}
+          >
+            {new Date(Number(order.id)).toLocaleDateString()}{" "}
+            {new Date(Number(order.id)).toLocaleTimeString()}
+          </Text>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 5,
+            marginTop: 5,
+          }}
+        >
+          <Text style={{ color: "#444", fontSize: wp("3.2%") }}>Subtotal</Text>
+          <Text
+            style={{
+              color: "#666",
+              fontWeight: "bold",
+              fontSize: wp("2.8%"),
+            }}
+          >
+            Tk {props.actualOrder}
+          </Text>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 5,
+            marginTop: 5,
+          }}
+        >
+          <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
+            Discount applied
+          </Text>
+          <Text
+            style={{
+              color: "#666",
+              fontWeight: "bold",
+              fontSize: wp("2.8%"),
+            }}
+          >
+            -Tk {order.discountApplied}
+          </Text>
+        </View>
+        {order.couponApplied && (
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginBottom: 5,
+              marginTop: 5,
+            }}
+          >
+            <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
+              Coupon applied ({order.couponApplied.name})
+            </Text>
+            <Text
+              style={{
+                color: "#666",
+                fontWeight: "bold",
+                fontSize: wp("2.8%"),
+              }}
+            >
+              -Tk {order.couponApplied.discount}
+            </Text>
+          </View>
+        )}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 5,
+            marginTop: 5,
+          }}
+        >
+          <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
+            Delivery Charge
+          </Text>
+          <Text
+            style={{
+              color: "#666",
+              fontWeight: "bold",
+              fontSize: wp("2.8%"),
+            }}
+          >
+            + Tk {order.deliveryCharge}
+          </Text>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 5,
+            marginTop: 5,
+          }}
+        >
+          <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
+            Rounding off
+          </Text>
+          <Text
+            style={{
+              color: "#666",
+              fontSize: wp("2.8%"),
+              fontWeight: "bold",
+            }}
+          >
+            -Tk 0
+          </Text>
+        </View>
+
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 10,
+            marginTop: 5,
+          }}
+        >
+          <Text
+            style={{
+              color: "#666",
+              fontWeight: "bold",
+              fontSize: wp("3.4%"),
+            }}
+          >
+            Amount Payable
+          </Text>
+          <Text
+            style={{
+              color: "#666",
+              fontWeight: "bold",
+              fontSize: wp("3.4%"),
+            }}
+          >
+            Tk{" "}
+            {order.subTotal +
+              order.deliveryCharge -
+              order.discountApplied -
+              (order.couponApplied ? order.couponApplied.discount : 0)}
+          </Text>
+        </View>
+      </View>
     </>
   );
 }

@@ -69,50 +69,54 @@ function ProductDetailScreen(props) {
   const sheetRef = useRef(null);
   const { loading, selectedColor, productCount, zoomImages, showZoom, msg } =
     state;
-
-  const showOutofStock = () => {
-    setTimeout(() => {
-      setState({ ...state, msg: "" });
-    }, 2500);
-    setState({ ...state, msg: "Product out of stock" });
-  };
+  const { cartData, product } = props;
 
   useEffect(() => {
     const { id } = props.route.params;
+
     const getProduct = async () => {
-      await props.getSingleProductRedux(id);
+      console.log("getting product");
+      if (product && product.id) {
+        // do nothing if product is availbale
+      } else {
+        await props.getSingleProductRedux(id);
+      }
+
+      console.log("getting product finished");
     };
     getProduct();
-    setState({
-      ...state,
-      loading: false,
-    });
   }, []);
 
   useEffect(() => {
+    const { id } = props.route.params;
     const { product } = props;
     let obj = {};
-    console.log(product);
-    if (
-      product &&
-      product.savedAttributes &&
-      product.savedAttributes.length > 0
-    ) {
-      product.savedAttributes.map((attribute, index) => {
-        if (attribute.selectedTerms.length > 0) {
-          obj["selectedTerm" + index] = attribute.selectedTerms[0];
-        }
-      });
-    }
-    let variation = getVariation(obj);
+    const getProduct = async () => {
+      await props.getSingleProductRedux(id);
+      if (
+        product &&
+        product.id &&
+        product.savedAttributes &&
+        product.savedAttributes.length > 0
+      ) {
+        console.log(product);
+        product.savedAttributes.map((attribute, index) => {
+          if (attribute.selectedTerms.length > 0) {
+            obj["selectedTerm" + index] = attribute.selectedTerms[0];
+          }
+        });
+      }
+      let variation = getVariation(obj);
 
-    setState({
-      ...state,
-      ...obj,
-      variation,
-      loading: false,
-    });
-  }, [product]);
+      setState({
+        ...state,
+        ...obj,
+        variation,
+        loading: false,
+      });
+    };
+    getProduct();
+  }, [product.id]);
 
   useEffect(() => {
     const { product } = props;
@@ -120,9 +124,11 @@ function ProductDetailScreen(props) {
     if (
       state.render &&
       product &&
+      product.id &&
       product.savedAttributes &&
       product.savedAttributes.length > 0
     ) {
+      console.log(product);
       for (var key of Object.keys(state)) {
         if (key.includes("selectedTerm")) {
           obj[key] = state[key];
@@ -143,7 +149,7 @@ function ProductDetailScreen(props) {
   const getVariation = (obj) => {
     const { product } = props;
     let selectedVariation = {};
-    if (product && product.displayedVariations.length > 0) {
+    if (product && product.id && product.displayedVariations.length > 0) {
       product.displayedVariations.map((vari) => {
         let combinationIdArray = vari.combination.map((combination) => {
           return combination.id;
@@ -160,16 +166,16 @@ function ProductDetailScreen(props) {
     }
     return selectedVariation;
   };
-  const { cartData, product } = props;
+
   let source = {};
-  if (product) {
+  if (product && product.id) {
     source = {
       html: `${product.description}`,
     };
   }
 
   let images = [];
-  if (product) {
+  if (product && product.id) {
     if (product.pictures.length > 0 && product.pictures2.length > 0) {
       const filteredPictures2 = product.pictures2.filter(
         (pic) => pic !== "/static/media/addProduct.3dff302b.png"
@@ -181,9 +187,7 @@ function ProductDetailScreen(props) {
   }
 
   const getPrice = (product) => {
-    console.log(state.variation);
     if (state.variation && state.variation.id) {
-      console.log(state.variation);
       if (state.variation.salePrice == 0) {
         return (
           <View style={styles.productPrice}>
@@ -263,7 +267,7 @@ function ProductDetailScreen(props) {
         return state.variation.salePrice;
       }
     } else {
-      if (product) {
+      if (product && product.id) {
         if (product.salePrice == 0) {
           return product.price;
         } else {
@@ -362,7 +366,7 @@ function ProductDetailScreen(props) {
     <OtrixContainer customStyles={{ backgroundColor: "white" }}>
       {loading ? (
         <OtrixLoader />
-      ) : product ? (
+      ) : product && product.id ? (
         <>
           {/* Product Detail View */}
 
@@ -381,7 +385,10 @@ function ProductDetailScreen(props) {
                 GlobalStyles.headerLeft,
                 { zIndex: 999999999, flex: 0.7, alignItems: "flex-start" },
               ]}
-              onPress={() => props.navigation.goBack()}
+              onPress={() => {
+                props.navigation.goBack();
+                // props.emptyProductObjRedux(null)
+              }}
             >
               <OtirxBackButton />
             </TouchableOpacity>
@@ -775,41 +782,6 @@ function ProductDetailScreen(props) {
                 </>
               )}
 
-              {/* <View style={styles.colorView}> */}
-              {/* Color */}
-              {/* <View style={styles.colorContainer}>
-                  <Text style={styles.containerTxt}>Colors:</Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      flexWrap: "wrap",
-                      marginHorizontal: wp("1%"),
-                    }}
-                  >
-                    {COLORS.map((item, index) => (
-                      <TouchableOpacity
-                        key={index.toString()}
-                        style={[styles.box, { backgroundColor: item }]}
-                        onPress={() =>
-                          setState({ ...state, selectedColor: index })
-                        }
-                      >
-                        {index == selectedColor && (
-                          <Image
-                            source={checkround2}
-                            style={styles.colorimageView}
-                          />
-                        )}
-                      </TouchableOpacity>
-                    ))}
-
-                    <TouchableOpacity style={{ justifyContent: "center" }}>
-                      <Icon name="right" style={styles.arrowRight}></Icon>
-                    </TouchableOpacity>
-                  </View>
-                </View> */}
-              {/* </View> */}
-
               <View style={GlobalStyles.horizontalLine}></View>
               <OtrixDivider size={"md"} />
 
@@ -833,6 +805,7 @@ function ProductDetailScreen(props) {
                 navigation={props.navigation}
                 item={product.selectedCategories[0]}
               />
+              <View style={{ marginBottom: 60 }}></View>
             </OtrixContent>
           </ScrollView>
 
@@ -1100,7 +1073,9 @@ function ProductDetailScreen(props) {
 function mapStateToProps(state) {
   return {
     cartData: state.cart.cartData,
-    product: state.products.productObj,
+    product: state.products.productObj
+      ? state.products.productObj
+      : { id: null },
     currentUser: state.auth.currentUser,
     freeShipping: state.cart.freeShipping,
   };

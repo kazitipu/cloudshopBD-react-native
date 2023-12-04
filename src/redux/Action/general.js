@@ -10,9 +10,12 @@ import {
   getAllCategories,
   getSingleProduct,
   addToCart,
+  addToOrder,
   removeFromCart,
   updateUserAddress,
   updateShippingAddress,
+  deleteAddress,
+  getAllOrders,
 } from "../../firebase/firebase.utils";
 export function requestInit(user) {
   return {
@@ -126,11 +129,25 @@ export const getAllTopCategoriesRedux = () => async (dispatch) => {
     payload: allCats,
   });
 };
+export const getAllOrdersRedux = (currentUserId) => async (dispatch) => {
+  const orders = await getAllOrders(currentUserId);
+  dispatch({
+    type: "GET_ALL_ORDERS",
+    payload: orders,
+  });
+};
 export const addToCartRedux = (cartObj, currentUser) => async (dispatch) => {
   const cartData = await addToCart(cartObj, currentUser);
   dispatch({
     type: "ADD_TO_CART",
     payload: cartData,
+  });
+};
+export const addToOrderRedux = (orderObj) => async (dispatch) => {
+  const allOrders = await addToOrder(orderObj);
+  dispatch({
+    type: "ADD_TO_ORDER",
+    payload: allOrders,
   });
 };
 export const removeFromCartRedux = (item, currentUser) => async (dispatch) => {
@@ -146,6 +163,18 @@ export const setReduxCart = (cartData) => async (dispatch) => {
     payload: cartData,
   });
 };
+export const setTotalRedux = (total) => async (dispatch) => {
+  dispatch({
+    type: "SET_TOTAL_REDUX",
+    payload: total,
+  });
+};
+export const setCouponRedux = (coupon) => async (dispatch) => {
+  dispatch({
+    type: "SET_COUPON_REDUX",
+    payload: coupon,
+  });
+};
 export const updateUserAddressRedux =
   (currentUser, address) => async (dispatch) => {
     const updatedUser = await updateUserAddress(currentUser, address);
@@ -157,6 +186,14 @@ export const updateUserAddressRedux =
 export const updateShippingAddressRedux =
   (currentUser, address) => async (dispatch) => {
     const updatedUser = await updateShippingAddress(currentUser, address);
+    dispatch({
+      type: "UPDATE_ADDRESSBOOK",
+      payload: updatedUser,
+    });
+  };
+export const deleteAddressRedux =
+  (currentUser, address) => async (dispatch) => {
+    const updatedUser = await deleteAddress(currentUser, address);
     dispatch({
       type: "UPDATE_ADDRESSBOOK",
       payload: updatedUser,

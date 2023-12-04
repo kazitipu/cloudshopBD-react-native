@@ -16,7 +16,12 @@ import {
 } from "react-native-responsive-screen";
 import { GlobalStyles, Colors } from "@helpers";
 import { _roundDimensions } from "@helpers/util";
-import { removeFromCart, decrementQuantity, incrementQuantity } from "@actions";
+import {
+  removeFromCart,
+  decrementQuantity,
+  incrementQuantity,
+  setTotalRedux,
+} from "@actions";
 import ProductListDummy from "@component/items/ProductListDummy";
 import Icon from "react-native-vector-icons/Ionicons";
 import Fonts from "@helpers/Fonts";
@@ -29,6 +34,7 @@ function CartScreen(props) {
     cartArr: [],
     cartProducts: [],
     sumAmount: 0,
+    actualOrder: 0,
     isApplied: false,
     validCode: false,
     couponCode: null,
@@ -62,13 +68,16 @@ function CartScreen(props) {
   const calculateCart = () => {
     let cartProducts = props.cartData;
     let sumAmount = 0;
+    let actualOrder = 0;
 
     //find and create array
     cartProducts &&
       cartProducts.length > 0 &&
       cartProducts.forEach(function (item, index) {
         let price = getPrice2(item);
+        let actualPrice = getPrice3(item);
         sumAmount += parseInt(price) * item.quantity;
+        actualOrder += parseInt(actualPrice) * item.quantity;
       });
 
     setState({
@@ -76,8 +85,11 @@ function CartScreen(props) {
       loading: false,
       cartProducts: cartProducts,
       sumAmount: sumAmount,
+      actualOrder: actualOrder,
     });
+    props.setTotalRedux(sumAmount);
   };
+
   const getPrice2 = (product) => {
     if (product.selectedVariation.id) {
       if (product.selectedVariation.salePrice == 0) {
@@ -92,6 +104,17 @@ function CartScreen(props) {
         } else {
           return product.product.salePrice;
         }
+      } else {
+        return 0;
+      }
+    }
+  };
+  const getPrice3 = (product) => {
+    if (product.selectedVariation.id) {
+      return product.selectedVariation.price;
+    } else {
+      if (product.product) {
+        return product.product.price;
       } else {
         return 0;
       }
@@ -143,6 +166,7 @@ function CartScreen(props) {
             decrementItem={decrement}
             incrementItem={increment}
             sumAmount={sumAmount}
+            actualOrder={state.actualOrder}
           />
         )}
         {!loading && props.cartData.length == 0 && (
@@ -203,7 +227,7 @@ function CartScreen(props) {
                     fontSize: wp("3.1%"),
                   }}
                 >
-                  Total ৳ {sumAmount}
+                  Total ৳ {props.total}
                 </Text>
                 <View
                   style={{
@@ -230,6 +254,7 @@ function CartScreen(props) {
               updateCart(props.cartData, props.currentUser);
               props.navigation.navigate("CheckoutScreen", {
                 sumAmount,
+                actualOrder: state.actualOrder,
               });
             }}
           />
@@ -243,6 +268,7 @@ function mapStateToProps(state) {
   return {
     cartData: state.cart.cartData,
     currentUser: state.auth.currentUser,
+    total: state.cart.total,
   };
 }
 
@@ -250,6 +276,7 @@ export default connect(mapStateToProps, {
   removeFromCart,
   decrementQuantity,
   incrementQuantity,
+  setTotalRedux,
 })(CartScreen);
 
 const styles = StyleSheet.create({

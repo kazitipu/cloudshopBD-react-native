@@ -23,7 +23,7 @@ import {
 } from "react-native-responsive-screen";
 import { GlobalStyles, Colors } from "@helpers";
 import { _roundDimensions } from "@helpers/util";
-import { updateShippingAddressRedux } from "@actions";
+import { updateShippingAddressRedux, deleteAddressRedux } from "@actions";
 import MatIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicon from "react-native-vector-icons/Ionicons";
@@ -228,7 +228,8 @@ function ManageAddressScreen(props) {
           >
             Choose Shipping Address
           </Text>
-          {currentUser.address &&
+          {currentUser &&
+            currentUser.address &&
             currentUser.address.length > 0 &&
             currentUser.address.map((shippingAddress) => (
               <TouchableOpacity
@@ -328,7 +329,9 @@ function ManageAddressScreen(props) {
                       {!shippingAddress.defaultShipping && (
                         <TouchableOpacity
                           onPress={() => {
-                            props.navigation.navigate("AddAddressScreen");
+                            props.navigation.navigate("AddAddressScreen", {
+                              selectedAddress: shippingAddress,
+                            });
                           }}
                           style={{
                             marginRight: 8,
@@ -358,7 +361,10 @@ function ManageAddressScreen(props) {
                       {!shippingAddress.defaultShipping && (
                         <TouchableOpacity
                           onPress={() => {
-                            props.navigation.navigate("AddAddressScreen");
+                            props.deleteAddressRedux(
+                              currentUser,
+                              shippingAddress
+                            );
                           }}
                         >
                           <Ionicon
@@ -370,25 +376,62 @@ function ManageAddressScreen(props) {
                       )}
                       {shippingAddress.defaultShipping && (
                         <View
-                          style={{
-                            marginTop: 7,
-                            backgroundColor: "#0092ac",
-                            alignSelf: "flex-start",
-                            padding: 5,
-                            paddingTop: 3,
-                            paddingBottom: 3,
-                            borderRadius: 4,
-                          }}
+                          style={{ display: "flex", flexDirection: "column" }}
                         >
-                          <Text
+                          <View
                             style={{
-                              fontSize: wp("2.3%"),
-                              fontWeight: "bold",
-                              color: "white",
+                              marginTop: 7,
+                              backgroundColor: "#0092ac",
+                              alignSelf: "flex-start",
+                              padding: 5,
+                              paddingTop: 3,
+                              paddingBottom: 3,
+                              borderRadius: 4,
                             }}
                           >
-                            Shipping Address
-                          </Text>
+                            <Text
+                              style={{
+                                fontSize: wp("2.3%"),
+                                fontWeight: "bold",
+                                color: "white",
+                              }}
+                            >
+                              Shipping Address
+                            </Text>
+                          </View>
+
+                          <TouchableOpacity
+                            onPress={() => {
+                              props.navigation.navigate("AddAddressScreen", {
+                                selectedAddress: shippingAddress,
+                              });
+                            }}
+                            style={{
+                              marginRight: 8,
+                              alignSelf: "flex-start",
+                              marginTop: 10,
+                            }}
+                          >
+                            <View
+                              style={{
+                                padding: 5,
+                                paddingLeft: 15,
+                                paddingRight: 15,
+                                backgroundColor: "#fff0f4",
+                                borderRadius: 7,
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: "#ff8084",
+
+                                  fontSize: wp("3%"),
+                                }}
+                              >
+                                Edit
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
                         </View>
                       )}
                     </View>
@@ -411,9 +454,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { updateShippingAddressRedux })(
-  ManageAddressScreen
-);
+export default connect(mapStateToProps, {
+  updateShippingAddressRedux,
+  deleteAddressRedux,
+})(ManageAddressScreen);
 
 const styles = StyleSheet.create({
   deliveryTitle: {

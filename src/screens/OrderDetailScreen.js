@@ -26,30 +26,20 @@ import Entypo from "react-native-vector-icons/Entypo";
 import Ionicon from "react-native-vector-icons/Ionicons";
 import Delivery from "./delivery.png";
 import CashOnDelivery from "./cashonDelivery.png";
+import { setTotalRedux } from "../redux/Action";
 function CheckoutScreen(props) {
   const [state, setState] = React.useState({
     loading: true,
     cartArr: [],
     cartProducts: [],
     sumAmount: 0,
+    actualOrder: 0,
     isApplied: false,
     validCode: false,
     couponCode: null,
     noRecord: false,
   });
-
-  const applyCouponCode = () => {
-    const { couponCode } = state;
-    if (couponCode != null) {
-      if (couponCode == "otrixweb") {
-        setState({ ...state, isApplied: true, validCode: true });
-      } else {
-        setState({ ...state, isApplied: true, validCode: false });
-      }
-    } else {
-      setState({ ...state, isApplied: true, validCode: false });
-    }
-  };
+  const { order } = props.route.params;
 
   const onDeleteItem = (id) => {
     props.removeFromCart(id);
@@ -64,22 +54,64 @@ function CheckoutScreen(props) {
   };
 
   const calculateCart = () => {
-    let cartProducts = props.cartData;
-    let cartItems = ProductListDummy;
-    let sumAmount = 2000;
+    let cartProducts = order.orders;
+    let sumAmount = 0;
+    let actualOrder = 0;
+
+    //find and create array
+    cartProducts &&
+      cartProducts.length > 0 &&
+      cartProducts.forEach(function (item, index) {
+        let price = getPrice2(item);
+        let actualPrice = getPrice3(item);
+        sumAmount += parseInt(price) * item.quantity;
+        actualOrder += parseInt(actualPrice) * item.quantity;
+      });
 
     setState({
       ...state,
-      noRecord: cartItems.length > 0 ? false : true,
       loading: false,
-      cartProducts: cartItems,
+      cartProducts: cartProducts,
       sumAmount: sumAmount,
+      actualOrder: actualOrder,
     });
+    props.setTotalRedux(sumAmount);
   };
 
   useEffect(() => {
     calculateCart();
   }, []);
+
+  const getPrice2 = (product) => {
+    if (product.selectedVariation.id) {
+      if (product.selectedVariation.salePrice == 0) {
+        return product.selectedVariation.price;
+      } else {
+        return product.selectedVariation.salePrice;
+      }
+    } else {
+      if (product.product) {
+        if (product.product.salePrice == 0) {
+          return product.product.price;
+        } else {
+          return product.product.salePrice;
+        }
+      } else {
+        return 0;
+      }
+    }
+  };
+  const getPrice3 = (product) => {
+    if (product.selectedVariation.id) {
+      return product.selectedVariation.price;
+    } else {
+      if (product.product) {
+        return product.product.price;
+      } else {
+        return 0;
+      }
+    }
+  };
 
   const {
     cartProducts,
@@ -89,7 +121,10 @@ function CheckoutScreen(props) {
     isApplied,
     validCode,
     noRecord,
+    actualOrder,
   } = state;
+
+  console.log(order);
   return (
     <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
       {/* Header */}
@@ -120,7 +155,7 @@ function CheckoutScreen(props) {
         }}
       >
         <View style={{ ...styles.box, marginBottom: 10 }}>
-          <OrderTrackingModalResult />
+          <OrderTrackingModalResult order={order}/>
         </View>
         {/* Cart Component Start from here */}
         <View style={styles.box}>
@@ -165,23 +200,89 @@ function CheckoutScreen(props) {
                 style={{ height: 40, width: "100%" }}
                 resizeMode="contain"
               />
+              <View
+                style={{
+                  backgroundColor:
+                    order.currentUser.address.find(
+                      (address) => address.defaultShipping
+                    ).addressType == "Home"
+                      ? "green"
+                      : order.currentUser.address.find(
+                          (address) => address.defaultShipping
+                        ).addressType == "Office"
+                      ? "blue"
+                      : "darkorange",
+                  padding: 5,
+                  paddingTop: 2,
+                  paddingBottom: 2,
+                  alignSelf: "center",
+
+                  fontSize: wp("3%"),
+                  borderRadius: 3,
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: wp("2.5%"),
+                    color: "white",
+                  }}
+                >
+                  {
+                    order.currentUser.address.find(
+                      (address) => address.defaultShipping
+                    ).addressType
+                  }
+                </Text>
+              </View>
             </View>
             <View style={{ flex: 0.6 }}>
-              <Text style={styles.text}>Kazi Tipu</Text>
-              <Text style={styles.text}>+8801641103558</Text>
               <Text style={styles.text}>
-                431/12,Bakshibagh,Malibagh,Dhaka City,Dhaka
+                {
+                  order.currentUser.address.find(
+                    (address) => address.defaultShipping
+                  ).fullName
+                }
               </Text>
-              <Text style={styles.text}>kazi.tipu.nxt@gmail.com</Text>
+              <Text style={styles.text}>
+                {
+                  order.currentUser.address.find(
+                    (address) => address.defaultShipping
+                  ).mobileNo
+                }
+              </Text>
+              <Text style={styles.text}>
+                {
+                  order.currentUser.address.find(
+                    (address) => address.defaultShipping
+                  ).address
+                }
+              </Text>
+              <Text style={styles.text}>
+                {
+                  order.currentUser.address.find(
+                    (address) => address.defaultShipping
+                  ).district
+                }
+                ,
+                {
+                  order.currentUser.address.find(
+                    (address) => address.defaultShipping
+                  ).division
+                }
+              </Text>
             </View>
           </View>
         </View>
         <CartView
           navigation={props.navigation}
-          products={cartProducts}
+          products={order.orders}
           deleteItem={onDeleteItem}
           decrementItem={decrement}
           incrementItem={increment}
+          sumAmount={sumAmount}
+          actualOrder={actualOrder}
+          order={order}
         />
       </OtrixContent>
     </OtrixContainer>
@@ -198,6 +299,7 @@ export default connect(mapStateToProps, {
   removeFromCart,
   decrementQuantity,
   incrementQuantity,
+  setTotalRedux,
 })(CheckoutScreen);
 
 const styles = StyleSheet.create({

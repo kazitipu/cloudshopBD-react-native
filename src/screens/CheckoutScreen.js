@@ -29,9 +29,6 @@ import {
 } from "react-native-responsive-screen";
 import { GlobalStyles, Colors } from "@helpers";
 import { _roundDimensions } from "@helpers/util";
-
-import ProductListDummy from "@component/items/ProductListDummy";
-import PaymentMethodsDummy from "@component/items/PaymentMethodsDummy";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicon from "react-native-vector-icons/Ionicons";
 import Fonts from "@helpers/Fonts";
@@ -40,7 +37,7 @@ import GradientButton from "../component/CartComponent/Button";
 import Delivery from "./delivery.png";
 import CashOnDelivery from "./cashonDelivery.png";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
-import MatIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { addToOrderRedux } from "../redux/Action/general";
 
 function CheckoutScreen(props) {
   const [state, setState] = React.useState({
@@ -138,8 +135,8 @@ function CheckoutScreen(props) {
     selectedPaymentMethod,
     paymentSuccessModal,
   } = state;
-  const { sumAmount } = props.route.params;
-  const { currentUser } = props;
+  const { sumAmount, actualOrder } = props.route.params;
+  const { currentUser, coupon } = props;
   let shippingAddress = null;
   if (currentUser && currentUser.address && currentUser.address.length > 0) {
     shippingAddress = currentUser.address.find((addr) => addr.defaultShipping);
@@ -197,62 +194,101 @@ function CheckoutScreen(props) {
           {props.currentUser &&
           props.currentUser.address &&
           props.currentUser.address.length > 0 ? (
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                flex: 1,
-                marginTop: 15,
-                paddingBottom: 20,
-              }}
-            >
+            shippingAddress ? (
               <View
                 style={{
-                  flex: 0.2,
+                  display: "flex",
+                  flexDirection: "row",
+                  flex: 1,
+                  marginTop: 15,
+                  paddingBottom: 20,
                 }}
               >
-                <Image
-                  source={Delivery}
-                  style={{ height: 30, width: "100%" }}
-                  resizeMode="contain"
-                />
                 <View
                   style={{
-                    backgroundColor:
-                      shippingAddress.addressType == "Home"
-                        ? "green"
-                        : shippingAddress.addressType == "Office"
-                        ? "blue"
-                        : "darkorange",
-                    padding: 5,
-                    paddingTop: 2,
-                    paddingBottom: 2,
-                    alignSelf: "center",
-                    marginTop: 7,
-                    fontSize: wp("3%"),
-                    borderRadius: 3,
+                    flex: 0.2,
                   }}
                 >
-                  <Text
+                  <Image
+                    source={Delivery}
+                    style={{ height: 30, width: "100%" }}
+                    resizeMode="contain"
+                  />
+                  <View
                     style={{
-                      fontSize: wp("2.8%"),
-                      color: "white",
+                      backgroundColor:
+                        shippingAddress.addressType == "Home"
+                          ? "green"
+                          : shippingAddress.addressType == "Office"
+                          ? "blue"
+                          : "darkorange",
+                      padding: 5,
+                      paddingTop: 2,
+                      paddingBottom: 2,
+                      alignSelf: "center",
+                      marginTop: 7,
+                      fontSize: wp("3%"),
+                      borderRadius: 3,
                     }}
                   >
-                    {shippingAddress.addressType}
+                    <Text
+                      style={{
+                        fontSize: wp("2.8%"),
+                        color: "white",
+                      }}
+                    >
+                      {shippingAddress.addressType}
+                    </Text>
+                  </View>
+                </View>
+                <View style={{ flex: 0.6 }}>
+                  <Text style={styles.text}>{shippingAddress.fullName}</Text>
+                  <Text style={styles.text}>{shippingAddress.mobileNo}</Text>
+                  <Text style={styles.text}>{shippingAddress.address}</Text>
+                  <Text style={styles.text}>
+                    {shippingAddress.district},{shippingAddress.division}
                   </Text>
                 </View>
-              </View>
-              <View style={{ flex: 0.6 }}>
-                <Text style={styles.text}>{shippingAddress.fullName}</Text>
-                <Text style={styles.text}>{shippingAddress.mobileNo}</Text>
-                <Text style={styles.text}>{shippingAddress.address}</Text>
-                <Text style={styles.text}>
-                  {shippingAddress.district},{shippingAddress.division}
-                </Text>
-              </View>
 
-              <View style={{ flex: 0.2, paddingRight: 15 }}>
+                <View style={{ flex: 0.2, paddingRight: 15 }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      props.navigation.navigate("ManageAddressScreen");
+                    }}
+                  >
+                    <View
+                      style={{
+                        padding: 5,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        backgroundColor: "#fff0f4",
+                        borderRadius: 7,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: "#ff8084",
+
+                          fontSize: wp("3%"),
+                        }}
+                      >
+                        Change
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : (
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  flex: 1,
+                  marginTop: 15,
+                  paddingBottom: 20,
+                }}
+              >
                 <TouchableOpacity
                   onPress={() => {
                     props.navigation.navigate("ManageAddressScreen");
@@ -274,12 +310,12 @@ function CheckoutScreen(props) {
                         fontSize: wp("3%"),
                       }}
                     >
-                      Change
+                      Choose Shipping Address
                     </Text>
                   </View>
                 </TouchableOpacity>
               </View>
-            </View>
+            )
           ) : (
             <View
               style={{
@@ -378,8 +414,121 @@ function CheckoutScreen(props) {
                 fontSize: wp("4.1%"),
               }}
             >
-              ৳ {sumAmount}
+              ৳ {props.total}
             </Text>
+          </View>
+          <View style={{ paddingLeft: 10, paddingRight: 10 }}>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 3,
+                marginTop: 3,
+              }}
+            >
+              <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
+                Subtotal
+              </Text>
+              <Text
+                style={{
+                  color: "#666",
+                  fontWeight: "bold",
+                  fontSize: wp("2.8%"),
+                }}
+              >
+                ৳ {actualOrder}
+              </Text>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 3,
+              }}
+            >
+              <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
+                Delivery Charge
+              </Text>
+              <Text
+                style={{
+                  color: "#666",
+                  fontWeight: "bold",
+                  fontSize: wp("2.8%"),
+                }}
+              >
+                +৳ {sumAmount >= props.freeShipping ? 0 : 70}
+              </Text>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 3,
+              }}
+            >
+              <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
+                Discount applied
+              </Text>
+              <Text
+                style={{
+                  color: "#666",
+                  fontWeight: "bold",
+                  fontSize: wp("2.8%"),
+                }}
+              >
+                -৳ {actualOrder - sumAmount}
+              </Text>
+            </View>
+            {coupon && (
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginBottom: 3,
+                }}
+              >
+                <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
+                  Coupon applied ({coupon.name})
+                </Text>
+                <Text
+                  style={{
+                    color: "#666",
+                    fontWeight: "bold",
+                    fontSize: wp("2.8%"),
+                  }}
+                >
+                  -৳{" "}
+                  {coupon.discountType == "cash"
+                    ? coupon.discountAmount
+                    : parseInt(sumAmount * (coupon.discountAmount / 100))}
+                </Text>
+              </View>
+            )}
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 3,
+              }}
+            >
+              <Text style={{ color: "#444", fontSize: wp("3.2%") }}>
+                Rounding off
+              </Text>
+              <Text
+                style={{
+                  color: "#666",
+                  fontSize: wp("2.8%"),
+                  fontWeight: "bold",
+                }}
+              >
+                -৳ 0
+              </Text>
+            </View>
           </View>
           <View style={{ marginTop: 10, padding: 10 }}>
             <Text
@@ -513,7 +662,7 @@ function CheckoutScreen(props) {
                     fontSize: wp("3.1%"),
                   }}
                 >
-                  Total ৳ {sumAmount}
+                  Total ৳ {props.total}
                 </Text>
                 <View
                   style={{
@@ -537,13 +686,30 @@ function CheckoutScreen(props) {
               </View>
             }
             onPress={() => {
+              let orderObj = {
+                id: new Date().getTime().toString(),
+                currentUser: currentUser,
+                orders: props.cartData,
+                subTotal: actualOrder,
+                deliveryCharge: sumAmount >= props.freeShipping ? 0 : 70,
+                discountApplied: actualOrder - sumAmount,
+                couponApplied: coupon
+                  ? {
+                      name: coupon.name,
+                      discount:
+                        coupon.discountType == "cash"
+                          ? coupon.discountAmount
+                          : parseInt(sumAmount * (coupon.discountAmount / 100)),
+                    }
+                  : null,
+                orderStatus: "Processing",
+                orderStatusScore: 1,
+              };
+              props.addToOrderRedux(orderObj);
               setState({
                 ...state,
                 paymentSuccessModal: true,
               });
-              // props.navigation.navigate("CheckoutScreen", {
-              //   sumAmount,
-              // });
             }}
           />
         </View>
@@ -570,10 +736,12 @@ function mapStateToProps(state) {
     cartData: state.cart.cartData,
     currentUser: state.auth.currentUser,
     freeShipping: state.cart.freeShipping,
+    total: state.cart.total,
+    coupon: state.cart.coupon,
   };
 }
 
-export default connect(mapStateToProps, {})(CheckoutScreen);
+export default connect(mapStateToProps, { addToOrderRedux })(CheckoutScreen);
 
 const styles = StyleSheet.create({
   box: {
