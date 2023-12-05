@@ -2,18 +2,29 @@ import { types } from "../Action/actionTypes";
 import { logfunction } from "../../helpers/FunctionHelper";
 
 const initialState = {
-    wishlistCount: 0,
-}
+  wishlist: [],
+};
 export default (state = initialState, action) => {
-    const { payload } = action;
-    switch (action.type) {
-        case types.SUCCESS_WISHLIST:
-            return {
-                ...state,
-                wishlistCount: payload.wishlistData.totalCount,
-                wishlistData: payload.wishlistData.wishlistData
-            }
-        default:
-            return state;
-    }
-}
+  const { payload } = action;
+  logfunction("PAYLOAD IN REDUCER ", payload);
+  switch (action.type) {
+    case "ADD_TO_WISHLIST":
+      return {
+        ...state,
+        wishlist: payload,
+      };
+
+    case "REMOVE_FROM_WISHLIST":
+      return {
+        ...state,
+        wishlist: payload,
+      };
+    case "SET_REDUX_WISHLIST":
+      return {
+        ...state,
+        wishlist: payload,
+      };
+    default:
+      return state;
+  }
+};

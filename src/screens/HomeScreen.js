@@ -42,11 +42,6 @@ function HomeScreen(props) {
     loading: true,
   });
 
-  const addToWish = async (id) => {
-    let wishlistData = await _addToWishlist(id);
-    props.addToWishList(wishlistData);
-  };
-
   useEffect(() => {
     let loadHomePage = setTimeout(
       () => setState({ ...state, loading: false }),
@@ -132,7 +127,10 @@ function HomeScreen(props) {
             alignItems: "center",
           }}
         >
-          <TouchableOpacity style={{ ...styles.FavCircle, marginRight: 5 }}>
+          <TouchableOpacity
+            style={{ ...styles.FavCircle, marginRight: 5 }}
+            onPress={() => props.navigation.navigate("WishlistScreen")}
+          >
             <FontAwesomeIcon
               name="heart"
               style={{ fontSize: wp("3.8%") }}
@@ -193,7 +191,6 @@ function HomeScreen(props) {
               key={category.id}
               navigation={props.navigation}
               wishlistArr={wishlistData}
-              addToWishlist={addToWish}
               category={category}
             />
           ))}
@@ -212,18 +209,12 @@ function HomeScreen(props) {
             <NewProduct2
               key={category.id}
               navigation={props.navigation}
-              wishlistArr={wishlistData}
-              addToWishlist={addToWish}
               category={category}
             />
           ))}
 
           {/*Latest Products Component */}
-          <LatestProducts
-            navigation={props.navigation}
-            wishlistArr={wishlistData}
-            addToWishlist={addToWish}
-          />
+          <LatestProducts navigation={props.navigation} />
           <OtrixDivider size={"sm"} />
 
           {/* TrendingProduct Component */}

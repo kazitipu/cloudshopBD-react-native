@@ -947,10 +947,10 @@ export const setBookingArrayOfUser = async (bookingObj) => {
   }
 };
 export const addToCart = async (cartObj, user) => {
-  if (!user.id) {
+  if (!user.uid) {
     return [];
   }
-  const cartRef = firestore().doc(`carts/${user.id}`);
+  const cartRef = firestore().doc(`carts/${user.uid}`);
   const snapShot = await cartRef.get();
   if (!snapShot.exists) {
     try {
@@ -1037,6 +1037,36 @@ export const addToCart = async (cartObj, user) => {
     }
   }
 };
+export const addToWishlist = async (wishlistObj, user) => {
+  if (!user.uid) {
+    return [];
+  }
+  const wishlistRef = firestore().doc(`wishlists/${user.uid}`);
+  const snapShot = await wishlistRef.get();
+  if (!snapShot.exists) {
+    try {
+      await wishlistRef.set({
+        wishlist: [wishlistObj],
+      });
+      const updatedSnapshot = await wishlistRef.get();
+      return updatedSnapshot.data().wishlist;
+    } catch (error) {
+      console.log("error creating cartProduct", error.message);
+      return [];
+    }
+  } else {
+    if (snapShot.data().wishlist.find((wish) => wish.id == wishlistObj.id)) {
+      const updatedSnapshot = await wishlistRef.get();
+      return updatedSnapshot.data().wishlist;
+    } else {
+      await wishlistRef.update({
+        wishlist: [...snapShot.data().wishlist, wishlistObj],
+      });
+      const updatedSnapshot = await wishlistRef.get();
+      return updatedSnapshot.data().wishlist;
+    }
+  }
+};
 export const addToOrder = async (orderObj) => {
   if (!orderObj.currentUser.id) {
     return [];
@@ -1101,6 +1131,25 @@ export const removeFromCart = async (item, user) => {
     const updatedSnapshot = await cartRef.get();
     return updatedSnapshot.data().cart;
   }
+};
+export const removeFromWishlist = async (item, user) => {
+  if (!user.uid) {
+    return [];
+  }
+  const wishlistRef = firestore().doc(`wishlists/${user.uid}`);
+  const snapShot = await wishlistRef.get();
+
+  await wishlistRef.update({
+    wishlist: snapShot.data().wishlist.filter((wishlistItem) => {
+      if (wishlistItem.id == item.id) {
+        return false;
+      } else {
+        return true;
+      }
+    }),
+  });
+  const updatedSnapshot = await wishlistRef.get();
+  return updatedSnapshot.data().wishlist;
 };
 
 // Orders

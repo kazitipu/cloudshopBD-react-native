@@ -15,6 +15,8 @@ import {
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import Entypo from "react-native-vector-icons/Entypo";
+import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
 import LinearGradient from "react-native-linear-gradient";
 
@@ -27,141 +29,449 @@ class OrderTrackingModalResult extends Component {
   };
 
   render() {
+    const { order } = this.props;
     return (
       <View style={styles.footerContainer}>
-        <>
-          <View style={styles.row}>
-            <View style={{ marginRight: 25, marginTop: 5 }}>
-              <Text style={styles.text}>Oct 26</Text>
-              <Text style={styles.text}>03:00 PM</Text>
-            </View>
-            <View style={styles.iconProgressBarContainer}>
-              <View style={styles.iconContainer}>
-                <FontAwesome
-                  name="industry"
-                  size={15}
-                  color="white"
-                  style={{ marginTop: 7 }}
-                />
+        {order.orderStatus !== "Cancelled" ? (
+          <>
+            {order.orderStatusScore >= 1 ? (
+              <View style={styles.row}>
+                <View style={{ marginRight: 25, marginTop: 5 }}>
+                  <Text style={styles.text}>Oct 26</Text>
+                  <Text style={styles.text}>03:00 PM</Text>
+                </View>
+                <View style={styles.iconProgressBarContainer}>
+                  <View style={styles.iconContainer}>
+                    <Entypo
+                      name="shopping-cart"
+                      size={15}
+                      color="white"
+                      style={{ marginTop: 7 }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      ...styles.progressBarLine,
+                      backgroundColor: "#23527c",
+                    }}
+                  ></View>
+                </View>
+
+                <Text style={styles.progressBarText}>
+                  Order Placed {"\n"}
+                  <Text style={{ color: "gray" }}>
+                    Your order is successfully placed
+                  </Text>
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.row}>
+                <View style={{ marginRight: 25, marginTop: 5 }}>
+                  <Text style={{ ...styles.text, color: "white" }}>Oct 26</Text>
+                  <Text style={{ ...styles.text, color: "white" }}>
+                    03:00 PM
+                  </Text>
+                </View>
+                <View style={styles.iconProgressBarContainer}>
+                  <View style={styles.iconContainer2}>
+                    <Entypo
+                      name="shopping-cart"
+                      size={15}
+                      color="gainsboro"
+                      style={{ marginTop: 7 }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      ...styles.progressBarLine,
+                      backgroundColor: "gainsboro",
+                    }}
+                  ></View>
+                </View>
+
+                <Text style={styles.progressBarText2}>Order Placed</Text>
+              </View>
+            )}
+
+            {order.orderStatusScore >= 2 ? (
+              <View style={styles.row}>
+                <View style={{ marginRight: 25, marginTop: 5 }}>
+                  <Text style={styles.text}>Oct 26</Text>
+                  <Text style={styles.text}>03:00 PM</Text>
+                </View>
+                <View style={styles.iconProgressBarContainer}>
+                  <View style={styles.iconContainer}>
+                    <FontAwesome5
+                      name="tasks"
+                      size={15}
+                      color="white"
+                      style={{ marginTop: 7 }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      ...styles.progressBarLine,
+                      backgroundColor: "#23527c",
+                    }}
+                  ></View>
+                </View>
+
+                <Text style={styles.progressBarText}>
+                  Processing {"\n"}
+                  <Text style={{ color: "gray" }}>
+                    We are processing your order.
+                  </Text>
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.row}>
+                <View style={{ marginRight: 25, marginTop: 5 }}>
+                  <Text style={{ ...styles.text, color: "white" }}>Oct 26</Text>
+                  <Text style={{ ...styles.text, color: "white" }}>
+                    03:00 PM
+                  </Text>
+                </View>
+                <View style={styles.iconProgressBarContainer}>
+                  <View style={styles.iconContainer2}>
+                    <FontAwesome5
+                      name="tasks"
+                      size={15}
+                      color="gainsboro"
+                      style={{ marginTop: 7 }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      ...styles.progressBarLine,
+                      backgroundColor: "gainsboro",
+                    }}
+                  ></View>
+                </View>
+
+                <Text style={styles.progressBarText2}>Processing</Text>
+              </View>
+            )}
+
+            {order.orderStatusScore >= 3 ? (
+              <View style={styles.row}>
+                <View style={{ marginRight: 25, marginTop: 5 }}>
+                  <Text style={styles.text}>Oct 26</Text>
+                  <Text style={styles.text}>03:00 PM</Text>
+                </View>
+                <View style={styles.iconProgressBarContainer}>
+                  <View style={styles.iconContainer}>
+                    <FontAwesome
+                      name="check-square-o"
+                      size={15}
+                      color="white"
+                      style={{ marginTop: 7 }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      ...styles.progressBarLine,
+                      backgroundColor: "#23527c",
+                    }}
+                  ></View>
+                </View>
+
+                <Text style={styles.progressBarText}>
+                  Confirmed {"\n"}
+                  <Text style={{ color: "gray" }}>
+                    Your order is confirmed.
+                  </Text>
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.row}>
+                <View style={{ marginRight: 25, marginTop: 5 }}>
+                  <Text style={{ ...styles.text, color: "white" }}>Oct 26</Text>
+                  <Text style={{ ...styles.text, color: "white" }}>
+                    03:00 PM
+                  </Text>
+                </View>
+                <View style={styles.iconProgressBarContainer}>
+                  <View style={styles.iconContainer2}>
+                    <FontAwesome
+                      name="check-square-o"
+                      size={15}
+                      color="gainsboro"
+                      style={{ marginTop: 7 }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      ...styles.progressBarLine,
+                      backgroundColor: "gainsboro",
+                    }}
+                  ></View>
+                </View>
+
+                <Text style={styles.progressBarText2}>Confirmed</Text>
+              </View>
+            )}
+
+            {order.orderStatusScore >= 4 ? (
+              <View style={styles.row}>
+                <View style={{ marginRight: 25, marginTop: 5 }}>
+                  <Text style={styles.text}>Oct 26</Text>
+                  <Text style={styles.text}>03:00 PM</Text>
+                </View>
+                <View style={styles.iconProgressBarContainer}>
+                  <View style={styles.iconContainer}>
+                    <FontAwesome5
+                      name="box-open"
+                      size={15}
+                      color="white"
+                      style={{ marginTop: 7 }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      ...styles.progressBarLine,
+                      backgroundColor: "#23527c",
+                    }}
+                  ></View>
+                </View>
+
+                <Text style={styles.progressBarText}>
+                  Packing {"\n"}
+                  <Text style={{ color: "gray" }}>
+                    We are packing your order.
+                  </Text>
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.row}>
+                <View style={{ marginRight: 25, marginTop: 5 }}>
+                  <Text style={{ ...styles.text, color: "white" }}>Oct 26</Text>
+                  <Text style={{ ...styles.text, color: "white" }}>
+                    03:00 PM
+                  </Text>
+                </View>
+                <View style={styles.iconProgressBarContainer}>
+                  <View style={styles.iconContainer2}>
+                    <FontAwesome5
+                      name="box-open"
+                      size={15}
+                      color="gainsboro"
+                      style={{ marginTop: 7 }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      ...styles.progressBarLine,
+                      backgroundColor: "gainsboro",
+                    }}
+                  ></View>
+                </View>
+
+                <Text style={styles.progressBarText2}>Packing</Text>
+              </View>
+            )}
+            {order.orderStatusScore >= 5 ? (
+              <View style={styles.row}>
+                <View style={{ marginRight: 25, marginTop: 5 }}>
+                  <Text style={styles.text}>Oct 26</Text>
+                  <Text style={styles.text}>03:00 PM</Text>
+                </View>
+                <View style={styles.iconProgressBarContainer}>
+                  <View style={styles.iconContainer}>
+                    <FontAwesome
+                      name="check"
+                      size={15}
+                      color="white"
+                      style={{ marginTop: 7 }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      ...styles.progressBarLine,
+                      backgroundColor: "#23527c",
+                    }}
+                  ></View>
+                </View>
+
+                <Text style={styles.progressBarText}>
+                  Delivered {"\n"}
+                  <Text style={{ color: "gray" }}>
+                    Your order is delivered.
+                  </Text>
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.row}>
+                <View style={{ marginRight: 25, marginTop: 5 }}>
+                  <Text style={{ ...styles.text, color: "white" }}>Oct 26</Text>
+                  <Text style={{ ...styles.text, color: "white" }}>
+                    03:00 PM
+                  </Text>
+                </View>
+                <View style={styles.iconProgressBarContainer}>
+                  <View style={styles.iconContainer2}>
+                    <FontAwesome
+                      name="check"
+                      size={15}
+                      color="gainsboro"
+                      style={{ marginTop: 7 }}
+                    />
+                  </View>
+                </View>
+
+                <Text style={styles.progressBarText2}>Delivered</Text>
+              </View>
+            )}
+          </>
+        ) : (
+          <>
+            <View style={styles.row}>
+              <View style={{ marginRight: 25, marginTop: 5 }}>
+                <Text style={{ ...styles.text, color: "white" }}>Oct 26</Text>
+                <Text style={{ ...styles.text, color: "white" }}>03:00 PM</Text>
               </View>
               <View
                 style={{
-                  ...styles.progressBarLine,
-                  backgroundColor: "#07224b",
+                  ...styles.iconProgressBarContainer,
                 }}
-              ></View>
-            </View>
+              >
+                <View
+                  style={{ ...styles.iconContainer, backgroundColor: "red" }}
+                >
+                  <Entypo
+                    name="cross"
+                    size={15}
+                    color="white"
+                    style={{ marginTop: 7 }}
+                  />
+                </View>
+                <View
+                  style={{
+                    ...styles.progressBarLine,
+                    backgroundColor: "red",
+                  }}
+                ></View>
+              </View>
 
-            <Text style={styles.progressBarText}>
-              Order Placed {"\n"}
-              <Text style={{ color: "gray" }}>
-                Your order is successfully placed
+              <Text style={{ ...styles.progressBarText2, color: "red" }}>
+                Order Placed
               </Text>
-            </Text>
-          </View>
-
-          <View style={styles.row}>
-            <View style={{ marginRight: 25, marginTop: 5 }}>
-              <Text style={styles.text}>Oct 26</Text>
-              <Text style={styles.text}>03:00 PM</Text>
             </View>
-            <View style={styles.iconProgressBarContainer}>
-              <View style={styles.iconContainer}>
-                <FontAwesome
-                  name="shield"
-                  size={15}
-                  color="white"
-                  style={{ marginTop: 7 }}
-                />
+
+            <View style={styles.row}>
+              <View style={{ marginRight: 25, marginTop: 5 }}>
+                <Text style={{ ...styles.text, color: "white" }}>Oct 26</Text>
+                <Text style={{ ...styles.text, color: "white" }}>03:00 PM</Text>
               </View>
-              <View
-                style={{
-                  ...styles.progressBarLine,
-                  backgroundColor: "#07224b",
-                }}
-              ></View>
-            </View>
+              <View style={styles.iconProgressBarContainer}>
+                <View
+                  style={{ ...styles.iconContainer, backgroundColor: "red" }}
+                >
+                  <Entypo
+                    name="cross"
+                    size={15}
+                    color="white"
+                    style={{ marginTop: 7 }}
+                  />
+                </View>
+                <View
+                  style={{
+                    ...styles.progressBarLine,
+                    backgroundColor: "red",
+                  }}
+                ></View>
+              </View>
 
-            <Text style={styles.progressBarText}>
-              Processing {"\n"}
-              <Text style={{ color: "gray" }}>
-                We are processing your order.
+              <Text style={{ ...styles.progressBarText2, color: "red" }}>
+                Processing
               </Text>
-            </Text>
-          </View>
-
-          <View style={styles.row}>
-            <View style={{ marginRight: 25, marginTop: 5 }}>
-              <Text style={styles.text}>Oct 26</Text>
-              <Text style={styles.text}>03:00 PM</Text>
             </View>
-            <View style={styles.iconProgressBarContainer}>
-              <View style={styles.iconContainer}>
-                <FontAwesome
-                  name="plane"
-                  size={15}
-                  color="white"
-                  style={{ marginTop: 7 }}
-                />
+
+            <View style={styles.row}>
+              <View style={{ marginRight: 25, marginTop: 5 }}>
+                <Text style={{ ...styles.text, color: "white" }}>Oct 26</Text>
+                <Text style={{ ...styles.text, color: "white" }}>03:00 PM</Text>
+              </View>
+              <View style={styles.iconProgressBarContainer}>
+                <View
+                  style={{ ...styles.iconContainer2, backgroundColor: "red" }}
+                >
+                  <Entypo
+                    name="cross"
+                    size={15}
+                    color="white"
+                    style={{ marginTop: 7 }}
+                  />
+                </View>
+                <View
+                  style={{
+                    ...styles.progressBarLine,
+                    backgroundColor: "red",
+                  }}
+                ></View>
+              </View>
+
+              <Text style={{ ...styles.progressBarText2, color: "red" }}>
+                Confirmed
+              </Text>
+            </View>
+
+            <View style={styles.row}>
+              <View style={{ marginRight: 25, marginTop: 5 }}>
+                <Text style={{ ...styles.text, color: "white" }}>Oct 26</Text>
+                <Text style={{ ...styles.text, color: "white" }}>03:00 PM</Text>
+              </View>
+              <View style={styles.iconProgressBarContainer}>
+                <View
+                  style={{ ...styles.iconContainer2, backgroundColor: "red" }}
+                >
+                  <Entypo
+                    name="cross"
+                    size={15}
+                    color="white"
+                    style={{ marginTop: 7 }}
+                  />
+                </View>
+                <View
+                  style={{
+                    ...styles.progressBarLine,
+                    backgroundColor: "red",
+                  }}
+                ></View>
+              </View>
+
+              <Text style={{ ...styles.progressBarText2, color: "red" }}>
+                Packing
+              </Text>
+            </View>
+
+            <View style={styles.row}>
+              <View style={{ marginRight: 25, marginTop: 5 }}>
+                <Text style={{ ...styles.text, color: "white" }}>Oct 26</Text>
+                <Text style={{ ...styles.text, color: "white" }}>03:00 PM</Text>
               </View>
               <View
                 style={{
-                  ...styles.progressBarLine,
-                  backgroundColor: "#07224b",
+                  ...styles.iconProgressBarContainer,
                 }}
-              ></View>
-            </View>
-
-            <Text style={styles.progressBarText}>
-              Confirmed {"\n"}
-              <Text style={{ color: "gray" }}>Your order is confirmed.</Text>
-            </Text>
-          </View>
-
-          <View style={styles.row}>
-            <View style={{ marginRight: 25, marginTop: 5 }}>
-              <Text style={styles.text}>Oct 26</Text>
-              <Text style={styles.text}>03:00 PM</Text>
-            </View>
-            <View style={styles.iconProgressBarContainer}>
-              <View style={styles.iconContainer2}>
-                <FontAwesome
-                  name="shield"
-                  size={15}
-                  color="gainsboro"
-                  style={{ marginTop: 7 }}
-                />
+              >
+                <View
+                  style={{ ...styles.iconContainer2, backgroundColor: "red" }}
+                >
+                  <Entypo
+                    name="cross"
+                    size={15}
+                    color="white"
+                    style={{ marginTop: 7 }}
+                  />
+                </View>
               </View>
-              <View
-                style={{
-                  ...styles.progressBarLine,
-                  backgroundColor: "gainsboro",
-                }}
-              ></View>
-            </View>
 
-            <Text style={styles.progressBarText2}>Packing</Text>
-          </View>
-
-          <View style={styles.row}>
-            <View style={{ marginRight: 25, marginTop: 5 }}>
-              <Text style={styles.text}>Oct 26</Text>
-              <Text style={styles.text}>03:00 PM</Text>
+              <Text style={{ ...styles.progressBarText2, color: "red" }}>
+                Cancelled
+              </Text>
             </View>
-            <View style={styles.iconProgressBarContainer}>
-              <View style={styles.iconContainer2}>
-                <FontAwesome
-                  name="check"
-                  size={15}
-                  color="gainsboro"
-                  style={{ marginTop: 7 }}
-                />
-              </View>
-            </View>
-
-            <Text style={styles.progressBarText2}>Delivered</Text>
-          </View>
-        </>
+          </>
+        )}
       </View>
     );
   }
@@ -182,11 +492,11 @@ const styles = StyleSheet.create({
     // flex: 1,
     top: 0,
     bottom: 0,
-    backgroundColor: "#07224b",
+    backgroundColor: "#23527c",
   },
   headerContainer: {
     flex: 1,
-    backgroundColor: "#07224b",
+    backgroundColor: "#23527c",
     padding: 10,
     marginTop: Platform.OS === "ios" ? 40 : 0,
   },
@@ -247,7 +557,7 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     borderRadius: 15,
-    backgroundColor: "#07224b",
+    backgroundColor: "#23527c",
     alignItems: "center",
   },
   iconContainer2: {
@@ -266,7 +576,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   progressBarText: {
-    color: "#07224b",
+    color: "#23527c",
     fontSize: 10,
     paddingLeft: 10,
     fontWeight: "bold",

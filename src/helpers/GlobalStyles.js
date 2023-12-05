@@ -79,8 +79,8 @@ export const GlobalStyles = StyleSheet.create({
   },
   unFavCircle: {
     backgroundColor: Colors.white,
-    height: _roundDimensions()._height * 0.04,
-    width: _roundDimensions()._height * 0.04,
+    height: _roundDimensions()._height * 0.03,
+    width: _roundDimensions()._height * 0.03,
     borderRadius: _roundDimensions()._borderRadius,
     position: "absolute",
     top: hp("1.2%"),
@@ -96,8 +96,8 @@ export const GlobalStyles = StyleSheet.create({
   },
   FavCircle: {
     backgroundColor: Colors.themeColor,
-    height: _roundDimensions()._height * 0.04,
-    width: _roundDimensions()._height * 0.04,
+    height: _roundDimensions()._height * 0.03,
+    width: _roundDimensions()._height * 0.03,
     borderRadius: _roundDimensions()._borderRadius,
     position: "absolute",
     top: hp("1.2%"),

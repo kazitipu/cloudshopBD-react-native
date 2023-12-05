@@ -155,7 +155,7 @@ function CheckoutScreen(props) {
         }}
       >
         <View style={{ ...styles.box, marginBottom: 10 }}>
-          <OrderTrackingModalResult order={order}/>
+          <OrderTrackingModalResult order={order} />
         </View>
         {/* Cart Component Start from here */}
         <View style={styles.box}>
@@ -272,6 +272,35 @@ function CheckoutScreen(props) {
                 }
               </Text>
             </View>
+            {order.orderStatusScore < 3 && (
+              <View style={{ flex: 0.2, paddingRight: 15 }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    props.navigation.navigate("ManageAddressScreen");
+                  }}
+                >
+                  <View
+                    style={{
+                      padding: 5,
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      backgroundColor: "#fff0f4",
+                      borderRadius: 7,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#ff8084",
+
+                        fontSize: wp("3%"),
+                      }}
+                    >
+                      Change
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </View>
         <CartView

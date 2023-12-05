@@ -10,8 +10,10 @@ import {
   getAllCategories,
   getSingleProduct,
   addToCart,
+  addToWishlist,
   addToOrder,
   removeFromCart,
+  removeFromWishlist,
   updateUserAddress,
   updateShippingAddress,
   deleteAddress,
@@ -31,15 +33,6 @@ export function successInt(navigateScreen) {
     type: types.SUCCESS_INIT,
     payload: {
       navigateScreen,
-    },
-  };
-}
-
-export function addToWishList(data) {
-  return {
-    type: types.ADD_TO_WISHLIST,
-    payload: {
-      data,
     },
   };
 }
@@ -143,6 +136,14 @@ export const addToCartRedux = (cartObj, currentUser) => async (dispatch) => {
     payload: cartData,
   });
 };
+export const addToWishlistRedux =
+  (wishlistObj, currentUser) => async (dispatch) => {
+    const wishlist = await addToWishlist(wishlistObj, currentUser);
+    dispatch({
+      type: "ADD_TO_WISHLIST",
+      payload: wishlist,
+    });
+  };
 export const addToOrderRedux = (orderObj) => async (dispatch) => {
   const allOrders = await addToOrder(orderObj);
   dispatch({
@@ -157,10 +158,24 @@ export const removeFromCartRedux = (item, currentUser) => async (dispatch) => {
     payload: cartData,
   });
 };
+export const removeFromWishlistRedux =
+  (item, currentUser) => async (dispatch) => {
+    const wishlist = await removeFromWishlist(item, currentUser);
+    dispatch({
+      type: "REMOVE_FROM_WISHLIST",
+      payload: wishlist,
+    });
+  };
 export const setReduxCart = (cartData) => async (dispatch) => {
   dispatch({
     type: "SET_REDUX_CART",
     payload: cartData,
+  });
+};
+export const setReduxWishlist = (wishlist) => async (dispatch) => {
+  dispatch({
+    type: "SET_REDUX_WISHLIST",
+    payload: wishlist,
   });
 };
 export const setTotalRedux = (total) => async (dispatch) => {

@@ -8,7 +8,12 @@ import {
 import Fonts from "@helpers/Fonts";
 import Stars from "react-native-stars";
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import { connect } from "react-redux";
+import {
+  addToWishlistRedux,
+  removeFromWishlistRedux,
+} from "../../redux/Action";
+import Toast from "react-native-simple-toast";
 function DealsProductView(props) {
   const data = props.data;
   const wishlistArr = props.wishlistArray ? props.wishlistArray : null;
@@ -172,12 +177,23 @@ function DealsProductView(props) {
               <Text style={GlobalStyles.newTxt}>New</Text>
             </View>
           )}
-          {wishlistArr &&
-          wishlistArr.length > 0 &&
-          wishlistArr.includes(data.id) ? (
+          {props.wishlist &&
+          props.wishlist.length > 0 &&
+          props.wishlist.find((wish) => wish.id == data.id) ? (
             <TouchableOpacity
               style={GlobalStyles.FavCircle}
-              onPress={() => props.addToWishlist(data.id)}
+              onPress={async () => {
+                if (props.currentUser && props.currentUser.uid) {
+                  let wishlistObj = data;
+                  Toast.show("item removed from wishlist.");
+                  await props.removeFromWishlistRedux(
+                    wishlistObj,
+                    props.currentUser
+                  );
+                } else {
+                  Toast.show("Please login first");
+                }
+              }}
             >
               <Icon
                 name="heart"
@@ -188,7 +204,19 @@ function DealsProductView(props) {
           ) : (
             <TouchableOpacity
               style={GlobalStyles.unFavCircle}
-              onPress={() => props.addToWishlist(data.id)}
+              onPress={async () => {
+                if (props.currentUser && props.currentUser.uid) {
+                  let wishlistObj = data;
+
+                  Toast.show("item added to wishlist.");
+                  await props.addToWishlistRedux(
+                    wishlistObj,
+                    props.currentUser
+                  );
+                } else {
+                  Toast.show("Please login first to add item into wishlist.");
+                }
+              }}
             >
               <Icon
                 name="heart-o"
@@ -203,7 +231,16 @@ function DealsProductView(props) {
   );
 }
 
-export default DealsProductView;
+const mapStateToProps = (state) => {
+  return {
+    wishlist: state.wishlist.wishlist,
+    currentUser: state.auth.currentUser,
+  };
+};
+export default connect(mapStateToProps, {
+  addToWishlistRedux,
+  removeFromWishlistRedux,
+})(DealsProductView);
 
 const styles = StyleSheet.create({
   productBox: {

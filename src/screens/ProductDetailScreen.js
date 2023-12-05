@@ -40,7 +40,12 @@ import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 import ImageViewer from "react-native-image-zoom-viewer";
 import Stars from "react-native-stars";
-import { getSingleProductRedux, addToCartRedux } from "../redux/Action";
+import {
+  getSingleProductRedux,
+  addToCartRedux,
+  addToWishlistRedux,
+  removeFromWishlistRedux,
+} from "../redux/Action";
 import BottomSheet from "../component/CartComponent/BottomSheet";
 import GradientButton from "../component/CartComponent/Button";
 import cloudshopBD from "./cloudshopBd.png";
@@ -107,7 +112,6 @@ function ProductDetailScreen(props) {
         });
       }
       let variation = getVariation(obj);
-
       setState({
         ...state,
         ...obj,
@@ -403,9 +407,23 @@ function ProductDetailScreen(props) {
                 },
               ]}
             >
-              {product.isFav ? (
+              {props.wishlist &&
+              props.wishlist.length > 0 &&
+              props.wishlist.find((wish) => wish.id == product.id) ? (
                 <TouchableOpacity
                   style={[styles.FavCircle, { left: wp("8%"), top: 0 }]}
+                  onPress={async () => {
+                    if (props.currentUser && props.currentUser.uid) {
+                      let wishlistObj = product;
+                      Toast.show("item removed from wishlist.");
+                      await props.removeFromWishlistRedux(
+                        wishlistObj,
+                        props.currentUser
+                      );
+                    } else {
+                      Toast.show("Please login first");
+                    }
+                  }}
                 >
                   <FontAwesomeIcon
                     name="heart"
@@ -416,6 +434,21 @@ function ProductDetailScreen(props) {
               ) : (
                 <TouchableOpacity
                   style={[styles.unFavCircle, { left: wp("8%"), top: 0 }]}
+                  onPress={async () => {
+                    if (props.currentUser && props.currentUser.uid) {
+                      let wishlistObj = product;
+
+                      Toast.show("item added to wishlist.");
+                      await props.addToWishlistRedux(
+                        wishlistObj,
+                        props.currentUser
+                      );
+                    } else {
+                      Toast.show(
+                        "Please login first to add item into wishlist."
+                      );
+                    }
+                  }}
                 >
                   <FontAwesomeIcon
                     name="heart-o"
@@ -426,7 +459,7 @@ function ProductDetailScreen(props) {
               )}
 
               <TouchableOpacity
-                style={{ alignSelf: "flex-end", marginBottom: -6 }}
+                style={{ alignSelf: "flex-end" }}
                 onPress={() => props.navigation.navigate("HomeCartScreen")}
               >
                 <Image source={bottomCart} style={styles.menuImage} />
@@ -1078,6 +1111,7 @@ function mapStateToProps(state) {
       : { id: null },
     currentUser: state.auth.currentUser,
     freeShipping: state.cart.freeShipping,
+    wishlist: state.wishlist.wishlist,
   };
 }
 
@@ -1085,6 +1119,8 @@ export default connect(mapStateToProps, {
   addToCart,
   getSingleProductRedux,
   addToCartRedux,
+  addToWishlistRedux,
+  removeFromWishlistRedux,
 })(ProductDetailScreen);
 
 const styles = StyleSheet.create({
@@ -1259,8 +1295,8 @@ const styles = StyleSheet.create({
   },
   unFavCircle: {
     backgroundColor: "#ffdcde",
-    height: _roundDimensions()._height * 0.04,
-    width: _roundDimensions()._height * 0.04,
+    height: _roundDimensions()._height * 0.037,
+    width: _roundDimensions()._height * 0.037,
     borderRadius: _roundDimensions()._borderRadius,
     position: "absolute",
     top: hp("1.2%"),
@@ -1275,9 +1311,9 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   FavCircle: {
-    backgroundColor: "#ffdcde",
-    height: _roundDimensions()._height * 0.04,
-    width: _roundDimensions()._height * 0.04,
+    backgroundColor: "#ec345b",
+    height: _roundDimensions()._height * 0.037,
+    width: _roundDimensions()._height * 0.037,
     borderRadius: _roundDimensions()._borderRadius,
     position: "absolute",
     top: hp("1.2%"),

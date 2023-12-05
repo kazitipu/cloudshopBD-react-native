@@ -56,6 +56,7 @@ import {
   setCurrentUserRedux,
   setAdditionalDataRedux,
   setReduxCart,
+  setReduxWishlist,
   setFreeShippingRedux,
 } from "./redux/Action";
 import auth from "@react-native-firebase/auth";
@@ -206,12 +207,12 @@ function AppNavigator(props) {
         //     setReduxFootPrint(snapShot.data().footPrint);
         //   }
         // });
-        // const wishlistRef = firestore.doc(`wishlists/${userAuth.uid}`);
-        // wishlistRef.onSnapshot((snapShot) => {
-        //   if (snapShot.exists) {
-        //     setReduxWishlist(snapShot.data().wishlist);
-        //   }
-        // });
+        const wishlistRef = firestore().doc(`wishlists/${user.uid}`);
+        wishlistRef.onSnapshot((snapShot) => {
+          if (snapShot.exists) {
+            props.setReduxWishlist(snapShot.data().wishlist);
+          }
+        });
         // await getAllMessagesRedux(userAuth.uid);
       }
     } else {
@@ -220,7 +221,7 @@ function AppNavigator(props) {
       setReduxCart([]);
       // setReduxFavourite([]);
       // setReduxFootPrint([]);
-      // setReduxWishlist([]);
+      props.setReduxWishlist([]);
     }
 
     if (initializing) setInitializing(false);
@@ -422,6 +423,7 @@ export default connect(mapStateToProps, {
   setCurrentUserRedux,
   setAdditionalDataRedux,
   setReduxCart,
+  setReduxWishlist,
   setFreeShippingRedux,
 })(AppNavigator);
 

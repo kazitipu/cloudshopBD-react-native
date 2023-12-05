@@ -9,9 +9,14 @@ import Fonts from "@helpers/Fonts";
 import Stars from "react-native-stars";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { _roundDimensions } from "@helpers/util";
+import {
+  addToWishlistRedux,
+  removeFromWishlistRedux,
+} from "../../redux/Action";
+import { connect } from "react-redux";
+import Toast from "react-native-simple-toast";
 function ProductView2(props) {
   const data = props.data;
-  const wishlistArr = props.wishlistArray ? props.wishlistArray : null;
 
   const getPrice = (product) => {
     if (product.displayedVariations.length > 0) {
@@ -183,19 +188,39 @@ function ProductView2(props) {
           <Text style={styles.newTxt}>New</Text>
         </View>
       )}
-      {wishlistArr &&
-      wishlistArr.length > 0 &&
-      wishlistArr.includes(data.id) ? (
+      {props.wishlist &&
+      props.wishlist.length > 0 &&
+      props.wishlist.find((wish) => wish.id == data.id) ? (
         <TouchableOpacity
           style={styles.FavCircle}
-          onPress={() => props.addToWishlist(data.id)}
+          onPress={async () => {
+            if (props.currentUser && props.currentUser.uid) {
+              let wishlistObj = data;
+              Toast.show("item removed from wishlist.");
+              await props.removeFromWishlistRedux(
+                wishlistObj,
+                props.currentUser
+              );
+            } else {
+              Toast.show("Please login first");
+            }
+          }}
         >
           <Icon name="heart" style={styles.unFavIcon} color={Colors.white} />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
           style={styles.unFavCircle}
-          onPress={() => props.addToWishlist(data.id)}
+          onPress={async () => {
+            if (props.currentUser && props.currentUser.uid) {
+              let wishlistObj = data;
+
+              Toast.show("item added to wishlist.");
+              await props.addToWishlistRedux(wishlistObj, props.currentUser);
+            } else {
+              Toast.show("Please login first to add item into wishlist.");
+            }
+          }}
         >
           <Icon
             name="heart-o"
@@ -208,7 +233,16 @@ function ProductView2(props) {
   );
 }
 
-export default ProductView2;
+const mapStateToProps = (state) => {
+  return {
+    wishlist: state.wishlist.wishlist,
+    currentUser: state.auth.currentUser,
+  };
+};
+export default connect(mapStateToProps, {
+  addToWishlistRedux,
+  removeFromWishlistRedux,
+})(ProductView2);
 
 const styles = StyleSheet.create({
   productBox: {
@@ -354,12 +388,12 @@ const styles = StyleSheet.create({
   },
   FavCircle: {
     backgroundColor: Colors.themeColor,
-    height: _roundDimensions()._height * 0.03,
-    width: _roundDimensions()._height * 0.03,
+    height: _roundDimensions()._height * 0.026,
+    width: _roundDimensions()._height * 0.026,
     borderRadius: _roundDimensions()._borderRadius,
     position: "absolute",
-    top: hp("1%"),
-    left: wp("25%"),
+    top: hp(".4%"),
+    left: wp("20%"),
     justifyContent: "center",
     alignItems: "flex-end",
     overflow: "hidden",

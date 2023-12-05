@@ -26,10 +26,6 @@ function LatestProducts(props) {
     props.navigation.navigate("ProductDetailScreen", { id: data.id });
   };
 
-  const addToWishlist = async (id) => {
-    props.addToWishlist(id);
-    // logfunction(" wishlist Data ", wishlistData)
-  };
 
   const renderCard = (item) => {
     return (
@@ -38,8 +34,7 @@ function LatestProducts(props) {
           data={item}
           key={item.id}
           navToDetail={navigateToDetailPage}
-          addToWishlist={addToWishlist}
-          wishlistArray={wishlistArr}
+       
         />
       </View>
     );

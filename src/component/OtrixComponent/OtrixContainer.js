@@ -3,7 +3,6 @@ import { View, SafeAreaView, StatusBar } from "react-native";
 import { GlobalStyles, Colors } from "@helpers";
 
 function OtrixContainer(props) {
-  console.log(props.statusBarColor);
   return (
     <>
       <StatusBar backgroundColor={Colors.light_white} barStyle="dark-content" />
