@@ -65,6 +65,7 @@ import {
   createUserProfileDocument,
   getFreeShipping,
 } from "./firebase/firebase.utils";
+import Spinner from "react-native-loading-spinner-overlay";
 const SettingStack = createStackNavigator();
 let cartCount = 0;
 
@@ -169,6 +170,7 @@ const Stack = createStackNavigator();
 function AppNavigator(props) {
   const { cartCount, authStatus } = props;
   const [initializing, setInitializing] = useState(true);
+
   const [user, setUser] = useState();
   console.log(props.additionalData);
   // Handle user state changes
@@ -232,181 +234,190 @@ function AppNavigator(props) {
 
     return subscriber; // unsubscribe on unmount
   }, []);
+  const { spinner } = props;
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="SplashScreen">
-        <Stack.Screen
-          name="SplashScreen"
-          component={SplashScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
+    <>
+      <Spinner
+        visible={spinner}
+        cancelable={true}
+        color="white"
+        overlayColor={"#00000077"}
+      />
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="SplashScreen">
+          <Stack.Screen
+            name="SplashScreen"
+            component={SplashScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
 
-        <Stack.Screen
-          {...props}
-          name="MainScreen"
-          options={{ headerShown: false }}
-        >
-          {(props) => <MyTabs cartCounts={cartCount} auth={authStatus} />}
-        </Stack.Screen>
+          <Stack.Screen
+            {...props}
+            name="MainScreen"
+            options={{ headerShown: false }}
+          >
+            {(props) => <MyTabs cartCounts={cartCount} auth={authStatus} />}
+          </Stack.Screen>
 
-        <Stack.Screen
-          name="LoginScreen"
-          component={LoginScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="RegisterScreen"
-          component={RegisterScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="ForgotPasswordScreen"
-          component={ForgotPasswordScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="ProductListScreen"
-          component={ProductListScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="HomeCartScreen"
-          component={HomeCartScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="ProductDetailScreen"
-          component={ProductDetailScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="CheckoutScreen"
-          component={CheckoutScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="EditProfileScreen"
-          component={EditProfileScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="ChangePasswordScreen"
-          component={ChangePasswordScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="ManageAddressScreen"
-          component={ManageAddressScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="AddAddressScreen"
-          component={AddAddressScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="WishlistScreen"
-          component={WishlistScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="OrderScreen"
-          component={OrderScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="OrderDetailScreen"
-          component={OrderDetailScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="LanguageScreen"
-          component={LanguageScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="TermsandconditionScreen"
-          component={TermsandconditionScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="PrivacyPolicyScreen"
-          component={PrivacyPolicyScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="NotificationScreen"
-          component={NotificationScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        />
-        <Stack.Screen
-          name="SearchScreen"
-          component={SearchScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator:
-              CardStyleInterpolators.forModalPresentationIOS,
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="RegisterScreen"
+            component={RegisterScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="ForgotPasswordScreen"
+            component={ForgotPasswordScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="ProductListScreen"
+            component={ProductListScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="HomeCartScreen"
+            component={HomeCartScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="ProductDetailScreen"
+            component={ProductDetailScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="CheckoutScreen"
+            component={CheckoutScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="EditProfileScreen"
+            component={EditProfileScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="ChangePasswordScreen"
+            component={ChangePasswordScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="ManageAddressScreen"
+            component={ManageAddressScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="AddAddressScreen"
+            component={AddAddressScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="WishlistScreen"
+            component={WishlistScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="OrderScreen"
+            component={OrderScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="OrderDetailScreen"
+            component={OrderDetailScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="LanguageScreen"
+            component={LanguageScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="TermsandconditionScreen"
+            component={TermsandconditionScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="PrivacyPolicyScreen"
+            component={PrivacyPolicyScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="NotificationScreen"
+            component={NotificationScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="SearchScreen"
+            component={SearchScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator:
+                CardStyleInterpolators.forModalPresentationIOS,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }
 
@@ -415,6 +426,7 @@ function mapStateToProps(state) {
     cartCount: state.cart.cartCount ? state.cart.cartCount : null,
     authStatus: state.auth.authStatus,
     currentUser: state.auth.currentUser,
+    spinner: state.auth.spinner,
     additionalData: state.auth.additionalData,
   };
 }
@@ -431,6 +443,9 @@ const styles = StyleSheet.create({
   bottomTabIcon: {
     height: wp("6%"),
     width: wp("6%"),
+  },
+  spinnerTextStyle: {
+    color: "red",
   },
   tabbarStyle: {
     backgroundColor: Colors.white,
@@ -457,5 +472,8 @@ const styles = StyleSheet.create({
   countText: {
     color: Colors.link_color,
     fontFamily: Fonts.Font_Bold,
+  },
+  spinnerTextStyle: {
+    color: "#fff",
   },
 });

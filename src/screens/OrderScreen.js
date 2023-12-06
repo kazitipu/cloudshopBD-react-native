@@ -32,11 +32,18 @@ import Delivery from "./delivery.png";
 import CashOnDelivery from "./cashonDelivery.png";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicon from "react-native-vector-icons/Ionicons";
-import { getAllOrdersRedux } from "../redux/Action/general";
+import { getAllOrdersRedux, setSpinnerRedux } from "../redux/Action/general";
 function OrderScreen(props) {
+  const [loader, setLoader] = useState(true);
   useEffect(() => {
     const { currentUser } = props;
-    props.getAllOrdersRedux(currentUser.uid);
+    const getAllOrders = async () => {
+      props.setSpinnerRedux(true);
+      await props.getAllOrdersRedux(currentUser.uid);
+      props.setSpinnerRedux(false);
+      setLoader(false);
+    };
+    getAllOrders();
   }, []);
   const [tab, setTab] = useState(0);
   const { navigation, orders } = props;
@@ -91,13 +98,14 @@ function OrderScreen(props) {
       </View>
       <OtrixContent>
         {orders && orders.length > 0 ? (
-          orders.map((order) => (
+          orders.map((order, index) => (
             <TouchableOpacity
               onPress={() => {
                 props.navigation.navigate("OrderDetailScreen", {
                   order: order,
                 });
               }}
+              key={index}
             >
               <View style={styles.box}>
                 <View
@@ -301,6 +309,8 @@ function OrderScreen(props) {
               </View>
             </TouchableOpacity>
           ))
+        ) : loader ? (
+          <View></View>
         ) : (
           <Text
             style={{
@@ -314,459 +324,6 @@ function OrderScreen(props) {
             Sorry You do not have any orders.
           </Text>
         )}
-        {/* <View style={styles.box}>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              flex: 1,
-              marginTop: 5,
-            }}
-          >
-            <View style={{ flex: 0.85 }}>
-              <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
-                Flat-6a,431/12 Malibagh, Bakshibagh, Dhaka....
-              </Text>
-              <Text
-                style={{
-                  backgroundColor: "#ec345b",
-                  color: "white",
-                  fontSize: wp("2.4%"),
-                  padding: 2,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  fontWeight: "bold",
-                  alignSelf: "flex-start",
-                  marginTop: 3,
-                }}
-              >
-                Regular Delivery
-              </Text>
-            </View>
-            <View
-              style={{ flex: 0.15, alignItems: "flex-end", marginRight: 10 }}
-            >
-              <Entypo
-                name={"location"}
-                color={"#ec345b"}
-                style={{ fontSize: wp("6%") }}
-              />
-            </View>
-          </View>
-
-          <View
-            style={{
-              width: "100%",
-              height: 1,
-              backgroundColor: "gainsboro",
-              marginTop: 10,
-              marginBottom: 5,
-            }}
-          ></View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
-              Order ID
-            </Text>
-            <Text
-              style={{ fontSize: wp("3%"), color: "#777", fontWeight: "bold" }}
-            >
-              #57399
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>Date</Text>
-            <Text style={{ fontSize: wp("3%"), color: "#777" }}>
-              26 oct 2023
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>Status</Text>
-            <View
-              style={{
-                alignSelf: "flex-end",
-                backgroundColor: "blue",
-                padding: 5,
-                borderRadius: 7,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: wp("2.8%"),
-                  color: "white",
-                }}
-              >
-                Processing
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <Text
-              style={{ fontSize: wp("3%"), color: "#777", fontWeight: "bold" }}
-            >
-              Amount Payable
-            </Text>
-            <Text
-              style={{ fontSize: wp("3%"), color: "#777", fontWeight: "bold" }}
-            >
-              Tk431061
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              marginTop: 15,
-              marginBottom: 10,
-              padding: 10,
-              paddingTop: 8,
-              paddingBottom: 8,
-              backgroundColor: "#dcefff",
-              borderRadius: 6,
-            }}
-          >
-            <Text
-              style={{
-                color: "#005dac",
-                fontWeight: "bold",
-                fontSize: wp("3.3%"),
-              }}
-            >
-              Order Again
-            </Text>
-          </View>
-        </View>
-        <View style={styles.box}>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              flex: 1,
-              marginTop: 5,
-            }}
-          >
-            <View style={{ flex: 0.85 }}>
-              <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
-                Flat-6a,431/12 Malibagh, Bakshibagh, Dhaka....
-              </Text>
-              <Text
-                style={{
-                  backgroundColor: "#ec345b",
-                  color: "white",
-                  fontSize: wp("2.4%"),
-                  padding: 2,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  fontWeight: "bold",
-                  alignSelf: "flex-start",
-                  marginTop: 3,
-                }}
-              >
-                Regular Delivery
-              </Text>
-            </View>
-            <View
-              style={{ flex: 0.15, alignItems: "flex-end", marginRight: 10 }}
-            >
-              <Entypo
-                name={"location"}
-                color={"#ec345b"}
-                style={{ fontSize: wp("6%") }}
-              />
-            </View>
-          </View>
-
-          <View
-            style={{
-              width: "100%",
-              height: 1,
-              backgroundColor: "gainsboro",
-              marginTop: 10,
-              marginBottom: 5,
-            }}
-          ></View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
-              Order ID
-            </Text>
-            <Text
-              style={{ fontSize: wp("3%"), color: "#777", fontWeight: "bold" }}
-            >
-              #57399
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>Date</Text>
-            <Text style={{ fontSize: wp("3%"), color: "#777" }}>
-              26 oct 2023
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>Status</Text>
-            <View
-              style={{
-                alignSelf: "flex-end",
-                backgroundColor: "darkorange",
-                padding: 5,
-                borderRadius: 7,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: wp("2.8%"),
-                  color: "white",
-                }}
-              >
-                Delivering
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <Text
-              style={{ fontSize: wp("3%"), color: "#777", fontWeight: "bold" }}
-            >
-              Amount Payable
-            </Text>
-            <Text
-              style={{ fontSize: wp("3%"), color: "#777", fontWeight: "bold" }}
-            >
-              Tk431061
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              marginTop: 15,
-              marginBottom: 10,
-              padding: 10,
-              paddingTop: 8,
-              paddingBottom: 8,
-              backgroundColor: "#dcefff",
-              borderRadius: 6,
-            }}
-          >
-            <Text
-              style={{
-                color: "#005dac",
-                fontWeight: "bold",
-                fontSize: wp("3.3%"),
-              }}
-            >
-              Order Again
-            </Text>
-          </View>
-        </View>
-        <View style={styles.box}>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              flex: 1,
-              marginTop: 5,
-            }}
-          >
-            <View style={{ flex: 0.85 }}>
-              <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
-                Flat-6a,431/12 Malibagh, Bakshibagh, Dhaka....
-              </Text>
-              <Text
-                style={{
-                  backgroundColor: "#ec345b",
-                  color: "white",
-                  fontSize: wp("2.4%"),
-                  padding: 2,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  fontWeight: "bold",
-                  alignSelf: "flex-start",
-                  marginTop: 3,
-                }}
-              >
-                Regular Delivery
-              </Text>
-            </View>
-            <View
-              style={{ flex: 0.15, alignItems: "flex-end", marginRight: 10 }}
-            >
-              <Entypo
-                name={"location"}
-                color={"#ec345b"}
-                style={{ fontSize: wp("6%") }}
-              />
-            </View>
-          </View>
-
-          <View
-            style={{
-              width: "100%",
-              height: 1,
-              backgroundColor: "gainsboro",
-              marginTop: 10,
-              marginBottom: 5,
-            }}
-          ></View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
-              Order ID
-            </Text>
-            <Text
-              style={{ fontSize: wp("3%"), color: "#777", fontWeight: "bold" }}
-            >
-              #57399
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>Date</Text>
-            <Text style={{ fontSize: wp("3%"), color: "#777" }}>
-              26 oct 2023
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>Status</Text>
-            <View
-              style={{
-                alignSelf: "flex-end",
-                backgroundColor: "green",
-                padding: 5,
-                borderRadius: 7,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: wp("2.8%"),
-                  color: "white",
-                }}
-              >
-                Delivered
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <Text
-              style={{ fontSize: wp("3%"), color: "#777", fontWeight: "bold" }}
-            >
-              Amount Payable
-            </Text>
-            <Text
-              style={{ fontSize: wp("3%"), color: "#777", fontWeight: "bold" }}
-            >
-              Tk431061
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              marginTop: 15,
-              marginBottom: 10,
-              padding: 10,
-              paddingTop: 8,
-              paddingBottom: 8,
-              backgroundColor: "#dcefff",
-              borderRadius: 6,
-            }}
-          >
-            <Text
-              style={{
-                color: "#005dac",
-                fontWeight: "bold",
-                fontSize: wp("3.3%"),
-              }}
-            >
-              Order Again
-            </Text>
-          </View>
-        </View> */}
       </OtrixContent>
     </OtrixContainer>
   );
@@ -780,9 +337,11 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { proceedCheckout, getAllOrdersRedux })(
-  OrderScreen
-);
+export default connect(mapStateToProps, {
+  proceedCheckout,
+  getAllOrdersRedux,
+  setSpinnerRedux,
+})(OrderScreen);
 
 const styles = StyleSheet.create({
   tab: {

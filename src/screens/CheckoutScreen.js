@@ -37,7 +37,7 @@ import GradientButton from "../component/CartComponent/Button";
 import Delivery from "./delivery.png";
 import CashOnDelivery from "./cashonDelivery.png";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
-import { addToOrderRedux } from "../redux/Action/general";
+import { addToOrderRedux, setSpinnerRedux } from "../redux/Action/general";
 
 function CheckoutScreen(props) {
   const [state, setState] = React.useState({
@@ -71,54 +71,6 @@ function CheckoutScreen(props) {
       ...state,
       addresses: [newObj, ...addresses],
       showAdd: false,
-    });
-  };
-
-  const updateAddress = (addressData) => {
-    let newID = "" + Math.floor(Math.random() * 10000) + 1;
-    if (selctedAddress == addressData.id) {
-      setState({ ...state, selctedAddress: newID });
-    }
-    let findIndex = addresses.findIndex(
-      (item) => item.id === editAddressData.id
-    );
-    let newObj = {
-      id: newID,
-      name: addressData.name,
-      country: addressData.country,
-      city: addressData.city,
-      postcode: addressData.postcode,
-      address1: addressData.address1,
-      address2: addressData.address2,
-    };
-    addresses.splice(findIndex, 1);
-
-    setState({
-      ...state,
-      addresses: [newObj, ...addresses],
-      showEdit: false,
-    });
-    if (selctedAddress == addressData.id) {
-      setState({ ...state, selctedAddress: newID });
-    }
-  };
-
-  const editAddress = (id) => {
-    let findAddress = addresses.filter((item) => item.id.indexOf(id) > -1);
-    setState({ ...state, editAddressData: findAddress[0], showEdit: true });
-  };
-
-  const closeAddressModel = () => {
-    setState({
-      ...state,
-      showAdd: false,
-    });
-  };
-
-  const closeAddressEditModel = () => {
-    setState({
-      ...state,
-      showEdit: false,
     });
   };
 
@@ -685,7 +637,8 @@ function CheckoutScreen(props) {
                 </Text>
               </View>
             }
-            onPress={() => {
+            onPress={async () => {
+              props.setSpinnerRedux(true);
               let orderObj = {
                 id: new Date().getTime().toString(),
                 currentUser: currentUser,
@@ -705,7 +658,8 @@ function CheckoutScreen(props) {
                 orderStatus: "Processing",
                 orderStatusScore: 1,
               };
-              props.addToOrderRedux(orderObj);
+              await props.addToOrderRedux(orderObj);
+              props.setSpinnerRedux(false);
               setState({
                 ...state,
                 paymentSuccessModal: true,
@@ -741,7 +695,9 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { addToOrderRedux })(CheckoutScreen);
+export default connect(mapStateToProps, { addToOrderRedux, setSpinnerRedux })(
+  CheckoutScreen
+);
 
 const styles = StyleSheet.create({
   box: {

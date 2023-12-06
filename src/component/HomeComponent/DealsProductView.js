@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import {
   addToWishlistRedux,
   removeFromWishlistRedux,
+  setSpinnerRedux,
 } from "../../redux/Action";
 import Toast from "react-native-simple-toast";
 function DealsProductView(props) {
@@ -185,11 +186,14 @@ function DealsProductView(props) {
               onPress={async () => {
                 if (props.currentUser && props.currentUser.uid) {
                   let wishlistObj = data;
-                  Toast.show("item removed from wishlist.");
+
+                  props.setSpinnerRedux(true);
                   await props.removeFromWishlistRedux(
                     wishlistObj,
                     props.currentUser
                   );
+                  props.setSpinnerRedux(false);
+                  Toast.show("item removed from wishlist.");
                 } else {
                   Toast.show("Please login first");
                 }
@@ -208,11 +212,13 @@ function DealsProductView(props) {
                 if (props.currentUser && props.currentUser.uid) {
                   let wishlistObj = data;
 
-                  Toast.show("item added to wishlist.");
+                  props.setSpinnerRedux(true);
                   await props.addToWishlistRedux(
                     wishlistObj,
                     props.currentUser
                   );
+                  props.setSpinnerRedux(false);
+                  Toast.show("item added to wishlist.");
                 } else {
                   Toast.show("Please login first to add item into wishlist.");
                 }
@@ -240,6 +246,7 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   addToWishlistRedux,
   removeFromWishlistRedux,
+  setSpinnerRedux,
 })(DealsProductView);
 
 const styles = StyleSheet.create({

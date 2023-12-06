@@ -20,13 +20,16 @@ import Fonts from "../helpers/Fonts";
 import { doLogin } from "@actions";
 import auth from "@react-native-firebase/auth";
 import Toast from "react-native-simple-toast";
+import GradientButton from "../component/CartComponent/Button";
+import { setSpinnerRedux } from "../redux/Action";
 function LoginScreen(props) {
   const [formData, setData] = React.useState({ email: "", password: "" });
   const [state, setDatapassword] = React.useState({ secureEntry: true });
   const { email, password } = formData;
 
-  const signInWithEmailAndPassword = () => {
-    auth()
+  const signInWithEmailAndPassword = async () => {
+    props.setSpinnerRedux(true);
+    await auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
         Toast.show("Signed in successfully!");
@@ -44,6 +47,7 @@ function LoginScreen(props) {
 
         Toast.show("Something went wrong,Please try again later.");
       });
+    props.setSpinnerRedux(false);
   };
   return (
     <OtrixContainer>
@@ -84,23 +88,43 @@ function LoginScreen(props) {
         >
           Enter your email and Password to login
         </Text>
-        <FormControl isRequired style={{ backgroundColor: Colors.white }}>
+        <FormControl
+          isRequired
+          style={{
+            backgroundColor: Colors.white,
+            padding: 10,
+            borderWidth: 1,
+            borderColor: "gainsboro",
+            borderRadius: 10,
+          }}
+        >
           <Input
-            variant="outline"
             placeholder="Email Address"
+            variant="unstyled"
             onChangeText={(value) => setData({ ...formData, email: value })}
+            style={{ borderWidth: 1, borderColor: "red" }}
           />
           <FormControl.ErrorMessage _text={{ fontSize: "xs" }}>
             Error Name
           </FormControl.ErrorMessage>
         </FormControl>
         <OtrixDivider size={"sm"} />
-        <FormControl isRequired style={{ backgroundColor: Colors.white }}>
+        <FormControl
+          isRequired
+          style={{
+            backgroundColor: Colors.white,
+            padding: 10,
+            borderWidth: 1,
+            borderColor: "gainsboro",
+            borderRadius: 10,
+          }}
+        >
           <Input
-            variant="outline"
+            variant="unstyled"
             placeholder="Password"
             onChangeText={(value) => setData({ ...formData, password: value })}
-            secureTextEntry={state.secureEntry}
+            // secureTextEntry={state.secureEntry}
+
             InputRightElement={
               <TouchableOpacity
                 onPress={() =>
@@ -126,15 +150,32 @@ function LoginScreen(props) {
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
         </TouchableOpacity>
         <OtrixDivider size={"md"} />
-        <Button
-          size="md"
-          variant="solid"
-          bg={Colors.themeColor}
-          style={GlobalStyles.button}
-          onPress={() => signInWithEmailAndPassword()}
-        >
-          <Text style={GlobalStyles.buttonText}>Login Now</Text>
-        </Button>
+
+        <GradientButton
+          children={
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  fontSize: wp("3.1%"),
+                }}
+              >
+                Login Now
+              </Text>
+            </View>
+          }
+          onPress={async () => {
+            signInWithEmailAndPassword();
+            // props.navigation.navigate("LoginScreen");
+          }}
+        />
         <OtrixDivider size={"md"} />
         <View style={styles.registerView}>
           <Text style={styles.registerTxt}>Don't have an account? </Text>
@@ -156,7 +197,9 @@ function mapStateToProps({ params }) {
   return {};
 }
 
-export default connect(mapStateToProps, { doLogin })(LoginScreen);
+export default connect(mapStateToProps, { doLogin, setSpinnerRedux })(
+  LoginScreen
+);
 
 const styles = StyleSheet.create({
   forgotPassword: {

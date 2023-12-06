@@ -15,6 +15,7 @@ import {
   removeFromCart,
   removeFromWishlist,
   updateUserAddress,
+  updateUser,
   updateShippingAddress,
   deleteAddress,
   getAllOrders,
@@ -34,6 +35,12 @@ export function successInt(navigateScreen) {
     payload: {
       navigateScreen,
     },
+  };
+}
+export function setSpinnerRedux(value) {
+  return {
+    type: "SET_SPINNER",
+    payload: value,
   };
 }
 
@@ -198,6 +205,13 @@ export const updateUserAddressRedux =
       payload: updatedUser,
     });
   };
+export const updateUserRedux = (currentUser) => async (dispatch) => {
+  const updatedUser = await updateUser(currentUser);
+  dispatch({
+    type: "UPDATE_USER",
+    payload: updatedUser,
+  });
+};
 export const updateShippingAddressRedux =
   (currentUser, address) => async (dispatch) => {
     const updatedUser = await updateShippingAddress(currentUser, address);

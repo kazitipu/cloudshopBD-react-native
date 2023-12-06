@@ -274,6 +274,24 @@ export const updateUserAddress = async (currentUser, address) => {
   const updatedSnapShot = await userRef.get();
   return { ...updatedSnapShot.data(), id: updatedSnapShot.data().uid };
 };
+export const updateUser = async (currentUser) => {
+  if (!currentUser.uid) {
+    return null;
+  }
+  const userRef = firestore().doc(`users/${currentUser.uid}`);
+  const snapShot = await userRef.get();
+  console.log(snapShot.data());
+  try {
+    await userRef.update({
+      ...snapShot.data(),
+      ...currentUser,
+    });
+  } catch (error) {
+    alert(error);
+  }
+  const updatedSnapShot = await userRef.get();
+  return { ...updatedSnapShot.data(), id: updatedSnapShot.data().uid };
+};
 export const updateShippingAddress = async (currentUser, address) => {
   if (!currentUser.uid) {
     return null;
@@ -875,6 +893,41 @@ export const getAllSourcings = async (userId) => {
       invoicesArray.push(doc.data());
     });
     return invoicesArray;
+  } catch (error) {
+    alert(error);
+    return [];
+  }
+};
+export const getAllSearchResult = async (text) => {
+  const productsCollectionRefbyName = firestore()
+    .collection("products")
+    .where("name", ">=", text)
+    .where("name", "<=", text + "\uf8ff")
+    .limit(10);
+  const productsCollectionRefbyCat = firestore()
+    .collection("products")
+    .where("selectedCategories", "array-contains", text)
+    .limit(10);
+  const productsCollectionRefbyBrand = firestore()
+    .collection("products")
+    .where("selectedBrands", "array-contains", text)
+    .limit(10);
+
+  try {
+    const names = await productsCollectionRefbyName.get();
+    const categories = await productsCollectionRefbyCat.get();
+    const brands = await productsCollectionRefbyBrand.get();
+    const resultsArray = [];
+    names.forEach((doc) => {
+      resultsArray.push(doc.data());
+    });
+    categories.forEach((doc) => {
+      resultsArray.push(doc.data());
+    });
+    brands.forEach((doc) => {
+      resultsArray.push(doc.data());
+    });
+    return resultsArray.slice(0, 11);
   } catch (error) {
     alert(error);
     return [];

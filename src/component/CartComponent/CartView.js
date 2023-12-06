@@ -28,6 +28,7 @@ import {
   removeFromCartRedux,
   setTotalRedux,
   setCouponRedux,
+  setSpinnerRedux,
 } from "../../redux/Action/general";
 import Toast from "react-native-simple-toast";
 import { matchCoupon } from "../../firebase/firebase.utils";
@@ -192,7 +193,9 @@ function CartView(props) {
               <View style={styles.input2}>
                 <TouchableOpacity
                   onPress={async () => {
+                    props.setSpinnerRedux(true);
                     let matchedCoupon = await matchCoupon(number);
+                    props.setSpinnerRedux(false);
                     if (matchedCoupon) {
                       if (
                         Date.parse(matchedCoupon.expirationDate) <
@@ -587,8 +590,10 @@ function CartView(props) {
                   quantity={item.quantity}
                 />
                 <TouchableOpacity
-                  onPress={() => {
-                    props.removeFromCartRedux(item, props.currentUser);
+                  onPress={async () => {
+                    props.setSpinnerRedux(true);
+                    await props.removeFromCartRedux(item, props.currentUser);
+                    props.setSpinnerRedux(false);
                     Toast.show("Removed from cart.");
                   }}
                   style={{ marginTop: 60 }}
@@ -616,6 +621,7 @@ export default connect(mapStateToProps, {
   removeFromCartRedux,
   setTotalRedux,
   setCouponRedux,
+  setSpinnerRedux,
 })(CartView);
 const styles = StyleSheet.create({
   categoryText: {

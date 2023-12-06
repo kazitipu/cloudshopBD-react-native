@@ -15,19 +15,31 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { GlobalStyles, Colors } from "@helpers";
-import Icon from "react-native-vector-icons/Ionicons";
-import Fonts from "../helpers/Fonts";
-
+import { updateUserRedux, setSpinnerRedux } from "../redux/Action";
+import Toast from "react-native-simple-toast";
 function EditProfileScreen(props) {
   const [state, setData] = React.useState({
-    first_name: "Tipu",
-    last_name: "User",
-    email: "otrixweb@mail.com",
-    phone: "9898989898",
+    displayName: "",
+    email: "",
+    mobileNumber: "",
     submited: false,
   });
 
-  const { first_name, last_name, email, phone, submited } = state;
+  useEffect(() => {
+    if (props.currentUser && props.currentUser.uid)
+      setData({
+        ...state,
+        displayName: props.currentUser.displayName
+          ? props.currentUser.displayName
+          : "",
+        email: props.currentUser.email ? props.currentUser.email : "",
+        mobileNumber: props.currentUser.mobileNumber
+          ? props.currentUser.mobileNumber
+          : "",
+      });
+  }, [props.currentUser.uid]);
+
+  const { first_name, displayName, email, mobileNumber, submited } = state;
   return (
     <OtrixContainer>
       {/* Header */}
@@ -54,31 +66,25 @@ function EditProfileScreen(props) {
       {/* Content Start from here */}
       <OtrixContent>
         {/* Profile  Start from here */}
-        <FormControl
-          isRequired
-          isInvalid={submited && first_name == "" ? true : false}
-        >
-          <TextInput
-            variant="outline"
-            value={first_name}
-            placeholder="First Name"
-            style={GlobalStyles.textInputStyle}
-            onChangeText={(value) => setData({ ...state, first_name: value })}
-          />
-          <FormControl.ErrorMessage leftIcon={<InfoOutlineIcon size="xs" />}>
-            First Name is required
-          </FormControl.ErrorMessage>
-        </FormControl>
 
-        <OtrixDivider size={"md"} />
         <FormControl>
           <TextInput
             variant="outline"
-            value={last_name}
-            placeholder="Last Name"
-            style={GlobalStyles.textInputStyle}
-            onChangeText={(value) => setData({ ...state, last_name: value })}
+            value={displayName}
+            placeholder="Change Display Name"
+            style={{
+              ...GlobalStyles.textInputStyle,
+              padding: 14,
+              borderWidth: 1,
+              borderColor: "gainsboro",
+              borderRadius: 5,
+              color: "#555",
+            }}
+            onChangeText={(value) => setData({ ...state, displayName: value })}
           />
+          <FormControl.ErrorMessage leftIcon={<InfoOutlineIcon size="xs" />}>
+            Display name is required!
+          </FormControl.ErrorMessage>
         </FormControl>
         <OtrixDivider size={"md"} />
 
@@ -91,7 +97,14 @@ function EditProfileScreen(props) {
             value={email}
             keyboardType="email-address"
             placeholder="Email Address"
-            style={GlobalStyles.textInputStyle}
+            style={{
+              ...GlobalStyles.textInputStyle,
+              padding: 14,
+              borderWidth: 1,
+              borderColor: "gainsboro",
+              borderRadius: 5,
+              color: "#555",
+            }}
             onChangeText={(value) => setData({ ...state, email: value })}
           />
           <FormControl.ErrorMessage leftIcon={<InfoOutlineIcon size="xs" />}>
@@ -102,15 +115,22 @@ function EditProfileScreen(props) {
 
         <FormControl
           isRequired
-          isInvalid={submited && phone == "" ? true : false}
+          isInvalid={submited && mobileNumber == "" ? true : false}
         >
           <TextInput
             variant="outline"
-            value={phone}
+            value={mobileNumber}
             keyboardType="number-pad"
-            placeholder="Mobile Number"
-            style={{ ...GlobalStyles.textInputStyle, ...styles.textInput }}
-            onChangeText={(value) => setData({ ...state, phone: value })}
+            placeholder="Change Mobile Number"
+            style={{
+              ...GlobalStyles.textInputStyle,
+              padding: 14,
+              borderWidth: 1,
+              borderColor: "gainsboro",
+              borderRadius: 5,
+              color: "#555",
+            }}
+            onChangeText={(value) => setData({ ...state, mobileNumber: value })}
           />
           <FormControl.ErrorMessage leftIcon={<InfoOutlineIcon size="xs" />}>
             Mobile Number is required
@@ -121,8 +141,14 @@ function EditProfileScreen(props) {
           size="md"
           variant="solid"
           bg={Colors.themeColor}
-          style={GlobalStyles.button}
-          onPress={() => props.navigation.navigate("MainScreen")}
+          style={{ ...GlobalStyles.button, marginTop: 10 }}
+          onPress={async () => {
+            props.setSpinnerRedux(true);
+            await props.updateUserRedux({ ...props.currentUser, ...state });
+            props.setSpinnerRedux(false);
+            Toast.show("User information updated!");
+            props.navigation.navigate("MainScreen");
+          }}
         >
           <Text style={GlobalStyles.buttonText}>Update</Text>
         </Button>
@@ -132,10 +158,14 @@ function EditProfileScreen(props) {
   );
 }
 
-function mapStateToProps({ params }) {
-  return {};
-}
+const mapStateToProps = (state) => {
+  return {
+    currentUser: state.auth.currentUser,
+  };
+};
 
-export default connect(mapStateToProps, { requestInit })(EditProfileScreen);
+export default connect(mapStateToProps, { updateUserRedux, setSpinnerRedux })(
+  EditProfileScreen
+);
 
 const styles = StyleSheet.create({});

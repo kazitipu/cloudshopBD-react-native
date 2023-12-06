@@ -5,6 +5,7 @@ const initialState = {
   authStatus: false,
   currentUser: null,
   additionalData: null,
+  spinner: false,
 };
 export default (state = initialState, action) => {
   const { payload } = action;
@@ -20,6 +21,11 @@ export default (state = initialState, action) => {
         ...state,
         currentUser: payload,
       };
+    case "UPDATE_USER":
+      return {
+        ...state,
+        currentUser: payload,
+      };
     case "UPDATE_ADDRESSBOOK":
       return {
         ...state,
@@ -29,6 +35,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         additionalData: payload,
+      };
+    case "SET_SPINNER":
+      return {
+        ...state,
+        spinner: payload,
       };
     default:
       return state;

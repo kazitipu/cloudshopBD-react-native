@@ -21,14 +21,55 @@ import Pill from "./Pill";
 import tk from "./tk.png";
 import truck from "./truck.png";
 import { borderStyle } from "styled-system";
+import { connect } from "react-redux";
+import { removeFromWishlistRedux, setSpinnerRedux } from "../../redux/Action";
 function CartView(props) {
-  let cartProduct = props.products;
+  let wishlist = props.products;
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState("");
   const PriceQuantity = (price, quantity) => {
     let amt = parseFloat(price.replace("$", ""));
     let qty = parseInt(quantity);
     return "$" + amt;
+  };
+
+  const getPrice2 = (product) => {
+    if (product.displayedVariations && product.displayedVariations.length > 0) {
+      if (product.displayedVariations[0].salePrice == 0) {
+        return product.displayedVariations[0].price;
+      } else {
+        return product.displayedVariations[0].salePrice;
+      }
+    } else {
+      if (product) {
+        if (product.salePrice == 0) {
+          return product.price;
+        } else {
+          return product.salePrice;
+        }
+      } else {
+        return 0;
+      }
+    }
+  };
+  const getPrice3 = (product) => {
+    if (product.displayedVariations && product.displayedVariations.length > 0) {
+      if (product.displayedVariations[0].salePrice == 0) {
+        return "";
+      } else {
+        return `৳ ${product.displayedVariations[0].price}`;
+      }
+    } else {
+      if (product) {
+        if (product.salePrice == 0) {
+          return "";
+        } else {
+          return `৳ ${product.price}`;
+        }
+      } else {
+        return 0;
+      }
+    }
   };
   return (
     <>
@@ -39,20 +80,25 @@ function CartView(props) {
             marginBottom: 10,
           }}
         >
-          Your wishlist (12)
+          Your wishlist ({wishlist.length})
         </Text>
-        {cartProduct.length > 0 &&
-          cartProduct.map((item, index) => (
+        {wishlist.length > 0 &&
+          wishlist.map((item, index) => (
             <View
               style={{
                 ...styles.cartContent,
-                borderBottomWidth: index + 1 == cartProduct.length ? 0 : 1,
+                borderBottomWidth: index + 1 == wishlist.length ? 0 : 1,
               }}
               key={item.id}
             >
               <View style={styles.cartBox}>
                 <View style={styles.imageView}>
-                  <Image source={item.image} style={styles.image}></Image>
+                  <Image
+                    source={{
+                      uri: item.pictures[0],
+                    }}
+                    style={styles.image}
+                  ></Image>
                 </View>
                 <View style={styles.infromationView}>
                   <TouchableOpacity
@@ -63,10 +109,15 @@ function CartView(props) {
                       })
                     }
                   >
-                    <Text style={styles.name}>Beauty Glazed Lip Mud</Text>
+                    <Text style={styles.name}>{item.name.slice(0, 18)}...</Text>
                   </TouchableOpacity>
-                  <Text style={styles.categoryText}>Eye shadow</Text>
-                  <Text style={styles.categoryText}>Lip gloss</Text>
+                  {item.selectedCategories &&
+                    item.selectedCategories.length > 0 &&
+                    item.selectedCategories.slice(0, 2).map((cat, index) => (
+                      <Text key={index} style={styles.categoryText}>
+                        {cat.name}
+                      </Text>
+                    ))}
                 </View>
               </View>
               <View style={styles.deleteIconContainer}>
@@ -84,7 +135,7 @@ function CartView(props) {
                       marginTop: 3,
                     }}
                   >
-                    ৳ 450{" "}
+                    {getPrice3(item)}
                   </Text>
                   <Text
                     style={{
@@ -93,12 +144,19 @@ function CartView(props) {
                       fontWeight: "bold",
                     }}
                   >
-                    ৳ 350
+                    ৳ {getPrice2(item)}
                   </Text>
                 </View>
 
                 <TouchableOpacity
-                  onPress={() => props.deleteItem(item.id)}
+                  onPress={async () => {
+                    props.setSpinnerRedux(true);
+                    await props.removeFromWishlistRedux(
+                      item,
+                      props.currentUser
+                    );
+                    props.setSpinnerRedux(false);
+                  }}
                   style={{ marginTop: 60 }}
                 >
                   <MatIcon name="trash" style={styles.delete} />
@@ -111,7 +169,15 @@ function CartView(props) {
   );
 }
 
-export default CartView;
+const mapStateToProps = (state) => {
+  return {
+    currentUser: state.auth.currentUser,
+  };
+};
+export default connect(mapStateToProps, {
+  removeFromWishlistRedux,
+  setSpinnerRedux,
+})(CartView);
 const styles = StyleSheet.create({
   categoryText: {
     fontSize: wp("2.4%"),

@@ -19,16 +19,16 @@ import { GlobalStyles, Colors } from "@helpers";
 import Icon from "react-native-vector-icons/Ionicons";
 import Fonts from "@helpers/Fonts";
 import auth from "@react-native-firebase/auth";
-import { setAdditionalDataRedux } from "../redux/Action";
+import { setAdditionalDataRedux, setSpinnerRedux } from "../redux/Action";
+import GradientButton from "../component/CartComponent/Button";
 import Toast from "react-native-simple-toast";
 function RegisterScreen(props) {
   const [formData, setData] = React.useState({});
   const [state, setDatapassword] = React.useState({ secureEntry: true });
-
   useEffect(() => {}, []);
   const { firstName, lastName, email, mobileNumber, password, cpassword } =
     formData;
-  const createAccountWithEmailAndPassword = () => {
+  const createAccountWithEmailAndPassword = async () => {
     props.setAdditionalDataRedux({
       firstName,
       lastName,
@@ -37,7 +37,7 @@ function RegisterScreen(props) {
       displayName: firstName + " " + lastName,
     });
 
-    auth()
+    await auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
         Toast.show("User account created & signed in!");
@@ -95,9 +95,17 @@ function RegisterScreen(props) {
           Register with your email and Password
         </Text>
         {/* Registration Form Start from here */}
-        <FormControl isRequired>
+        <FormControl
+          style={{
+            backgroundColor: Colors.white,
+            padding: 10,
+            borderWidth: 1,
+            borderColor: "gainsboro",
+            borderRadius: 10,
+          }}
+        >
           <Input
-            variant="outline"
+            variant="unstyled"
             placeholder="First Name"
             style={GlobalStyles.textInputStyle}
             onChangeText={(value) => setData({ ...formData, firstName: value })}
@@ -107,9 +115,18 @@ function RegisterScreen(props) {
           </FormControl.ErrorMessage>
         </FormControl>
         <OtrixDivider size={"sm"} />
-        <FormControl isRequired>
+        <FormControl
+          isRequired
+          style={{
+            backgroundColor: Colors.white,
+            padding: 10,
+            borderWidth: 1,
+            borderColor: "gainsboro",
+            borderRadius: 10,
+          }}
+        >
           <Input
-            variant="outline"
+            variant="unstyled"
             placeholder="Last Name"
             style={GlobalStyles.textInputStyle}
             onChangeText={(value) => setData({ ...formData, lastName: value })}
@@ -119,9 +136,18 @@ function RegisterScreen(props) {
           </FormControl.ErrorMessage>
         </FormControl>
         <OtrixDivider size={"sm"} />
-        <FormControl isRequired>
+        <FormControl
+          isRequired
+          style={{
+            backgroundColor: Colors.white,
+            padding: 10,
+            borderWidth: 1,
+            borderColor: "gainsboro",
+            borderRadius: 10,
+          }}
+        >
           <Input
-            variant="outline"
+            variant="unstyled"
             placeholder="Email Address"
             style={GlobalStyles.textInputStyle}
             keyboardType="email-address"
@@ -132,9 +158,18 @@ function RegisterScreen(props) {
           </FormControl.ErrorMessage>
         </FormControl>
         <OtrixDivider size={"sm"} />
-        <FormControl isRequired>
+        <FormControl
+          isRequired
+          style={{
+            backgroundColor: Colors.white,
+            padding: 10,
+            borderWidth: 1,
+            borderColor: "gainsboro",
+            borderRadius: 10,
+          }}
+        >
           <Input
-            variant="outline"
+            variant="unstyled"
             keyboardType="number-pad"
             placeholder="Mobile Number"
             style={GlobalStyles.textInputStyle}
@@ -147,9 +182,18 @@ function RegisterScreen(props) {
           </FormControl.ErrorMessage>
         </FormControl>
         <OtrixDivider size={"sm"} />
-        <FormControl isRequired>
+        <FormControl
+          isRequired
+          style={{
+            backgroundColor: Colors.white,
+            padding: 10,
+            borderWidth: 1,
+            borderColor: "gainsboro",
+            borderRadius: 10,
+          }}
+        >
           <Input
-            variant="outline"
+            variant="unstyled"
             placeholder="Password"
             style={GlobalStyles.textInputStyle}
             onChangeText={(value) => setData({ ...formData, password: value })}
@@ -174,9 +218,18 @@ function RegisterScreen(props) {
           </FormControl.ErrorMessage>
         </FormControl>
         <OtrixDivider size={"sm"} />
-        <FormControl isRequired>
+        <FormControl
+          isRequired
+          style={{
+            backgroundColor: Colors.white,
+            padding: 10,
+            borderWidth: 1,
+            borderColor: "gainsboro",
+            borderRadius: 10,
+          }}
+        >
           <Input
-            variant="outline"
+            variant="unstyled"
             placeholder="Confirm Password"
             style={GlobalStyles.textInputStyle}
             onChangeText={(value) => setData({ ...formData, cpassword: value })}
@@ -201,15 +254,34 @@ function RegisterScreen(props) {
           </FormControl.ErrorMessage>
         </FormControl>
         <OtrixDivider size={"md"} />
-        <Button
-          size="md"
-          variant="solid"
-          bg={Colors.themeColor}
-          style={GlobalStyles.button}
-          onPress={() => createAccountWithEmailAndPassword()}
-        >
-          <Text style={GlobalStyles.buttonText}>Register Now</Text>
-        </Button>
+
+        <GradientButton
+          children={
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  fontSize: wp("3.1%"),
+                }}
+              >
+                Register Now
+              </Text>
+            </View>
+          }
+          onPress={async () => {
+            props.setSpinnerRedux(true);
+            await createAccountWithEmailAndPassword();
+            props.setSpinnerRedux(false);
+            // props.navigation.navigate("LoginScreen");
+          }}
+        />
         <OtrixDivider size={"md"} />
         <View style={styles.registerView}>
           <Text style={styles.registerTxt}>Already have an account? </Text>
@@ -235,6 +307,7 @@ function mapStateToProps({ params }) {
 export default connect(mapStateToProps, {
   requestInit,
   setAdditionalDataRedux,
+  setSpinnerRedux,
 })(RegisterScreen);
 
 const styles = StyleSheet.create({

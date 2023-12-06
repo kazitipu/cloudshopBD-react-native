@@ -13,6 +13,7 @@ import {
   decrementQuantity,
   incrementQuantity,
   doLogout,
+  setSpinnerRedux,
 } from "@actions";
 import { avatarImg } from "@common";
 import Fonts from "@helpers/Fonts";
@@ -22,6 +23,7 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Toast from "react-native-simple-toast";
 import auth from "@react-native-firebase/auth";
+import { avatarImg2 } from "../common/config";
 
 function ProfileScreen(props) {
   const [state, setState] = React.useState({ profileImage: "" });
@@ -48,12 +50,19 @@ function ProfileScreen(props) {
           {profileImage != "" ? (
             <Image source={{ uri: profileImage }} style={styles.image}></Image>
           ) : (
-            <Image source={avatarImg} style={styles.image}></Image>
+            <Image source={avatarImg2} style={styles.image}></Image>
           )}
         </TouchableOpacity>
         <OtrixDivider size={"sm"} />
-        <Text style={styles.username}>Otrixweb User</Text>
-        <Text style={styles.email}>otrixweb@mail.com</Text>
+        <Text style={styles.username}>
+          {props.currentUser && props.currentUser.displayName}
+        </Text>
+        {props.currentUser && props.currentUser.email && (
+          <Text style={styles.email}>{props.currentUser.email}</Text>
+        )}
+        {props.currentUser && props.currentUser.mobileNumber && (
+          <Text style={styles.email}>{props.currentUser.mobileNumber}</Text>
+        )}
       </View>
 
       {/* Header */}
@@ -78,20 +87,6 @@ function ProfileScreen(props) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.listView}
-          onPress={() => props.navigation.navigate("WishlistScreen")}
-        >
-          <View style={styles.leftSide}>
-            <Fontisto name="heart" style={styles.icon} />
-          </View>
-          <View style={styles.center}>
-            <Text style={styles.listTitle}>Wishlist</Text>
-          </View>
-          <View style={styles.rightSide}>
-            <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.listView}
           onPress={() => props.navigation.navigate("ManageAddressScreen")}
         >
           <View style={styles.leftSide}>
@@ -107,6 +102,21 @@ function ProfileScreen(props) {
             <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
           </View>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.listView}
+          onPress={() => props.navigation.navigate("WishlistScreen")}
+        >
+          <View style={styles.leftSide}>
+            <Fontisto name="heart" style={styles.icon} />
+          </View>
+          <View style={styles.center}>
+            <Text style={styles.listTitle}>Wishlist</Text>
+          </View>
+          <View style={styles.rightSide}>
+            <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
+          </View>
+        </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.listView}
           onPress={() => props.navigation.navigate("OrderScreen")}
@@ -127,28 +137,15 @@ function ProfileScreen(props) {
 
         <TouchableOpacity
           style={styles.listView}
-          onPress={() => props.navigation.navigate("ChangePasswordScreen")}
-        >
-          <View style={styles.leftSide}>
-            <Fontisto name="locked" style={styles.icon} />
-          </View>
-          <View style={styles.center}>
-            <Text style={styles.listTitle}>Change Password</Text>
-          </View>
-          <View style={styles.rightSide}>
-            <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.listView}
-          onPress={() => {
-            auth()
+          onPress={async () => {
+            props.setSpinnerRedux(true);
+            await auth()
               .signOut()
               .then(() => {
                 Toast.show("Successfully Loggged out!"),
                   props.navigation.navigate("HomeScreen");
               });
+            props.setSpinnerRedux(false);
           }}
         >
           <View style={styles.leftSide}>
@@ -178,6 +175,7 @@ export default connect(mapStateToProps, {
   decrementQuantity,
   incrementQuantity,
   doLogout,
+  setSpinnerRedux,
 })(ProfileScreen);
 
 const styles = StyleSheet.create({

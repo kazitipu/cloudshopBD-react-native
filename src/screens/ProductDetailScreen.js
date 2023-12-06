@@ -45,6 +45,7 @@ import {
   addToCartRedux,
   addToWishlistRedux,
   removeFromWishlistRedux,
+  setSpinnerRedux,
 } from "../redux/Action";
 import BottomSheet from "../component/CartComponent/BottomSheet";
 import GradientButton from "../component/CartComponent/Button";
@@ -98,6 +99,7 @@ function ProductDetailScreen(props) {
     let obj = {};
     const getProduct = async () => {
       await props.getSingleProductRedux(id);
+
       if (
         product &&
         product.id &&
@@ -415,11 +417,13 @@ function ProductDetailScreen(props) {
                   onPress={async () => {
                     if (props.currentUser && props.currentUser.uid) {
                       let wishlistObj = product;
-                      Toast.show("item removed from wishlist.");
+                      props.setSpinnerRedux(true);
                       await props.removeFromWishlistRedux(
                         wishlistObj,
                         props.currentUser
                       );
+                      props.setSpinnerRedux(false);
+                      Toast.show("item removed from wishlist.");
                     } else {
                       Toast.show("Please login first");
                     }
@@ -438,11 +442,13 @@ function ProductDetailScreen(props) {
                     if (props.currentUser && props.currentUser.uid) {
                       let wishlistObj = product;
 
-                      Toast.show("item added to wishlist.");
+                      props.setSpinnerRedux(true);
                       await props.addToWishlistRedux(
                         wishlistObj,
                         props.currentUser
                       );
+                      props.setSpinnerRedux(false);
+                      Toast.show("item added to wishlist.");
                     } else {
                       Toast.show(
                         "Please login first to add item into wishlist."
@@ -1121,6 +1127,7 @@ export default connect(mapStateToProps, {
   addToCartRedux,
   addToWishlistRedux,
   removeFromWishlistRedux,
+  setSpinnerRedux,
 })(ProductDetailScreen);
 
 const styles = StyleSheet.create({

@@ -58,6 +58,7 @@ function WishlistScreen(props) {
   }, []);
 
   const { wishlistArr, loading, noRecord } = state;
+  const { wishlist } = props;
   return (
     <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
       {/* Header */}
@@ -89,14 +90,14 @@ function WishlistScreen(props) {
 
                 */}
 
-        {!noRecord && !loading && (
+        {wishlist.length > 0 && (
           <WishListView
             navigation={props.navigation}
-            products={wishlistArr}
+            products={wishlist}
             deleteItem={onDeleteItem}
           />
         )}
-        {!loading && noRecord && (
+        {wishlist.length == 0 && (
           <View style={styles.noRecord}>
             <Text style={styles.emptyTxt}>Wishlist is empty!</Text>
             <Button
@@ -132,6 +133,7 @@ function WishlistScreen(props) {
 function mapStateToProps(state) {
   return {
     cartData: state.cart.cartData,
+    wishlist: state.wishlist.wishlist,
   };
 }
 

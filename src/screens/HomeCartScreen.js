@@ -21,6 +21,7 @@ import {
   decrementQuantity,
   incrementQuantity,
   setTotalRedux,
+  setSpinnerRedux,
 } from "@actions";
 import ProductListDummy from "@component/items/ProductListDummy";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -53,8 +54,10 @@ function CartScreen(props) {
     }
   };
 
-  const onDeleteItem = (id) => {
+  const onDeleteItem = async (id) => {
+    props.setSpinnerRedux(true);
     props.removeFromCart(id);
+    props.setSpinnerRedux(false);
   };
 
   const decrement = (id) => {
@@ -169,7 +172,7 @@ function CartScreen(props) {
             actualOrder={state.actualOrder}
           />
         )}
-        {!loading && props.cartData.length == 0 && (
+        {props.cartData.length == 0 && (
           <View style={styles.noRecord}>
             <Text style={styles.emptyTxt}>Cart is empty!</Text>
             <Button
@@ -250,8 +253,10 @@ function CartScreen(props) {
                 </Text>
               </View>
             }
-            onPress={() => {
-              updateCart(props.cartData, props.currentUser);
+            onPress={async () => {
+              props.setSpinnerRedux(true);
+              await updateCart(props.cartData, props.currentUser);
+              props.setSpinnerRedux(false);
               props.navigation.navigate("CheckoutScreen", {
                 sumAmount,
                 actualOrder: state.actualOrder,
@@ -277,6 +282,7 @@ export default connect(mapStateToProps, {
   decrementQuantity,
   incrementQuantity,
   setTotalRedux,
+  setSpinnerRedux,
 })(CartScreen);
 
 const styles = StyleSheet.create({

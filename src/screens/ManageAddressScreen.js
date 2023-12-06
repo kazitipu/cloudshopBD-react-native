@@ -23,16 +23,17 @@ import {
 } from "react-native-responsive-screen";
 import { GlobalStyles, Colors } from "@helpers";
 import { _roundDimensions } from "@helpers/util";
-import { updateShippingAddressRedux, deleteAddressRedux } from "@actions";
+import {
+  updateShippingAddressRedux,
+  deleteAddressRedux,
+  setSpinnerRedux,
+} from "@actions";
 import MatIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicon from "react-native-vector-icons/Ionicons";
 import Fonts from "@helpers/Fonts";
 import DummyAddress from "@component/items/DummyAddress";
-import { Button } from "native-base";
-import Delivery from "./delivery.png";
-import CashOnDelivery from "./cashonDelivery.png";
-import { fontWeight } from "styled-system";
+import Toast from "react-native-simple-toast";
 function ManageAddressScreen(props) {
   const [state, setState] = React.useState({
     cartArr: [],
@@ -234,12 +235,15 @@ function ManageAddressScreen(props) {
             currentUser.address.map((shippingAddress) => (
               <TouchableOpacity
                 key={shippingAddress.id}
-                onPress={() => {
+                onPress={async () => {
                   if (!shippingAddress.defaultShipping) {
+                    props.setSpinnerRedux(true);
                     props.updateShippingAddressRedux(currentUser, {
                       ...shippingAddress,
                       defaultShipping: true,
                     });
+                    props.setSpinnerRedux(false);
+                    Toast.show("shipping address updated");
                   }
                   props.navigation.goBack();
                 }}
@@ -360,11 +364,14 @@ function ManageAddressScreen(props) {
                       )}
                       {!shippingAddress.defaultShipping && (
                         <TouchableOpacity
-                          onPress={() => {
+                          onPress={async () => {
+                            props.setSpinnerRedux(true);
                             props.deleteAddressRedux(
                               currentUser,
                               shippingAddress
                             );
+                            props.setSpinnerRedux(false);
+                            Toast.show("Address deleted!");
                           }}
                         >
                           <Ionicon
@@ -457,6 +464,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   updateShippingAddressRedux,
   deleteAddressRedux,
+  setSpinnerRedux,
 })(ManageAddressScreen);
 
 const styles = StyleSheet.create({

@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  TextInput,
+} from "react-native";
 import { connect } from "react-redux";
 import { Button } from "native-base";
 import {
@@ -21,26 +27,31 @@ import { _getWishlist, _addToWishlist } from "@helpers/FunctionHelper";
 import MostSearchArr from "@component/items/MostSearchArr";
 import SearchProductsArr from "@component/items/SearchProductsArr";
 import { Input } from "native-base";
+import { getAllSearchResult } from "../firebase/firebase.utils";
 
 function SearchScreen(props) {
   const [state, setState] = React.useState({
     searchKeyword: "",
     showMost: true,
     showSuggestions: false,
+    searchResults: [],
   });
 
-  const getData = (text) => {
+  const getData = async (text) => {
     if (text.length > 2) {
+      const searchResults = await getAllSearchResult(text);
       setState({
+        ...state,
         showSuggestions: true,
         showMost: false,
-        searchKeyword: text,
+        searchResults: searchResults,
       });
     } else {
       setState({
+        ...state,
         showSuggestions: false,
         showMost: true,
-        searchKeyword: text,
+        searchResults: [],
       });
     }
   };
@@ -65,18 +76,16 @@ function SearchScreen(props) {
         <View style={styles.searchContainer}>
           <Icon name="search" style={styles.searchIcon} />
           <View style={styles.verticalLine}></View>
-          <Input
+          <TextInput
             autoFocus={true}
-            variant="outline"
             placeholder="Search Products"
             style={[styles.textInputSearchStyle]}
             returnKeyType="search"
-            value={searchKeyword}
             onEndEditing={() => search()}
             onChangeText={(value) => {
-              setState({ ...state, searchKeyword: value }), getData(value);
+              getData(value);
             }}
-          ></Input>
+          ></TextInput>
         </View>
       </View>
 
@@ -99,11 +108,11 @@ function SearchScreen(props) {
         </View>
       )}
 
-      {showSuggestions && (
+      {showSuggestions && state.searchResults.length > 0 && (
         <OtrixContent>
           <SearchProductsViewComponent
             navigation={props.navigation}
-            products={SearchProductsArr}
+            products={state.searchResults}
           />
         </OtrixContent>
       )}
@@ -131,19 +140,19 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   searchContainer: {
-    flex: 0.9,
+    flex: 1,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     borderRadius: 8,
     backgroundColor: Colors.white,
     height: hp("6%"),
   },
   searchIcon: {
-    flex: 0.05,
     color: Colors.secondry_text_color,
     alignSelf: "center",
     textAlign: "center",
+    marginLeft: 10,
   },
   verticalLine: {
     height: hp("2.5%"),
@@ -156,8 +165,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: Colors.secondry_text_color,
     borderWidth: 0,
-    flex: 0.9,
     marginHorizontal: wp("5%"),
+
+    flex: 1,
   },
   noRecord: {
     justifyContent: "center",

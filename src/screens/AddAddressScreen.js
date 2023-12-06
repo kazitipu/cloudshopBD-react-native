@@ -36,6 +36,7 @@ import { Button } from "native-base";
 import Delivery from "./delivery.png";
 import CashOnDelivery from "./cashonDelivery.png";
 import { fontWeight } from "styled-system";
+import { setSpinnerRedux } from "../redux/Action";
 function ManageAddressScreen(props) {
   const [state, setState] = React.useState({
     fullName: "",
@@ -474,6 +475,7 @@ function ManageAddressScreen(props) {
       >
         <GradientButton
           onPress={async () => {
+            props.setSpinnerRedux(true);
             await props.updateUserAddressRedux(props.currentUser, {
               ...state,
               id:
@@ -481,6 +483,7 @@ function ManageAddressScreen(props) {
                   ? selectedAddress.id
                   : new Date().getTime().toString(),
             });
+            props.setSpinnerRedux(false);
             props.navigation.goBack();
           }}
           children={
@@ -512,6 +515,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   updateUserAddressRedux,
   updateShippingAddressRedux,
+  setSpinnerRedux,
 })(ManageAddressScreen);
 
 const styles = StyleSheet.create({

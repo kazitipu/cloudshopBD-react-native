@@ -1,6 +1,6 @@
 import React from "react";
 import { requestInit } from "@actions";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View, TextInput } from "react-native";
 import {
   OtrixContainer,
   OtrixHeader,
@@ -15,9 +15,41 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-
+import Toast from "react-native-simple-toast";
+import GradientButton from "../component/CartComponent/Button";
+import GradientButton2 from "../component/CartComponent/Button2";
+import auth from "@react-native-firebase/auth";
+import { setSpinnerRedux } from "../redux/Action";
 function ForgotPasswordScreen(props) {
-  const [formData, setData] = React.useState({});
+  const [formData, setData] = React.useState({ email: "" });
+
+  const handleSubmit = async () => {
+    var emailAddress = formData.email;
+    console.log(emailAddress);
+
+    await auth()
+      .sendPasswordResetEmail(emailAddress)
+      .then(() => {
+        setData({
+          ...formData,
+          email: "",
+        });
+
+        alert(
+          "Password reset email has been sent to your email address.Please check your email"
+        );
+        props.navigation.navigate("LoginScreen");
+      })
+      .catch((error) => {
+        setData({
+          ...formData,
+          email: "",
+        });
+        console.log(error);
+        // return alert("An error occurred. Please try again later.");
+        alert(error);
+      });
+  };
 
   return (
     <OtrixContainer>
@@ -58,43 +90,106 @@ function ForgotPasswordScreen(props) {
         </Text>
         {/* Forgot password form Start from here */}
         <FormControl isRequired>
-          <Input
+          <TextInput
             variant="outline"
             placeholder="Email Address"
-            style={GlobalStyles.textInputStyle}
+            style={{
+              ...GlobalStyles.textInputStyle,
+              padding: 14,
+              borderColor: "gainsboro",
+              borderWidth: 1,
+              borderRadius: 10,
+              backgroundColor: "white",
+            }}
             onChangeText={(value) => setData({ ...formData, email: value })}
+            value={formData.email}
           />
           <FormControl.ErrorMessage _text={{ fontSize: "xs" }}>
-            Error Name
+            Error Email Address
           </FormControl.ErrorMessage>
         </FormControl>
-        <OtrixDivider size={"md"} />
-        <Button
-          size="md"
-          variant="solid"
-          bg={Colors.themeColor}
-          style={GlobalStyles.button}
-          onPress={() => props.navigation.navigate("LoginScreen")}
+
+        <View
+          style={{
+            backgroundColor: Colors.light_white,
+            display: "flex",
+            flexDirection: "row",
+            minWidth: "100%",
+            marginTop: 20,
+          }}
         >
-          <Text style={GlobalStyles.buttonText}>Submit</Text>
-        </Button>
-        <OtrixDivider size={"md"} />
-        <Button
-          size="md"
-          onPress={() => props.navigation.navigate("LoginScreen")}
-          style={GlobalStyles.button}
+          <GradientButton
+            children={
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    fontSize: wp("3.1%"),
+                  }}
+                >
+                  Submit
+                </Text>
+              </View>
+            }
+            onPress={async () => {
+              props.setSpinnerRedux(true);
+              await handleSubmit();
+              props.setSpinnerRedux(false);
+              // props.navigation.navigate("LoginScreen");
+            }}
+          />
+        </View>
+
+        <View
+          style={{
+            backgroundColor: Colors.light_white,
+            display: "flex",
+            flexDirection: "row",
+            minWidth: "100%",
+            marginTop: 10,
+          }}
         >
-          <Text style={[GlobalStyles.buttonText, { color: "white" }]}>
-            Back to login
-          </Text>
-        </Button>
+          <GradientButton2
+            children={
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    fontSize: wp("3.1%"),
+                  }}
+                >
+                  Back to login
+                </Text>
+              </View>
+            }
+            onPress={() => {
+              props.navigation.navigate("LoginScreen");
+            }}
+          />
+        </View>
       </OtrixContent>
     </OtrixContainer>
   );
 }
 
-function mapStateToProps({ params }) {
+function mapStateToProps(state) {
   return {};
 }
 
-export default connect(mapStateToProps, { requestInit })(ForgotPasswordScreen);
+export default connect(mapStateToProps, { requestInit, setSpinnerRedux })(
+  ForgotPasswordScreen
+);

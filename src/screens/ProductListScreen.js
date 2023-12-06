@@ -40,6 +40,7 @@ import {
   getSingleCategoryProductsRedux,
   getAllCategoriesRedux,
   getAllLatestProductsRedux,
+  setSpinnerRedux,
 } from "../redux/Action";
 import { fontSize } from "styled-system";
 
@@ -55,13 +56,16 @@ function ProductListScreen(props) {
 
   useEffect(() => {
     let wishlistData = [];
-    if (item == "Latest Products") {
-      props.getAllLatestProductsRedux();
-      console.log("getting latest products");
-    }
-    props.getAllCategoriesRedux();
+
     const getWishList = async () => {
       wishlistData = await _getWishlist();
+      if (item == "Latest Products") {
+        props.setSpinnerRedux(true);
+        await props.getAllLatestProductsRedux();
+        props.setSpinnerRedux(false);
+        console.log("getting latest products");
+      }
+      props.getAllCategoriesRedux();
     };
     getWishList();
     let loadPage = setTimeout(
@@ -75,14 +79,19 @@ function ProductListScreen(props) {
   }, []);
 
   useEffect(() => {
-    if (item && result.length > 0) {
-      let categories = result.map((cat) => cat.id);
-      console.log(categories);
-      if (item !== "Latest Products") {
-        props.getSingleCategoryProductsRedux(categories.slice(0, 10));
-        console.log("getting category products");
+    const getProducts = async () => {
+      if (item && result.length > 0) {
+        let categories = result.map((cat) => cat.id);
+        console.log(categories);
+        if (item !== "Latest Products") {
+          props.setSpinnerRedux(true);
+          await props.getSingleCategoryProductsRedux(categories.slice(0, 10));
+          props.setSpinnerRedux(false);
+          console.log("getting category products");
+        }
       }
-    }
+    };
+    getProducts();
   }, [result]);
 
   useEffect(() => {
@@ -280,6 +289,7 @@ export default connect(mapStateToProps, {
   getSingleCategoryProductsRedux,
   getAllCategoriesRedux,
   getAllLatestProductsRedux,
+  setSpinnerRedux,
 })(ProductListScreen);
 
 const styles = StyleSheet.create({
