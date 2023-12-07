@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   useWindowDimensions,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
 import { connect } from "react-redux";
 import {
@@ -22,6 +23,7 @@ import {
   RatingComponent,
   CartView,
 } from "@component";
+import { avatarImg2 } from "@common";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -32,7 +34,7 @@ import { _roundDimensions } from "@helpers/util";
 import ProductListDummy from "@component/items/ProductListDummy";
 import { bottomCart, checkround2, close } from "@common";
 import { SliderBox } from "react-native-image-slider-box";
-import { Badge, ScrollView, Button } from "native-base";
+import { Badge, ScrollView, Button, Avatar } from "native-base";
 import Fonts from "../helpers/Fonts";
 import { addToCart } from "@actions";
 import Icon from "react-native-vector-icons/AntDesign";
@@ -46,6 +48,7 @@ import {
   addToWishlistRedux,
   removeFromWishlistRedux,
   setSpinnerRedux,
+  updateSingleProductRedux,
 } from "../redux/Action";
 import BottomSheet from "../component/CartComponent/BottomSheet";
 import GradientButton from "../component/CartComponent/Button";
@@ -58,7 +61,9 @@ const COLORS = ["#3ad35c", Colors.themeColor, "#efcd19", "#ff1e1a"];
 
 function ProductDetailScreen(props) {
   const { width } = useWindowDimensions();
-
+  const [option, setOption] = React.useState("Description");
+  const [review, setReview] = React.useState("");
+  const [star, setStar] = React.useState(0);
   const [state, setState] = React.useState({
     loading: true,
     productCount: 1,
@@ -332,6 +337,18 @@ function ProductDetailScreen(props) {
     );
   };
 
+  const getStar = (product) => {
+    if (product.reviews && product.reviews.length > 0) {
+      let averageStar = 0;
+      product.reviews.map((review) => {
+        averageStar += parseInt(review.star);
+      });
+      return averageStar / product.reviews.length;
+    } else {
+      return 0;
+    }
+  };
+
   const calculateCart = () => {
     let cartProducts = props.cartData;
     let sumAmount = 0;
@@ -571,7 +588,7 @@ function ProductDetailScreen(props) {
                 {getPrice(product)}
                 <View style={styles.starView}>
                   <Stars
-                    default={0}
+                    default={getStar(product)}
                     count={5}
                     half={true}
                     starSize={45}
@@ -598,7 +615,9 @@ function ProductDetailScreen(props) {
                     }
                     disabled={true}
                   />
-                  <Text style={styles.reviewTxt}>(0 Reviews)</Text>
+                  <Text style={styles.reviewTxt}>
+                    ({product.reviews ? product.reviews.length : 0} Reviews)
+                  </Text>
                 </View>
               </View>
               <OtrixDivider size={"sm"} />
@@ -828,11 +847,373 @@ function ProductDetailScreen(props) {
               {/* <SizeContainerComponent productData={productDetail} /> */}
 
               {/* Description Container*/}
-              <Text style={[styles.headingTxt, { fontSize: wp("3.8%") }]}>
-                Description
-              </Text>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginBottom: 10,
+                }}
+              >
+                <TouchableOpacity
+                  style={{
+                    padding: 10,
+                    paddingTop: 0,
+                    borderBottomWidth: 1,
+                    borderBottomColor:
+                      option == "Description" ? "#ec345b" : "white",
+                  }}
+                  onPress={() => {
+                    setOption("Description");
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: wp("3.8%"),
+                      color: option == "Description" ? "#ec345b" : "#555",
+                    }}
+                  >
+                    Description
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    padding: 10,
+                    paddingTop: 0,
+                    borderBottomWidth: 1,
+                    borderBottomColor:
+                      option == "Reviews" ? "#ec345b" : "white",
+                  }}
+                  onPress={() => {
+                    setOption("Reviews");
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: wp("3.8%"),
+                      color: option == "Reviews" ? "#ec345b" : "#555",
+                    }}
+                  >
+                    Reviews
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    padding: 10,
+                    paddingTop: 0,
+                    borderBottomWidth: 1,
+                    borderBottomColor:
+                      option == "Add Review" ? "#ec345b" : "white",
+                  }}
+                  onPress={() => {
+                    setOption("Add Review");
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: wp("3.8%"),
+                      color: option == "Add Review" ? "#ec345b" : "#555",
+                    }}
+                  >
+                    Add Review
+                  </Text>
+                </TouchableOpacity>
+              </View>
               <OtrixDivider size={"sm"} />
-              <RenderHtml contentWidth={width} source={source} />
+              {option === "Description" && (
+                <RenderHtml contentWidth={width} source={source} />
+              )}
+              {option === "Add Review" && (
+                <>
+                  {props.currentUser && props.currentUser.uid ? (
+                    <>
+                      {product.reviews &&
+                      product.reviews.length > 0 &&
+                      product.reviews.find(
+                        (review) => review.id == props.currentUser.uid
+                      ) ? (
+                        <Text
+                          style={{
+                            textAlign: "center",
+                            marginTop: 10,
+                            marginBottom: 130,
+                            color: "#666",
+                            fontWeight: "bold",
+                            fontSize: wp("3.7%"),
+                          }}
+                        >
+                          You have already added a review for this product.
+                        </Text>
+                      ) : (
+                        <View
+                          style={{
+                            padding: 20,
+                            borderWidth: 1,
+                            borderColor: "gainsboro",
+                            borderRadius: 10,
+                            paddingBottom: 40,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              textAlign: "center",
+                              fontWeight: "bold",
+                              marginBottom: 15,
+                              color: "#444",
+                            }}
+                          >
+                            Rate the Product
+                          </Text>
+
+                          <Stars
+                            default={parseInt(star)}
+                            count={5}
+                            half={false}
+                            fullStar={
+                              <FontAwesomeIcon
+                                name={"star"}
+                                size={wp("10%")}
+                                style={[styles.myStarStyle]}
+                              />
+                            }
+                            emptyStar={
+                              <FontAwesomeIcon
+                                name={"star-o"}
+                                size={wp("10%")}
+                                style={[
+                                  styles.myStarStyle,
+                                  styles.myEmptyStarStyle,
+                                  { color: "gainsboro" },
+                                ]}
+                              />
+                            }
+                            halfStar={
+                              <FontAwesomeIcon
+                                name={"star-half-empty"}
+                                size={wp("10%")}
+                                style={[styles.myStarStyle]}
+                              />
+                            }
+                            disabled={false}
+                            update={(value) => {
+                              console.log(value);
+                              setStar(value);
+                            }}
+                          />
+                          <Text
+                            style={{
+                              textAlign: "center",
+                              fontWeight: "bold",
+                              marginTop: 20,
+                              color: "#444",
+                            }}
+                          >
+                            Please share your opinion about the product
+                          </Text>
+                          <TextInput
+                            value={review}
+                            placeholder="Your review"
+                            style={{
+                              ...GlobalStyles.textInputStyle,
+                              padding: 14,
+                              borderWidth: 1,
+                              borderColor: "gainsboro",
+                              borderRadius: 5,
+                              color: "#555",
+                              marginTop: 15,
+                              backgroundColor: "white",
+                              height: hp("20%"),
+                              marginBottom: 10,
+                            }}
+                            onChangeText={(value) => setReview(value)}
+                            multiline={true}
+                          />
+                          <GradientButton
+                            // label={"ADD TO CART ->"}
+                            onPress={async () => {
+                              props.setSpinnerRedux(true);
+                              console.log(product);
+                              await props.updateSingleProductRedux({
+                                ...product,
+                                reviews:
+                                  product.reviews && product.reviews.length > 0
+                                    ? [
+                                        {
+                                          user: props.currentUser,
+                                          id: props.currentUser.uid,
+                                          reviewText: review,
+                                          star: star,
+                                          date: new Date().toLocaleDateString(
+                                            "en-GB"
+                                          ),
+                                        },
+                                        ,
+                                        ...product.reviews,
+                                      ]
+                                    : [
+                                        {
+                                          user: props.currentUser,
+                                          id: props.currentUser.uid,
+                                          reviewText: review,
+                                          star: star,
+                                          date: new Date().toLocaleDateString(
+                                            "en-GB"
+                                          ),
+                                        },
+                                      ],
+                              });
+                              setReview("");
+                              setStar(0);
+                              setOption("Reviews");
+                              props.setSpinnerRedux(false);
+                              Toast.show("Review added.");
+                            }}
+                            children={
+                              <View
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    color: "white",
+                                    fontWeight: "bold",
+                                    fontSize: wp("3.1%"),
+                                  }}
+                                >
+                                  Add review
+                                </Text>
+                              </View>
+                            }
+                          />
+                        </View>
+                      )}
+                    </>
+                  ) : (
+                    <Text
+                      style={{
+                        textAlign: "center",
+                        marginTop: 10,
+                        marginBottom: 130,
+                        color: "#666",
+                        fontWeight: "bold",
+                        fontSize: wp("3.7%"),
+                      }}
+                    >
+                      You must login first to add a review.
+                    </Text>
+                  )}
+                </>
+              )}
+
+              {option == "Reviews" && (
+                <View style={{ marginTop: 10, padding: 10 }}>
+                  {product.reviews && product.reviews.length > 0 ? (
+                    product.reviews.map((review) => (
+                      <View style={{ marginBottom: 40 }}>
+                        <View
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <View
+                            style={{ display: "flex", flexDirection: "row" }}
+                          >
+                            <Avatar
+                              ml="1"
+                              size="sm"
+                              style={styles.avatarImg}
+                              source={avatarImg2}
+                            ></Avatar>
+                            <View
+                              style={{
+                                marginLeft: 10,
+                                marginTop: 3,
+                                alignSelf: "flex-start",
+                                alignItems: "flex-start",
+                              }}
+                            >
+                              <Text>{review.user.displayName}</Text>
+
+                              <Stars
+                                default={review.star}
+                                count={5}
+                                half={true}
+                                starSize={45}
+                                fullStar={
+                                  <FontAwesomeIcon
+                                    name={"star"}
+                                    size={wp("3.5%")}
+                                    style={[styles.myStarStyle]}
+                                  />
+                                }
+                                emptyStar={
+                                  <FontAwesomeIcon
+                                    name={"star-o"}
+                                    size={wp("3.5%")}
+                                    style={[
+                                      styles.myStarStyle,
+                                      styles.myEmptyStarStyle,
+                                    ]}
+                                  />
+                                }
+                                halfStar={
+                                  <FontAwesomeIcon
+                                    name={"star-half-empty"}
+                                    size={wp("3.5%")}
+                                    style={[styles.myStarStyle]}
+                                  />
+                                }
+                                disabled={true}
+                              />
+                            </View>
+                          </View>
+                          <View style={{ alignItems: "flex-end" }}>
+                            <Text
+                              style={{
+                                color: "#444",
+                                marginTop: 3,
+                                fontSize: wp("3.3%"),
+                              }}
+                            >
+                              {review.date}
+                            </Text>
+                          </View>
+                        </View>
+                        <View>
+                          <Text
+                            style={{
+                              color: "#555",
+                              textAlign: "left",
+                              marginTop: 6,
+                              fontSize: wp("3.3%"),
+                            }}
+                          >
+                            {review.reviewText}
+                          </Text>
+                        </View>
+                      </View>
+                    ))
+                  ) : (
+                    <Text
+                      style={{
+                        textAlign: "center",
+                        marginTop: 10,
+                        marginBottom: 130,
+                        color: "#666",
+                        fontWeight: "bold",
+                        fontSize: wp("3.7%"),
+                      }}
+                    >
+                      This Product has no reviews yet.
+                    </Text>
+                  )}
+                </View>
+              )}
               <OtrixDivider size={"md"} />
               <View style={GlobalStyles.horizontalLine}></View>
 
@@ -1124,6 +1505,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   addToCart,
   getSingleProductRedux,
+  updateSingleProductRedux,
   addToCartRedux,
   addToWishlistRedux,
   removeFromWishlistRedux,
@@ -1134,6 +1516,13 @@ const styles = StyleSheet.create({
   productDetailView: {
     backgroundColor: Colors.white,
     marginHorizontal: wp("5%"),
+  },
+  avatarImg: {
+    height: wp("4.5%"),
+    width: wp("4.5%"),
+    resizeMode: "contain",
+    borderColor: "red",
+    borderWidth: 1,
   },
   sheet: {
     padding: 10,

@@ -9,6 +9,7 @@ import {
   getSingleCategoryProducts,
   getAllCategories,
   getSingleProduct,
+  updateSingleProduct,
   addToCart,
   addToWishlist,
   addToOrder,
@@ -304,6 +305,13 @@ export const getSimilarCategoryProductsRedux =
   };
 export const getSingleProductRedux = (id) => async (dispatch) => {
   const product = await getSingleProduct(id);
+  dispatch({
+    type: "GET_SINGLE_PRODUCT",
+    payload: product,
+  });
+};
+export const updateSingleProductRedux = (productObj) => async (dispatch) => {
+  const product = await updateSingleProduct(productObj);
   dispatch({
     type: "GET_SINGLE_PRODUCT",
     payload: product,

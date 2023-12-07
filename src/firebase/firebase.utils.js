@@ -658,6 +658,20 @@ export const getSingleProduct = async (id) => {
     console.log(error);
   }
 };
+export const updateSingleProduct = async (product) => {
+  const productRef = firestore().doc(`products/${product.id}`);
+  console.log(product);
+  try { 
+    await productRef.update({
+      ...product,
+    });
+    const product2 = await productRef.get();
+    return product2.data();
+  } catch (error) {
+    alert(error);
+    console.log(error);
+  }
+};
 
 export const getAllExpressRatesParcel = async () => {
   const expressRatesParcelCollectionRef =

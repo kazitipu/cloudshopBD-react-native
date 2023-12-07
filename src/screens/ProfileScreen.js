@@ -44,122 +44,131 @@ function ProfileScreen(props) {
   console.log("RES ", profileImage);
 
   return (
-    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.imageView} onPress={() => {}}>
-          {profileImage != "" ? (
-            <Image source={{ uri: profileImage }} style={styles.image}></Image>
-          ) : (
-            <Image source={avatarImg2} style={styles.image}></Image>
-          )}
-        </TouchableOpacity>
-        <OtrixDivider size={"sm"} />
-        <Text style={styles.username}>
-          {props.currentUser && props.currentUser.displayName}
-        </Text>
-        {props.currentUser && props.currentUser.email && (
-          <Text style={styles.email}>{props.currentUser.email}</Text>
-        )}
-        {props.currentUser && props.currentUser.mobileNumber && (
-          <Text style={styles.email}>{props.currentUser.mobileNumber}</Text>
-        )}
-      </View>
+    <>
+      {props.currentUser.uid ? (
+        <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+          <View style={styles.container}>
+            <TouchableOpacity style={styles.imageView} onPress={() => {}}>
+              {profileImage != "" ? (
+                <Image
+                  source={{ uri: profileImage }}
+                  style={styles.image}
+                ></Image>
+              ) : (
+                <Image source={avatarImg2} style={styles.image}></Image>
+              )}
+            </TouchableOpacity>
+            <OtrixDivider size={"sm"} />
+            <Text style={styles.username}>
+              {props.currentUser && props.currentUser.displayName}
+            </Text>
+            {props.currentUser && props.currentUser.email && (
+              <Text style={styles.email}>{props.currentUser.email}</Text>
+            )}
+            {props.currentUser && props.currentUser.mobileNumber && (
+              <Text style={styles.email}>{props.currentUser.mobileNumber}</Text>
+            )}
+          </View>
 
-      {/* Header */}
+          {/* Header */}
 
-      {/* Content Start from here */}
-      <OtrixContent customStyles={styles.contentView}>
-        <OtrixDivider size={"lg"} />
+          {/* Content Start from here */}
+          <OtrixContent customStyles={styles.contentView}>
+            <OtrixDivider size={"lg"} />
 
-        <TouchableOpacity
-          style={styles.listView}
-          onPress={() => props.navigation.navigate("EditProfileScreen")}
-        >
-          <View style={[styles.leftSide, { left: wp("1%") }]}>
-            <Icon name="user-edit" style={styles.icon} />
-          </View>
-          <View style={styles.center}>
-            <Text style={styles.listTitle}>Edit Profile</Text>
-          </View>
-          <View style={styles.rightSide}>
-            <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.listView}
-          onPress={() => props.navigation.navigate("ManageAddressScreen")}
-        >
-          <View style={styles.leftSide}>
-            <Icon
-              name="address-book"
-              style={[styles.icon, { fontSize: wp("5.4%") }]}
-            />
-          </View>
-          <View style={styles.center}>
-            <Text style={styles.listTitle}>Manage Address</Text>
-          </View>
-          <View style={styles.rightSide}>
-            <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.listView}
-          onPress={() => props.navigation.navigate("WishlistScreen")}
-        >
-          <View style={styles.leftSide}>
-            <Fontisto name="heart" style={styles.icon} />
-          </View>
-          <View style={styles.center}>
-            <Text style={styles.listTitle}>Wishlist</Text>
-          </View>
-          <View style={styles.rightSide}>
-            <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
-          </View>
-        </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.listView}
+              onPress={() => props.navigation.navigate("EditProfileScreen")}
+            >
+              <View style={[styles.leftSide, { left: wp("1%") }]}>
+                <Icon name="user-edit" style={styles.icon} />
+              </View>
+              <View style={styles.center}>
+                <Text style={styles.listTitle}>Edit Profile</Text>
+              </View>
+              <View style={styles.rightSide}>
+                <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.listView}
+              onPress={() => props.navigation.navigate("ManageAddressScreen")}
+            >
+              <View style={styles.leftSide}>
+                <Icon
+                  name="address-book"
+                  style={[styles.icon, { fontSize: wp("5.4%") }]}
+                />
+              </View>
+              <View style={styles.center}>
+                <Text style={styles.listTitle}>Manage Address</Text>
+              </View>
+              <View style={styles.rightSide}>
+                <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.listView}
+              onPress={() => props.navigation.navigate("WishlistScreen")}
+            >
+              <View style={styles.leftSide}>
+                <Fontisto name="heart" style={styles.icon} />
+              </View>
+              <View style={styles.center}>
+                <Text style={styles.listTitle}>Wishlist</Text>
+              </View>
+              <View style={styles.rightSide}>
+                <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
+              </View>
+            </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.listView}
-          onPress={() => props.navigation.navigate("OrderScreen")}
-        >
-          <View style={styles.leftSide}>
-            <Fontisto
-              name="shopping-bag-1"
-              style={[styles.icon, { fontSize: wp("5.4%") }]}
-            />
-          </View>
-          <View style={styles.center}>
-            <Text style={styles.listTitle}>My Orders</Text>
-          </View>
-          <View style={styles.rightSide}>
-            <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
-          </View>
-        </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.listView}
+              onPress={() => props.navigation.navigate("OrderScreen")}
+            >
+              <View style={styles.leftSide}>
+                <Fontisto
+                  name="shopping-bag-1"
+                  style={[styles.icon, { fontSize: wp("5.4%") }]}
+                />
+              </View>
+              <View style={styles.center}>
+                <Text style={styles.listTitle}>My Orders</Text>
+              </View>
+              <View style={styles.rightSide}>
+                <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
+              </View>
+            </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.listView}
-          onPress={async () => {
-            props.setSpinnerRedux(true);
-            await auth()
-              .signOut()
-              .then(() => {
-                Toast.show("Successfully Loggged out!"),
-                  props.navigation.navigate("HomeScreen");
-              });
-            props.setSpinnerRedux(false);
-          }}
-        >
-          <View style={styles.leftSide}>
-            <AntDesign name="logout" style={styles.icon} />
-          </View>
-          <View style={styles.center}>
-            <Text style={styles.listTitle}>Logout</Text>
-          </View>
-          <View style={styles.rightSide}>
-            <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
-          </View>
-        </TouchableOpacity>
-      </OtrixContent>
-    </OtrixContainer>
+            <TouchableOpacity
+              style={styles.listView}
+              onPress={async () => {
+                props.setSpinnerRedux(true);
+                await auth()
+                  .signOut()
+                  .then(() => {
+                    Toast.show("Successfully Loggged out!"),
+                      props.navigation.navigate("HomeScreen");
+                  });
+                props.setSpinnerRedux(false);
+              }}
+            >
+              <View style={styles.leftSide}>
+                <AntDesign name="logout" style={styles.icon} />
+              </View>
+              <View style={styles.center}>
+                <Text style={styles.listTitle}>Logout</Text>
+              </View>
+              <View style={styles.rightSide}>
+                <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
+              </View>
+            </TouchableOpacity>
+          </OtrixContent>
+        </OtrixContainer>
+      ) : (
+        <View></View>
+      )}
+    </>
   );
 }
 
