@@ -79,7 +79,7 @@ function ManageAddressScreen(props) {
       <OtrixHeader
         customStyles={{
           backgroundColor: Colors.light_white,
-          height: Platform.OS === "ios" ? wp("13%") : wp("10%"),
+          height:wp("13%"),
         }}
       >
         <TouchableOpacity

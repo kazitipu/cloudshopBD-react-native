@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 // @invertase/react-native-apple-authentication
 import com.RNAppleAuthentication.AppleAuthenticationAndroidPackage;
+// @notifee/react-native
+import io.invertase.notifee.NotifeePackage;
 // @react-native-community/async-storage
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-community/netinfo
@@ -23,6 +25,8 @@ import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
 // @react-native-firebase/firestore
 import io.invertase.firebase.firestore.ReactNativeFirebaseFirestorePackage;
+// @react-native-firebase/messaging
+import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
 // @react-native-google-signin/google-signin
 import com.reactnativegooglesignin.RNGoogleSigninPackage;
 // @react-native-masked-view/masked-view
@@ -93,11 +97,13 @@ public class PackageList {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
       new AppleAuthenticationAndroidPackage(),
+      new NotifeePackage(),
       new AsyncStoragePackage(),
       new NetInfoPackage(),
       new ReactNativeFirebaseAppPackage(),
       new ReactNativeFirebaseAuthPackage(),
       new ReactNativeFirebaseFirestorePackage(),
+      new ReactNativeFirebaseMessagingPackage(),
       new RNGoogleSigninPackage(),
       new RNCMaskedViewPackage(),
       new FastImageViewPackage(),

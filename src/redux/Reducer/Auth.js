@@ -26,6 +26,8 @@ export default (state = initialState, action) => {
         ...state,
         currentUser: payload,
       };
+    case "SAVE_DEVICE_TOKEN":
+      return { ...state, currentUser: action.payload };
     case "UPDATE_ADDRESSBOOK":
       return {
         ...state,

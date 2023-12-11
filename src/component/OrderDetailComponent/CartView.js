@@ -266,8 +266,8 @@ function CartView(props) {
               fontSize: wp("2.8%"),
             }}
           >
-            {new Date(Number(order.id)).toLocaleDateString()}{" "}
-            {new Date(Number(order.id)).toLocaleTimeString()}
+            {new Date(Number(order.date)).toLocaleDateString()}{" "}
+            {new Date(Number(order.date)).toLocaleTimeString()}
           </Text>
         </View>
         <View

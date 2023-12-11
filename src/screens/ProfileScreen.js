@@ -24,15 +24,18 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Toast from "react-native-simple-toast";
 import auth from "@react-native-firebase/auth";
 import { avatarImg2 } from "../common/config";
+import LoginScreen from "./LoginScreen";
+import { useIsFocused } from "@react-navigation/native";
 
 function ProfileScreen(props) {
   const [state, setState] = React.useState({ profileImage: "" });
-
+  const focused = useIsFocused();
   useEffect(() => {
-    if (!props.currentUser.uid) {
-      props.navigation.navigate("LoginScreen");
+    if (props.currentUser && !props.currentUser.uid) {
+      Toast.show("Please login to account to access.");
     }
   }, []);
+
   const openImagePicker = async (res) => {
     setState({
       ...state,
@@ -45,8 +48,8 @@ function ProfileScreen(props) {
 
   return (
     <>
-      {props.currentUser.uid ? (
-        <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+      {props.currentUser && props.currentUser.uid ? (
+        <OtrixContainer customStyles={{ backgroundColor: "#ec345b" }}>
           <View style={styles.container}>
             <TouchableOpacity style={styles.imageView} onPress={() => {}}>
               {profileImage != "" ? (
@@ -166,7 +169,36 @@ function ProfileScreen(props) {
           </OtrixContent>
         </OtrixContainer>
       ) : (
-        <View></View>
+        <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              alignContent: "center",
+            }}
+          >
+            <Text
+              style={{ color: "gray", fontSize: wp("3.7%"), marginBottom: 10 }}
+            >
+              Please Login to account first
+            </Text>
+            <TouchableOpacity
+              style={{
+                padding: 10,
+                backgroundColor: "#ec345b",
+                borderRadius: 5,
+              }}
+              onPress={() => {
+                props.navigation.navigate("LoginScreen");
+              }}
+            >
+              <Text style={{ color: "white", fontWeight: "bold" }}>
+                Login now
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </OtrixContainer>
       )}
     </>
   );
@@ -191,7 +223,7 @@ const styles = StyleSheet.create({
   container: {
     height: hp("25%"),
     position: "relative",
-    backgroundColor: Colors.light_white,
+    backgroundColor: "#ec345b",
     justifyContent: "flex-end",
     alignItems: "center",
     zIndex: 99,
@@ -199,17 +231,12 @@ const styles = StyleSheet.create({
   },
   imageView: {
     justifyContent: "center",
-    backgroundColor: Colors.white,
+    backgroundColor: "#ec345b",
     alignItems: "center",
-    borderRadius: wp("0.8%"),
-    elevation: 2,
     height: hp("11%"),
     width: wp("23%"),
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 0.2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
   },
+
   image: {
     resizeMode: "contain",
     height: undefined,
@@ -218,12 +245,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   username: {
-    color: Colors.text_color,
+    color: "white",
     fontFamily: Fonts.Font_Bold,
     fontSize: wp("4%"),
   },
   email: {
-    color: Colors.secondry_text_color,
+    color: "white",
     fontFamily: Fonts.Font_Regular,
     fontSize: wp("3.5%"),
     marginTop: hp("0.5%"),

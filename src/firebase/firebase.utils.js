@@ -1,5 +1,7 @@
 // import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
+import firebase from "@react-native-firebase/app";
+import { order } from "styled-system";
 // import storage from "@react-native-firebase/storage";
 
 export const signInWithGoogle = () => {};
@@ -569,13 +571,15 @@ export const getAllCategories = async () => {
   }
 };
 export const getAllOrders = async (userId) => {
-  const orderRef = firestore().doc(`orders/${userId}`);
-  const order = await orderRef.get();
-  if (order.exists) {
-    return order.data().orders;
-  } else {
-    return [];
-  }
+  const orderCollectionRef = firestore()
+    .collection(`orders`)
+    .where("userId", "==", userId);
+  const orders = await orderCollectionRef.get();
+  const ordersArray = [];
+  orders.forEach((doc) => {
+    ordersArray.push(doc.data());
+  });
+  return ordersArray;
 };
 
 export const getAllHomeScreenCategories = async () => {
@@ -661,7 +665,7 @@ export const getSingleProduct = async (id) => {
 export const updateSingleProduct = async (product) => {
   const productRef = firestore().doc(`products/${product.id}`);
   console.log(product);
-  try { 
+  try {
     await productRef.update({
       ...product,
     });
@@ -1146,23 +1150,30 @@ export const addToOrder = async (orderObj) => {
       cart: [],
     });
   }
-  const orderRef = firestore().doc(`orders/${orderObj.currentUser.id}`);
+  const orderRef = firestore().doc(`orders/${orderObj.id}`);
   const snapShot = await orderRef.get();
   // first empty the cart
-  if (snapShot.data()) {
-    await orderRef.update({
-      orders: [orderObj, ...snapShot.data().orders],
-    });
-    const updatedSnapshot = await orderRef.get();
-    return updatedSnapshot.data();
+  if (snapShot.exists) {
+    return null;
   } else {
-    await orderRef.set({
-      orders: [orderObj],
-    });
+    await orderRef.set(orderObj);
     const updatedSnapshot = await orderRef.get();
     return updatedSnapshot.data();
   }
 };
+
+export const saveDeviceToken = async (currentUser, token) => {
+  if (!currentUser.uid) return;
+  const userRef = firestore().doc(`users/${currentUser.uid}`);
+  await userRef.update({
+    deviceToken: firebase.firestore.FieldValue.arrayUnion(token),
+  });
+  const updatedSnapShot = await userRef.get();
+  let userObj = { id: updatedSnapShot.data().uid, ...updatedSnapShot.data() };
+  console.log(userObj);
+  return userObj;
+};
+
 export const removeFromCart = async (item, user) => {
   if (!user.id) {
     return [];
@@ -1221,7 +1232,7 @@ export const removeFromWishlist = async (item, user) => {
 
 // Orders
 export const updateOrder = async (orderObj) => {
-  const orderRef = firestore().doc(`orders/${orderObj.parcelId}`);
+  const orderRef = firestore().doc(`orders/${orderObj.id}`);
   try {
     await orderRef.update({
       ...orderObj,

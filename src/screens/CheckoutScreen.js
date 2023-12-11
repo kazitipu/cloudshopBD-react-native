@@ -640,7 +640,8 @@ function CheckoutScreen(props) {
             onPress={async () => {
               props.setSpinnerRedux(true);
               let orderObj = {
-                id: new Date().getTime().toString(),
+                id:
+                  new Date().getTime().toString() + currentUser.id.slice(0, 3),
                 currentUser: currentUser,
                 orders: props.cartData,
                 subTotal: actualOrder,
@@ -656,7 +657,9 @@ function CheckoutScreen(props) {
                     }
                   : null,
                 orderStatus: "Processing",
+                date: new Date().getTime().toString(),
                 orderStatusScore: 1,
+                userId: currentUser.uid,
               };
               await props.addToOrderRedux(orderObj);
               props.setSpinnerRedux(false);

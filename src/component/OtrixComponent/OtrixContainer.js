@@ -5,7 +5,10 @@ import { GlobalStyles, Colors } from "@helpers";
 function OtrixContainer(props) {
   return (
     <>
-      <StatusBar backgroundColor={Colors.light_white} barStyle="dark-content" />
+      <StatusBar
+        backgroundColor={props.statusBarColor ? props.statusBarColor : "white"}
+        barStyle={props.barStyle ? props.barStyle : "dark-content"}
+      />
       <SafeAreaView
         style={{
           flex: 1,

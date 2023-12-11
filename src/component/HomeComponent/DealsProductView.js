@@ -15,10 +15,22 @@ import {
   setSpinnerRedux,
 } from "../../redux/Action";
 import Toast from "react-native-simple-toast";
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 function DealsProductView(props) {
   const data = props.data;
   const wishlistArr = props.wishlistArray ? props.wishlistArray : null;
 
+  const getStar = (product) => {
+    if (product.reviews && product.reviews.length > 0) {
+      let averageStar = 0;
+      product.reviews.map((review) => {
+        averageStar += parseInt(review.star);
+      });
+      return averageStar / product.reviews.length;
+    } else {
+      return 0;
+    }
+  };
   const getPrice = (product) => {
     if (product.displayedVariations.length > 0) {
       if (product.displayedVariations[0].salePrice == 0) {
@@ -143,24 +155,28 @@ function DealsProductView(props) {
           <View style={styles.infromationView}>
             <View style={styles.starView}>
               <Stars
-                default={data.rating}
+                default={getStar(data)}
                 count={5}
                 half={true}
                 starSize={45}
                 fullStar={
-                  <Icon name={"star"} size={11} style={[styles.myStarStyle]} />
+                  <FontAwesomeIcon
+                    name={"star"}
+                    size={wp("3.5%")}
+                    style={[styles.myStarStyle]}
+                  />
                 }
                 emptyStar={
-                  <Icon
+                  <FontAwesomeIcon
                     name={"star-o"}
-                    size={11}
+                    size={wp("3.5%")}
                     style={[styles.myStarStyle, styles.myEmptyStarStyle]}
                   />
                 }
                 halfStar={
-                  <Icon
+                  <FontAwesomeIcon
                     name={"star-half-empty"}
-                    size={11}
+                    size={wp("3.5%")}
                     style={[styles.myStarStyle]}
                   />
                 }

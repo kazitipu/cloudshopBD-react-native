@@ -58,6 +58,7 @@ import {
   setReduxCart,
   setReduxWishlist,
   setFreeShippingRedux,
+  saveDeviceTokenRedux,
 } from "./redux/Action";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
@@ -66,6 +67,7 @@ import {
   getFreeShipping,
 } from "./firebase/firebase.utils";
 import Spinner from "react-native-loading-spinner-overlay";
+import messaging from "@react-native-firebase/messaging";
 const SettingStack = createStackNavigator();
 let cartCount = 0;
 
@@ -88,6 +90,7 @@ const BottomTab = createBottomTabNavigator();
 function MyTabs(props) {
   let cartCount = props.cartCounts;
   let authStatus = props.auth;
+  console.log(props);
   return (
     <BottomTab.Navigator
       initialRouteName="HomeScreen"
@@ -168,7 +171,7 @@ function MyTabs(props) {
 
 const Stack = createStackNavigator();
 function AppNavigator(props) {
-  const { cartCount, authStatus } = props;
+  const { cartCount, authStatus, currentUser } = props;
   const [initializing, setInitializing] = useState(true);
 
   const [user, setUser] = useState();
@@ -189,7 +192,7 @@ function AppNavigator(props) {
             ...snapShot.data(),
           });
           // props.setAdditionalDataRedux({});
-          // requestUserPermission({ id: snapShot.id, ...snapShot.data() });
+          requestUserPermission({ id: snapShot.id, ...snapShot.data() });
         });
         const cartRef = firestore().doc(`carts/${user.uid}`);
         cartRef.onSnapshot((snapShot) => {
@@ -229,6 +232,35 @@ function AppNavigator(props) {
     if (initializing) setInitializing(false);
   };
 
+  const requestUserPermission = async (user) => {
+    if (Platform.OS === "ios") {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+      if (enabled) {
+        console.log("Authorization status:", authStatus);
+        getDeviceToken(user);
+      }
+    } else {
+      getDeviceToken(user);
+    }
+  };
+
+  const getDeviceToken = async (user) => {
+    let token = await messaging().getToken();
+    if (token && user && user.id) {
+      props.saveDeviceTokenRedux(user, token);
+    }
+    console.log(token);
+  };
+
+  let isLoggedIn = false;
+  if (currentUser) {
+    isLoggedIn = currentUser.id ? true : false;
+  }
+
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
 
@@ -259,7 +291,13 @@ function AppNavigator(props) {
             name="MainScreen"
             options={{ headerShown: false }}
           >
-            {(props) => <MyTabs cartCounts={cartCount} auth={authStatus} />}
+            {(props) => (
+              <MyTabs
+                cartCounts={cartCount}
+                auth={authStatus}
+                currentUser={currentUser}
+              />
+            )}
           </Stack.Screen>
 
           <Stack.Screen
@@ -437,6 +475,7 @@ export default connect(mapStateToProps, {
   setReduxCart,
   setReduxWishlist,
   setFreeShippingRedux,
+  saveDeviceTokenRedux,
 })(AppNavigator);
 
 const styles = StyleSheet.create({

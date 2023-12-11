@@ -32,7 +32,13 @@ import Delivery from "./delivery.png";
 import CashOnDelivery from "./cashonDelivery.png";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicon from "react-native-vector-icons/Ionicons";
-import { getAllOrdersRedux, setSpinnerRedux } from "../redux/Action/general";
+import Toast from "react-native-simple-toast";
+import {
+  getAllOrdersRedux,
+  setSpinnerRedux,
+  updateOrderRedux,
+  addToOrderRedux,
+} from "../redux/Action/general";
 function OrderScreen(props) {
   const [loader, setLoader] = useState(true);
   useEffect(() => {
@@ -45,8 +51,44 @@ function OrderScreen(props) {
     };
     getAllOrders();
   }, []);
-  const [tab, setTab] = useState(0);
-  const { navigation, orders } = props;
+  const [tab, setTab] = useState("All");
+  let { navigation, orders } = props;
+  if (orders.length > 0) {
+    if (tab == "All") {
+      orders = orders;
+    } else {
+      orders = orders.filter((order) => order.orderStatus == tab);
+    }
+  }
+
+  const handleSubmit = async (order) => {
+    console.log("Handle submit is getting called!");
+    let orderObj = {
+      ...order,
+      orderStatus: "Cancelled",
+      [`cancelledDate`]: new Date().getTime().toString(),
+      orderStatusScore: 0,
+      cancelNote: "Cacelled by customer",
+    };
+    props.setSpinnerRedux(true);
+    await props.updateOrderRedux(orderObj);
+    props.setSpinnerRedux(false);
+    Toast.show("Order is cancelled!");
+  };
+  const orderAgain = async (order) => {
+    props.setSpinnerRedux(true);
+    let orderObj = {
+      ...order,
+      id: new Date().getTime().toString() + order.currentUser.id.slice(0, 3),
+      orderStatus: "Processing",
+      date: new Date().getTime().toString(),
+      orderStatusScore: 1,
+    };
+    await props.addToOrderRedux(orderObj);
+    props.setSpinnerRedux(false);
+    Toast.show("Your order added successfully!");
+  };
+
   console.log(orders);
   return (
     <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
@@ -83,18 +125,93 @@ function OrderScreen(props) {
           marginBottom: 10,
         }}
       >
-        <View style={styles.tab}>
-          <Text style={styles.tabText}>All</Text>
-        </View>
-        <View style={{ ...styles.tab, backgroundColor: "#ffdde4" }}>
-          <Text style={{ ...styles.tabText, color: "#ff686d" }}>Confirmed</Text>
-        </View>
-        <View style={styles.tab}>
-          <Text style={styles.tabText}>Delivering</Text>
-        </View>
-        <View style={styles.tab}>
-          <Text style={styles.tabText}>Delivered</Text>
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            setTab("All");
+          }}
+        >
+          <View
+            style={{
+              ...styles.tab,
+              backgroundColor: tab == "All" ? "#ffdde4" : Colors.light_white,
+            }}
+          >
+            <Text
+              style={{
+                ...styles.tabText,
+                color: tab == "All" ? "#ff686d" : "gray",
+              }}
+            >
+              All
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setTab("Confirmed");
+          }}
+        >
+          <View
+            style={{
+              ...styles.tab,
+              backgroundColor:
+                tab == "Confirmed" ? "#ffdde4" : Colors.light_white,
+            }}
+          >
+            <Text
+              style={{
+                ...styles.tabText,
+                color: tab == "Confirmed" ? "#ff686d" : "gray",
+              }}
+            >
+              Confirmed
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setTab("Packing");
+          }}
+        >
+          <View
+            style={{
+              ...styles.tab,
+              backgroundColor:
+                tab == "Packing" ? "#ffdde4" : Colors.light_white,
+            }}
+          >
+            <Text
+              style={{
+                ...styles.tabText,
+                color: tab == "Packing" ? "#ff686d" : "gray",
+              }}
+            >
+              Packing
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setTab("Delivered");
+          }}
+        >
+          <View
+            style={{
+              ...styles.tab,
+              backgroundColor:
+                tab == "Delivered" ? "#ffdde4" : Colors.light_white,
+            }}
+          >
+            <Text
+              style={{
+                ...styles.tabText,
+                color: tab == "Delivered" ? "#ff686d" : "gray",
+              }}
+            >
+              Delivered
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
       <OtrixContent>
         {orders && orders.length > 0 ? (
@@ -207,10 +324,10 @@ function OrderScreen(props) {
                   }}
                 >
                   <Text style={{ fontSize: wp("3.1%"), color: "gray" }}>
-                    Date
+                    Order Date
                   </Text>
                   <Text style={{ fontSize: wp("3%"), color: "#777" }}>
-                    {new Date(Number(order.id)).toLocaleDateString()}
+                    {new Date(Number(order.date)).toLocaleDateString()}
                   </Text>
                 </View>
                 <View
@@ -232,7 +349,7 @@ function OrderScreen(props) {
                           ? "#1B75D0"
                           : order.orderStatus == "Confirmed"
                           ? "orange"
-                          : order.orderStatus == "Delivering"
+                          : order.orderStatus == "Packing"
                           ? "darkorange"
                           : order.orderStatus == "Delivered"
                           ? "green"
@@ -282,30 +399,97 @@ function OrderScreen(props) {
                       (order.couponApplied ? order.couponApplied.discount : 0)}
                   </Text>
                 </View>
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    marginTop: 15,
-                    marginBottom: 10,
-                    padding: 10,
-                    paddingTop: 8,
-                    paddingBottom: 8,
-                    backgroundColor: "#dcefff",
-                    borderRadius: 6,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#005dac",
-                      fontWeight: "bold",
-                      fontSize: wp("3.3%"),
+                {order.orderStatus !== "Cancelled" &&
+                  order.orderStatus !== "Processing" && (
+                    <TouchableOpacity
+                      onPress={() => {
+                        orderAgain(order);
+                      }}
+                    >
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "center",
+                          marginTop: 15,
+
+                          padding: 10,
+                          paddingTop: 8,
+                          paddingBottom: 8,
+                          backgroundColor: "#dcefff",
+                          borderRadius: 6,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: "#005dac",
+                            fontWeight: "bold",
+                            fontSize: wp("3.3%"),
+                          }}
+                        >
+                          Order Again
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                {order.orderStatus == "Processing" && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleSubmit(order);
                     }}
                   >
-                    Order Again
-                  </Text>
-                </View>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        marginTop: 10,
+                        marginBottom: 10,
+                        padding: 10,
+                        paddingTop: 8,
+                        paddingBottom: 8,
+                        backgroundColor: "#ffe1e8",
+                        borderRadius: 6,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: "#ec345b",
+                          fontWeight: "bold",
+                          fontSize: wp("3.3%"),
+                        }}
+                      >
+                        Cancel Order
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+                {order.cancelNote && (
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      marginTop: 10,
+                      marginBottom: 10,
+                      padding: 10,
+                      paddingTop: 8,
+                      paddingBottom: 8,
+                      backgroundColor: "#ffe1e8",
+                      borderRadius: 6,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#ec345b",
+                        fontWeight: "bold",
+                        fontSize: wp("3.3%"),
+                      }}
+                    >
+                      Cancelled by customer
+                    </Text>
+                  </View>
+                )}
               </View>
             </TouchableOpacity>
           ))
@@ -321,7 +505,7 @@ function OrderScreen(props) {
               fontWeight: "bold",
             }}
           >
-            Sorry You do not have any orders.
+            Sorry You do not have any orders here.
           </Text>
         )}
       </OtrixContent>
@@ -341,6 +525,8 @@ export default connect(mapStateToProps, {
   proceedCheckout,
   getAllOrdersRedux,
   setSpinnerRedux,
+  updateOrderRedux,
+  addToOrderRedux,
 })(OrderScreen);
 
 const styles = StyleSheet.create({

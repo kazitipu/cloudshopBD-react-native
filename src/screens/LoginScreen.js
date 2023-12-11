@@ -60,7 +60,9 @@ function LoginScreen(props) {
       >
         <TouchableOpacity
           style={{ ...GlobalStyles.headerLeft }}
-          onPress={() => props.navigation.goBack()}
+          onPress={() => {
+            props.navigation.goBack();
+          }}
         >
           <OtirxBackButton />
         </TouchableOpacity>

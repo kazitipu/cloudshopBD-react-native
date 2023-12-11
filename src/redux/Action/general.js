@@ -20,6 +20,8 @@ import {
   updateShippingAddress,
   deleteAddress,
   getAllOrders,
+  saveDeviceToken,
+  updateOrder,
 } from "../../firebase/firebase.utils";
 export function requestInit(user) {
   return {
@@ -53,6 +55,13 @@ export function successWishlist(data) {
     },
   };
 }
+export const updateOrderRedux = (order) => async (dispatch) => {
+  const orderObj = await updateOrder(order);
+  dispatch({
+    type: "UPDATE_ORDER",
+    payload: orderObj,
+  });
+};
 
 export function decrementQuantity(id) {
   return {
@@ -137,6 +146,13 @@ export const getAllOrdersRedux = (currentUserId) => async (dispatch) => {
     payload: orders,
   });
 };
+
+export const saveDeviceTokenRedux =
+  (currentUser, token) => async (dispatch) => {
+    const updatedUser = await saveDeviceToken(currentUser, token);
+    dispatch({ type: "SAVE_DEVICE_TOKEN", payload: updatedUser });
+  };
+
 export const addToCartRedux = (cartObj, currentUser) => async (dispatch) => {
   const cartData = await addToCart(cartObj, currentUser);
   dispatch({
@@ -153,10 +169,10 @@ export const addToWishlistRedux =
     });
   };
 export const addToOrderRedux = (orderObj) => async (dispatch) => {
-  const allOrders = await addToOrder(orderObj);
+  const order = await addToOrder(orderObj);
   dispatch({
     type: "ADD_TO_ORDER",
-    payload: allOrders,
+    payload: order,
   });
 };
 export const removeFromCartRedux = (item, currentUser) => async (dispatch) => {

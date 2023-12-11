@@ -20,13 +20,25 @@ export default (state = initialState, action) => {
     case "ADD_TO_ORDER":
       return {
         ...state,
-        orders: payload,
+        orders: [payload, ...state.orders],
         cartData: [],
       };
     case "GET_ALL_ORDERS":
       return {
         ...state,
         orders: payload,
+      };
+
+    case "UPDATE_ORDER":
+      return {
+        ...state,
+        orders: state.orders.map((order) => {
+          if (order.id == action.payload.id) {
+            return action.payload;
+          } else {
+            return order;
+          }
+        }),
       };
     case "REMOVE_FROM_CART":
       return {

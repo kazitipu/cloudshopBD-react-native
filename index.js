@@ -4,9 +4,18 @@
 
 import { AppRegistry } from "react-native";
 import App from "./src";
-
+import messaging from "@react-native-firebase/messaging";
 import { name as appName } from "./app.json";
+import { onDisplayNotification } from "./src/notifications";
+messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+  console.log("message handled in the background", remoteMessage);
+  //   onDisplayNotification(remoteMessage);
+});
 
+// messaging().getInitialNotification(async (remoteMessage) => {
+//   console.log(remoteMessage);
+//   //   onDisplayNotification(remoteMessage);
+// });
 AppRegistry.registerComponent(appName, () => App);
 
 // SHA-1(5e:8f:16:06:2e:a3:cd:2c:4a:0d:54:78:76:ba:a6:f3:8c:ab:f6:25)
