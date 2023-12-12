@@ -167,7 +167,6 @@ function CartScreen(props) {
         customStyles={{
           marginHorizontal: wp("2%"),
           marginBottom: hp("5%"),
-         
         }}
       >
         {/* Cart Component Start from here */}

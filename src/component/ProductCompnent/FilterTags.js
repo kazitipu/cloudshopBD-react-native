@@ -89,6 +89,10 @@ const styles = StyleSheet.create({
     borderColor: Colors.themeColor,
     borderWidth: 1,
   },
+  unborderBox: {
+    borderColor: "gainsboro",
+    borderWidth: 1,
+  },
 
   imageView: {
     height: hp("2%"),

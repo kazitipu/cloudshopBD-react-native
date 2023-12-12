@@ -18,6 +18,18 @@ function ListProductView(props) {
   const data = props.data;
   const wishlistArr = props.wishlistArray ? props.wishlistArray : null;
 
+  const getStar = (product) => {
+    if (product.reviews && product.reviews.length > 0) {
+      let averageStar = 0;
+      product.reviews.map((review) => {
+        averageStar += parseInt(review.star);
+      });
+      return averageStar / product.reviews.length;
+    } else {
+      return 0;
+    }
+  };
+
   const getPrice = (product) => {
     if (product.displayedVariations.length > 0) {
       if (product.displayedVariations[0].salePrice == 0) {
@@ -142,7 +154,7 @@ function ListProductView(props) {
           <View style={styles.infromationView}>
             <View style={styles.starView}>
               <Stars
-                default={data.rating}
+                default={getStar(data)}
                 count={5}
                 half={true}
                 starSize={45}

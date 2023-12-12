@@ -43,6 +43,7 @@ import {
   setSpinnerRedux,
 } from "../redux/Action";
 import { fontSize } from "styled-system";
+import Toast from "react-native-simple-toast";
 
 function ProductListScreen(props) {
   const { item } = props.route.params;
@@ -131,12 +132,12 @@ function ProductListScreen(props) {
       }
       setState({
         ...state,
-        selectedFilters: selectedFilters,
+        selectedFilters: value,
       });
     } else {
       setState({
         ...state,
-        selectedFilters: [...selectedFilters, value],
+        selectedFilters: value,
       });
     }
   };
@@ -210,7 +211,7 @@ function ProductListScreen(props) {
       </OtrixHeader> */}
 
       {/* Filter */}
-      {result.length > 0 && item !== "Latest Products" ? (
+      {result.length > 1 && item !== "Latest Products" ? (
         <View style={{ height: hp("6%"), marginTop: -15 }}>
           <ScrollView
             style={{ flexDirection: "row", marginHorizontal: wp("1%") }}

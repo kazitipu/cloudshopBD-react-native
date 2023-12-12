@@ -582,9 +582,13 @@ function CartView(props) {
 
                 <Pill
                   decrementQuantity={() => {
+                    props.setCouponRedux(null);
+                    setCoupon(null);
                     props.decrementQuantityRedux(item);
                   }}
                   incrementQuantity={() => {
+                    props.setCouponRedux(null);
+                    setCoupon(null);
                     props.incrementQuantityRedux(item);
                   }}
                   quantity={item.quantity}

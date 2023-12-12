@@ -97,6 +97,7 @@ function PaymentSuccessComponent(props) {
               }
               onPress={() => {
                 props.setPaymentSuccessModal(false);
+                props.navigation.popToTop();
                 props.navigation.navigate("OrderScreen");
               }}
             />

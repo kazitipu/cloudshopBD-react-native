@@ -31,9 +31,11 @@ const HomeCategoryView = (props) => {
   return (
     <View style={{ marginBottom: 10 }}>
       <View style={styles.catHeading}>
-        <Text style={GlobalStyles.boxHeading}>Top Categories</Text>
+        <Text style={{ ...GlobalStyles.boxHeading, flex: 0.7 }}>
+          Top Categories
+        </Text>
         <TouchableOpacity
-          style={{ flex: 0.5 }}
+          style={{ flex: 0.3 }}
           onPress={() => props.navigation.navigate("CategoryScreen")}
         >
           <Text style={GlobalStyles.viewAll}>View All</Text>
