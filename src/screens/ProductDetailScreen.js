@@ -10,6 +10,7 @@ import {
   useWindowDimensions,
   ActivityIndicator,
   TextInput,
+  Platform,
 } from "react-native";
 import { connect } from "react-redux";
 import {
@@ -1258,7 +1259,7 @@ function ProductDetailScreen(props) {
           <View
             style={{
               position: "absolute",
-              bottom: -10,
+              bottom: Platform.OS === "ios" ? -10 : 0,
               padding: 10,
               backgroundColor: "white",
               display: "flex",
@@ -1428,7 +1429,7 @@ function ProductDetailScreen(props) {
             <View
               style={{
                 position: "absolute",
-                bottom: 20,
+                bottom: Platform.OS === "ios" ? 20 : 0,
                 padding: 10,
                 backgroundColor: "white",
                 display: "flex",

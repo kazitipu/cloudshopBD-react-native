@@ -9,6 +9,7 @@ import {
   Image,
   TextInput,
   Switch,
+  Platform,
 } from "react-native";
 import { connect } from "react-redux";
 import {
@@ -74,12 +75,16 @@ function ManageAddressScreen(props) {
     shippingAddress = currentUser.address.find((addr) => addr.defaultShipping);
   }
   return (
-    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+    <OtrixContainer
+      customStyles={{ backgroundColor: Colors.light_white }}
+      barStyle={"dark-content"}
+      statusBarColor={Colors.light_white}
+    >
       {/* Header */}
       <OtrixHeader
         customStyles={{
           backgroundColor: Colors.light_white,
-          height:wp("13%"),
+          height: wp("13%"),
         }}
       >
         <TouchableOpacity
@@ -465,7 +470,7 @@ function ManageAddressScreen(props) {
       <View
         style={{
           position: "absolute",
-          bottom: -15,
+          bottom: Platform.OS === "ios" ? -15 : 0,
           padding: 10,
           backgroundColor: "Colors.light_white",
           display: "flex",

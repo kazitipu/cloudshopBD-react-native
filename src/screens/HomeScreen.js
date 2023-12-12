@@ -71,7 +71,10 @@ function HomeScreen(props) {
     .filter((category) => category.homePosition > 3)
     .sort((a, b) => Number(a.homePosition) - Number(b.homePosition));
   return (
-    <OtrixContainer customStyles={{ backgroundColor: Colors.white }}>
+    <OtrixContainer
+      customStyles={{ backgroundColor: Colors.white }}
+      statusBarColor={Colors.white}
+    >
       {/* Header */}
       <View
         style={{

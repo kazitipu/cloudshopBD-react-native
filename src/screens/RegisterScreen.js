@@ -36,7 +36,6 @@ function RegisterScreen(props) {
       password,
       displayName: firstName + " " + lastName,
     });
-
     await auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
@@ -58,7 +57,7 @@ function RegisterScreen(props) {
       });
   };
   return (
-    <OtrixContainer>
+    <OtrixContainer statusBarColor={Colors.light_white}>
       {/* Header */}
       <OtrixHeader
         customStyles={{

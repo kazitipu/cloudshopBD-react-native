@@ -4,7 +4,7 @@ import { logfunction } from "../../helpers/FunctionHelper";
 const initialState = {
   authStatus: false,
   currentUser: null,
-  additionalData: null,
+  additionalData: {},
   spinner: false,
 };
 export default (state = initialState, action) => {

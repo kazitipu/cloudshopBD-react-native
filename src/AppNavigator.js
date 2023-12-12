@@ -176,9 +176,11 @@ function AppNavigator(props) {
 
   const [user, setUser] = useState();
   console.log(props.additionalData);
+
   // Handle user state changes
-  const additionalData = props.additionalData;
-  const onAuthStateChanged = async (user) => {
+
+  const onAuthStateChanged = async (user, additionalData) => {
+    console.log(props);
     console.log(additionalData);
     let data = await getFreeShipping();
     props.setFreeShippingRedux(data.value);
@@ -191,7 +193,7 @@ function AppNavigator(props) {
             id: snapShot.id,
             ...snapShot.data(),
           });
-          // props.setAdditionalDataRedux({});
+          props.setAdditionalDataRedux({});
           requestUserPermission({ id: snapShot.id, ...snapShot.data() });
         });
         const cartRef = firestore().doc(`carts/${user.uid}`);
@@ -262,8 +264,10 @@ function AppNavigator(props) {
   }
 
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-
+    console.log(props.additionalData);
+    const subscriber = auth().onAuthStateChanged((userAuth) =>
+      onAuthStateChanged(userAuth, props.additionalData)
+    );
     return subscriber; // unsubscribe on unmount
   }, []);
   const { spinner } = props;

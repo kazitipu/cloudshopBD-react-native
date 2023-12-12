@@ -8,6 +8,7 @@ import {
   Modal,
   Image,
   TextInput,
+  Platform,
 } from "react-native";
 import { connect } from "react-redux";
 import { Button } from "native-base";
@@ -94,12 +95,15 @@ function CheckoutScreen(props) {
     shippingAddress = currentUser.address.find((addr) => addr.defaultShipping);
   }
   return (
-    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+    <OtrixContainer
+      customStyles={{ backgroundColor: Colors.light_white }}
+      statusBarColor={Colors.light_white}
+    >
       {/* Header */}
       <OtrixHeader
         customStyles={{
           backgroundColor: Colors.light_white,
-          height: Platform.OS === "ios" ? wp("13%") : wp("10%"),
+          height: Platform.OS === "ios" ? wp("13%") : wp("13%"),
         }}
       >
         <TouchableOpacity
@@ -590,7 +594,7 @@ function CheckoutScreen(props) {
         <View
           style={{
             position: "absolute",
-            bottom: -20,
+            bottom: Platform.OS === "ios" ? -20 : 0,
             padding: 10,
             backgroundColor: Colors.light_white,
             display: "flex",

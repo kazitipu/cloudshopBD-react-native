@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Platform,
+} from "react-native";
 import { connect } from "react-redux";
 import { Input, Button } from "native-base";
 import {
@@ -131,12 +137,15 @@ function CartScreen(props) {
   const { cartProducts, sumAmount, couponCode, loading, isApplied, validCode } =
     state;
   return (
-    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+    <OtrixContainer
+      customStyles={{ backgroundColor: Colors.light_white }}
+      statusBarColor={Colors.light_white}
+    >
       {/* Header */}
       <OtrixHeader
         customStyles={{
           backgroundColor: Colors.light_white,
-          height: Platform.OS === "ios" ? wp("13%") : wp("10%"),
+          height: Platform.OS === "ios" ? wp("13%") : wp("13%"),
         }}
       >
         <TouchableOpacity
@@ -158,6 +167,7 @@ function CartScreen(props) {
         customStyles={{
           marginHorizontal: wp("2%"),
           marginBottom: hp("5%"),
+         
         }}
       >
         {/* Cart Component Start from here */}
@@ -206,7 +216,7 @@ function CartScreen(props) {
         <View
           style={{
             position: "absolute",
-            bottom: -20,
+            bottom: Platform.OS === "ios" ? -20 : 0,
             padding: 10,
             backgroundColor: Colors.light_white,
             display: "flex",

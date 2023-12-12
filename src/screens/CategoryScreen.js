@@ -19,7 +19,10 @@ import { _roundDimensions } from "@helpers/util";
 
 function CategoryScreen(props) {
   return (
-    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+    <OtrixContainer
+      customStyles={{ backgroundColor: Colors.light_white }}
+      statusBarColor={Colors.light_white}
+    >
       {/* Header */}
       <OtrixHeader customStyles={{ backgroundColor: Colors.light_white }}>
         {/* <TouchableOpacity style={GlobalStyles.headerLeft} onPress={() => props.navigation.goBack()}>

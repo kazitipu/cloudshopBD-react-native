@@ -10,7 +10,7 @@ export const singInWithFacebook = () => auth.signInWithPopup(facebookProvider);
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
   if (userAuth && userAuth.isAnonymous) return;
-
+  console.log(additionalData);
   const adminRef = firestore().doc(`admins/${userAuth.uid}`);
   const adminSnapShot = await adminRef.get();
   if (adminSnapShot.exists) return;
@@ -26,6 +26,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
       await userRef.set({
         userId: userCount < 10 ? `0${userCount}` : `${userCount}`,
         uid: userAuth.uid,
+        id: userAuth.uid,
         email,
         createdAt,
         ...additionalData,
@@ -1660,6 +1661,16 @@ export const deletep2p = async (p2pId) => {
   console.log(snapShot.data());
   try {
     await p2pRef.delete();
+  } catch (error) {
+    alert(error);
+  }
+};
+export const deleteUser = async (userId) => {
+  const userRef = firestore().doc(`users/${userId}`);
+  const snapShot = await userRef.get();
+  console.log(snapShot.data());
+  try {
+    await userRef.delete();
   } catch (error) {
     alert(error);
   }

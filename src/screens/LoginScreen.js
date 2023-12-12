@@ -50,7 +50,7 @@ function LoginScreen(props) {
     props.setSpinnerRedux(false);
   };
   return (
-    <OtrixContainer>
+    <OtrixContainer statusBarColor={Colors.light_white}>
       {/* Header */}
       <OtrixHeader
         customStyles={{

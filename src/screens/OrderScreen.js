@@ -91,7 +91,10 @@ function OrderScreen(props) {
 
   console.log(orders);
   return (
-    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+    <OtrixContainer
+      customStyles={{ backgroundColor: Colors.light_white }}
+      statusBarColor={Colors.light_white}
+    >
       {/* Header */}
 
       <OtrixHeader

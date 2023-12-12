@@ -62,7 +62,10 @@ function SearchScreen(props) {
 
   const { searchKeyword, showMost, showSuggestions } = state;
   return (
-    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+    <OtrixContainer
+      customStyles={{ backgroundColor: Colors.light_white }}
+      statusBarColor={Colors.light_white}
+    >
       <View style={[styles.headerView]}>
         <TouchableOpacity
           style={[

@@ -32,7 +32,7 @@ function ProfileScreen(props) {
   const focused = useIsFocused();
   useEffect(() => {
     if (props.currentUser && !props.currentUser.uid) {
-      Toast.show("Please login to account to access.");
+      Toast.show("Please login first to access your account.");
     }
   }, []);
 
@@ -49,7 +49,11 @@ function ProfileScreen(props) {
   return (
     <>
       {props.currentUser && props.currentUser.uid ? (
-        <OtrixContainer customStyles={{ backgroundColor: "#ec345b" }}>
+        <OtrixContainer
+          customStyles={{ backgroundColor: "#ec345b" }}
+          statusBarColor={"#ec345b"}
+          barStyle={"light-content"}
+        >
           <View style={styles.container}>
             <TouchableOpacity style={styles.imageView} onPress={() => {}}>
               {profileImage != "" ? (

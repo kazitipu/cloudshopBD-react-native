@@ -21,14 +21,23 @@ import {
 import { GlobalStyles, Colors } from "@helpers";
 import { _roundDimensions } from "@helpers/util";
 import { removeFromCart, decrementQuantity, incrementQuantity } from "@actions";
+import {
+  setCurrentUserRedux,
+  setReduxCart,
+  setReduxWishlist,
+  setSpinnerRedux,
+} from "../redux/Action";
 import Fonts from "@helpers/Fonts";
 import FIcon from "react-native-vector-icons/FontAwesome";
 import MatIcon from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { deleteUser } from "../firebase/firebase.utils";
 import { logo } from "@common";
 import InAppReview from "react-native-in-app-review";
 import Rate, { AndroidMarket } from "react-native-rate";
 import Share from "react-native-share";
+import Toast from "react-native-simple-toast";
+import auth from "@react-native-firebase/auth";
 const shareOptions = {
   title: "Otrixapp",
   url:
@@ -45,13 +54,14 @@ function SettingScreen(props) {
       .then((res) => {
         console.log(res);
       })
-      .catch((err) => {
-        err && console.log(err);
-      });
+      .catch((err) => {});
   };
 
   return (
-    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+    <OtrixContainer
+      customStyles={{ backgroundColor: Colors.light_white }}
+      statusBarColor={Colors.light_white}
+    >
       {/* Header */}
       <OtrixHeader customStyles={{ backgroundColor: Colors.light_white }}>
         {/* <TouchableOpacity style={GlobalStyles.headerLeft} onPress={() => props.navigation.goBack()}>
@@ -99,7 +109,7 @@ function SettingScreen(props) {
           onPress={() => {
             const options = {
               AppleAppID: "",
-              GooglePackageName: "com.otrixcommerce",
+              GooglePackageName: "com.cloudshopbd",
               AmazonPackageName: "",
               OtherAndroidURL: "",
               preferredAndroidMarket: AndroidMarket.Google,
@@ -107,7 +117,7 @@ function SettingScreen(props) {
               inAppDelay: 5.0,
               openAppStoreIfInAppFails: false,
               fallbackPlatformURL:
-                "ms-windows-store:review?PFN:com.otrixcommerce",
+                "ms-windows-store:review?PFN:com.cloudshopbd",
             };
             Rate.rate(options, (success, errorMessage) => {
               if (success) {
@@ -145,6 +155,51 @@ function SettingScreen(props) {
             <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
           </View>
         </TouchableOpacity>
+        {props.currentUser && props.currentUser.uid && (
+          <TouchableOpacity
+            style={styles.listView}
+            onPress={async () => {
+              props.setSpinnerRedux(true);
+              let user = auth().currentUser;
+              await user
+                .delete()
+                .then(async () => {
+                  await deleteUser(props.currentUser.uid);
+                  props.setCurrentUserRedux({ displayName: "", email: "" });
+                  props.setReduxCart([]);
+                  props.setReduxWishlist([]);
+                  props.setSpinnerRedux(false);
+
+                  return Toast.show("Successfully! Deleted your account.");
+                })
+                .catch((error) => {
+                  console.log(error);
+                  props.setSpinnerRedux(false);
+                  return Toast.show(
+                    "Sensitive Task! An error occurred.A recent login is required Please login again"
+                  );
+                });
+            }}
+          >
+            <View style={styles.leftSide}>
+              <Ionicons
+                name="trash-outline"
+                style={{ ...styles.icon, color: "red" }}
+              />
+            </View>
+            <View style={styles.center}>
+              <Text style={{ ...styles.listTitle, color: "red" }}>
+                Delete Account
+              </Text>
+            </View>
+            <View style={styles.rightSide}>
+              <MatIcon
+                name="arrow-forward-ios"
+                style={{ ...styles.rightIcon, color: "red" }}
+              />
+            </View>
+          </TouchableOpacity>
+        )}
       </OtrixContent>
 
       {/* <Text style={styles.bottomTxt}>Otrixapp</Text> */}
@@ -157,6 +212,7 @@ function SettingScreen(props) {
 function mapStateToProps(state) {
   return {
     cartData: state.cart.cartData,
+    currentUser: state.auth.currentUser,
   };
 }
 
@@ -164,6 +220,10 @@ export default connect(mapStateToProps, {
   removeFromCart,
   decrementQuantity,
   incrementQuantity,
+  setCurrentUserRedux,
+  setReduxCart,
+  setReduxWishlist,
+  setSpinnerRedux,
 })(SettingScreen);
 
 const styles = StyleSheet.create({

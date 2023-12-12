@@ -52,7 +52,7 @@ function ForgotPasswordScreen(props) {
   };
 
   return (
-    <OtrixContainer>
+    <OtrixContainer statusBarColor={Colors.light_white}>
       {/* Header */}
       <OtrixHeader
         customStyles={{

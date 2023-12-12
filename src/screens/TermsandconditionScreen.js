@@ -18,7 +18,10 @@ function PrivacyPolicyScreen(props) {
   useEffect(() => {}, []);
 
   return (
-    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+    <OtrixContainer
+      customStyles={{ backgroundColor: Colors.light_white }}
+      statusBarColor={Colors.light_white}
+    >
       {/* Header */}
       <OtrixHeader
         customStyles={{

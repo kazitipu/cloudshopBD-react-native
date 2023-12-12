@@ -41,7 +41,7 @@ function EditProfileScreen(props) {
 
   const { first_name, displayName, email, mobileNumber, submited } = state;
   return (
-    <OtrixContainer>
+    <OtrixContainer statusBarColor={Colors.light_white}>
       {/* Header */}
       <OtrixHeader
         customStyles={{

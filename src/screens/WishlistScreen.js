@@ -60,7 +60,10 @@ function WishlistScreen(props) {
   const { wishlistArr, loading, noRecord } = state;
   const { wishlist } = props;
   return (
-    <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>
+    <OtrixContainer
+      customStyles={{ backgroundColor: Colors.light_white }}
+      statusBarColor={Colors.light_white}
+    >
       {/* Header */}
 
       <OtrixHeader
