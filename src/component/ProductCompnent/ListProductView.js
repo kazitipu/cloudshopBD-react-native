@@ -16,7 +16,6 @@ import Toast from "react-native-simple-toast";
 import { connect } from "react-redux";
 function ListProductView(props) {
   const data = props.data;
-  const wishlistArr = props.wishlistArray ? props.wishlistArray : null;
 
   const getStar = (product) => {
     if (product.reviews && product.reviews.length > 0) {
@@ -260,6 +259,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "auto",
     paddingBottom: hp("1%"),
+
     width: wp("44%"),
     maxWidth: wp("44%"),
     marginHorizontal: wp("2%"),
@@ -268,10 +268,10 @@ const styles = StyleSheet.create({
     marginBottom: wp("3%"),
     borderRadius: wp("2%"),
     shadowColor: "grey",
-    shadowOffset: { width: 0, height: 0.4 },
+    shadowOffset: { width: 0.4, height: 0.4 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
-    elevation: 6,
+    elevation: 8,
     flexDirection: "column",
   },
   imageView: {

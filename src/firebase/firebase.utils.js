@@ -2,7 +2,7 @@
 import firestore from "@react-native-firebase/firestore";
 import firebase from "@react-native-firebase/app";
 import { order } from "styled-system";
-// import storage from "@react-native-firebase/storage";
+import storage from "@react-native-firebase/storage";
 
 export const signInWithGoogle = () => {};
 export const singInWithFacebook = () => auth.signInWithPopup(facebookProvider);
@@ -640,6 +640,23 @@ export const getSingleCategoryProducts = async (categories) => {
   const productsCollectionRef = firestore()
     .collection("products")
     .where("checkedValues", "array-contains-any", categories);
+
+  try {
+    const products = await productsCollectionRef.get();
+    const productsArray = [];
+    products.forEach((doc) => {
+      productsArray.push(doc.data());
+    });
+    return productsArray;
+  } catch (error) {
+    alert(error);
+    console.log(error);
+  }
+};
+export const getSingleBrandProducts = async (brand) => {
+  const productsCollectionRef = firestore()
+    .collection("products")
+    .where("checkedValues2", "array-contains", brand.id);
 
   try {
     const products = await productsCollectionRef.get();

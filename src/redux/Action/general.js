@@ -7,6 +7,7 @@ import {
   getAllHomeScreenProducts,
   getAllLatestProducts,
   getSingleCategoryProducts,
+  getSingleBrandProducts,
   getAllCategories,
   getSingleProduct,
   updateSingleProduct,
@@ -311,6 +312,13 @@ export const getSingleCategoryProductsRedux =
       payload: allProducts,
     });
   };
+export const getSingleBrandProductsRedux = (brand) => async (dispatch) => {
+  const allProducts = await getSingleBrandProducts(brand);
+  dispatch({
+    type: "GET_ALL_SINGLE_CATEGORY_PRODUCTS",
+    payload: allProducts,
+  });
+};
 export const getSimilarCategoryProductsRedux =
   (categories) => async (dispatch) => {
     const allProducts = await getSingleCategoryProducts(categories);

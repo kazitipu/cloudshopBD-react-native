@@ -27,6 +27,8 @@ import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
 import io.invertase.firebase.firestore.ReactNativeFirebaseFirestorePackage;
 // @react-native-firebase/messaging
 import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
+// @react-native-firebase/storage
+import io.invertase.firebase.storage.ReactNativeFirebaseStoragePackage;
 // @react-native-google-signin/google-signin
 import com.reactnativegooglesignin.RNGoogleSigninPackage;
 // @react-native-masked-view/masked-view
@@ -35,6 +37,8 @@ import org.reactnative.maskedview.RNCMaskedViewPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
+// react-native-image-picker
+import com.imagepicker.ImagePickerPackage;
 // react-native-in-app-review
 import com.ibits.react_native_in_app_review.AppReviewPackage;
 // react-native-linear-gradient
@@ -104,10 +108,12 @@ public class PackageList {
       new ReactNativeFirebaseAuthPackage(),
       new ReactNativeFirebaseFirestorePackage(),
       new ReactNativeFirebaseMessagingPackage(),
+      new ReactNativeFirebaseStoragePackage(),
       new RNGoogleSigninPackage(),
       new RNCMaskedViewPackage(),
       new FastImageViewPackage(),
       new RNGestureHandlerPackage(),
+      new ImagePickerPackage(),
       new AppReviewPackage(),
       new LinearGradientPackage(),
       new RNRatePackage(),

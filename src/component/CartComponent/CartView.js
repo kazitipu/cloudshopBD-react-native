@@ -146,10 +146,10 @@ function CartView(props) {
             }}
           >
             {sumAmount > freeShipping
-              ? "You will get free shipping."
+              ? "You will get free delivery."
               : `spend ৳ ${
                   parseInt(freeShipping) - parseInt(sumAmount)
-                } more to get Free Shipping.`}
+                } more to get Free Delivery.`}
           </Text>
         </View>
       </View>

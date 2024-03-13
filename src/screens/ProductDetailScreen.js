@@ -43,6 +43,7 @@ import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 import ImageViewer from "react-native-image-zoom-viewer";
 import Stars from "react-native-stars";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import {
   getSingleProductRedux,
   addToCartRedux,
@@ -54,10 +55,11 @@ import {
 import BottomSheet from "../component/CartComponent/BottomSheet";
 import GradientButton from "../component/CartComponent/Button";
 import cloudshopBD from "./cloudshopBd.png";
-
 import Pill from "./Pill";
 import { scale } from "react-native-size-matters";
 import Toast from "react-native-simple-toast";
+import ModalPoup from "./successModal";
+import { uploadImageD2dExpressProduct } from "../firebase/firebase.utils";
 const COLORS = ["#3ad35c", Colors.themeColor, "#efcd19", "#ff1e1a"];
 
 function ProductDetailScreen(props) {
@@ -74,9 +76,14 @@ function ProductDetailScreen(props) {
     zoomImages: [],
     msg: "",
     render: false,
+    getPicture: false,
     variation: null,
     quantity: 1,
     loader: true,
+    image: require("../assets/images/plus.jpeg"),
+    visible: false,
+    imageUrl: "",
+    imageLoading: false,
   });
   const sheetRef = useRef(null);
   const { loading, selectedColor, productCount, zoomImages, showZoom, msg } =
@@ -147,7 +154,7 @@ function ProductDetailScreen(props) {
         }
       }
       let variation = getVariation(obj);
-
+      console.log(variation);
       setState({
         ...state,
         ...obj,
@@ -291,6 +298,55 @@ function ProductDetailScreen(props) {
     }
   };
 
+  const imageGalleryLaunch = async () => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: "images",
+      },
+    };
+
+    launchImageLibrary(options, async (res) => {
+      console.log("Response = ", res);
+      if (res.didCancel) {
+        setState({ ...state, visible: false });
+        console.log("User cancelled image picker");
+      } else if (res.error) {
+        setState({ ...state, visible: false });
+        console.log("ImagePicker Error: ", res.error);
+      } else if (res.customButton) {
+        setState({ ...state, visible: false });
+        console.log("User tapped custom button: ", res.customButton);
+        alert(res.customButton);
+      } else {
+        const source = { uri: res.assets[0].uri };
+        setState({
+          ...state,
+          image: source,
+          fileName: res.assets[0].fileName,
+          visible: false,
+        });
+        console.log(source);
+        if (source.uri) {
+          setState({ ...state, imageLoading: true });
+
+          let response = await fetch(source.uri);
+          let blob = await response.blob();
+          let fileName2 = `${res.assets[0].fileName}${Date.now()}`;
+          let imgUrl = await uploadImageD2dExpressProduct(blob, fileName2);
+          console.log(imgUrl);
+          setState({
+            ...state,
+            imageUrl: imgUrl,
+            imageLoading: false,
+            image: source,
+            visible: false,
+          });
+        }
+      }
+    });
+  };
+
   const getTimeRemaining = () => {
     const date = new Date();
     const endtime = `${date.toLocaleString("default", {
@@ -320,7 +376,7 @@ function ProductDetailScreen(props) {
               fontSize: wp("3.2%"),
             }}
           >
-            {hours} hours {minutes} minutes
+            {hours ? hours : "6"} hours {minutes ? minutes : "00"} minutes
           </Text>{" "}
           to get it by{" "}
           <Text
@@ -388,6 +444,38 @@ function ProductDetailScreen(props) {
 
   return (
     <OtrixContainer customStyles={{ backgroundColor: "white" }}>
+      <ModalPoup visible={state.visible}>
+        <View style={{ alignItems: "flex-end" }}>
+          <View style={styles.modalHeader}>
+            <TouchableOpacity
+              onPress={() => setState({ ...state, visible: false })}
+            >
+              <Image
+                source={require("../assets/images/x.png")}
+                style={{ height: 20, width: 20 }}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <TouchableWithoutFeedback
+          onPress={() => {
+            imageGalleryLaunch();
+          }}
+        >
+          <View
+            style={{
+              paddingVertical: 10,
+
+              alignItems: "center",
+              borderColor: "gainsboro",
+              borderTopWidth: 1,
+            }}
+          >
+            <Text>Choose from Photos</Text>
+          </View>
+        </TouchableWithoutFeedback>
+      </ModalPoup>
       {loading ? (
         <OtrixLoader />
       ) : product && product.id ? (
@@ -533,9 +621,28 @@ function ProductDetailScreen(props) {
             {product.pictures.length > 0 && (
               <View style={{ paddingTop: 10, marginTop: 10 }}>
                 <SliderBox
-                  images={images}
+                  images={
+                    state.getPicture &&
+                    state.variation &&
+                    state.variation.id &&
+                    state.variation.pictures &&
+                    state.variation.pictures.length > 0
+                      ? state.variation.pictures
+                      : images
+                  }
                   onCurrentImagePressed={(index) =>
-                    setState({ ...state, showZoom: true })
+                    setState({
+                      ...state,
+                      showZoom: true,
+                      zoomImages:
+                        state.getPicture &&
+                        state.variation &&
+                        state.variation.id &&
+                        state.variation.pictures &&
+                        state.variation.pictures.length > 0
+                          ? state.variation.pictures
+                          : images,
+                    })
                   }
                   dotColor={Colors.themeColor}
                   inactiveDotColor="#90A4AE"
@@ -576,13 +683,7 @@ function ProductDetailScreen(props) {
                   {product.stockStatus}
                 </Text>
               </View>
-              <View style={{ marginTop: 2 }}>
-                {product.selectedCategories.map((cat) => (
-                  <Text style={{ color: "gray", fontSize: wp("3%") }}>
-                    {cat.name},
-                  </Text>
-                ))}
-              </View>
+
               <OtrixDivider size={"sm"} />
               {/* Price Container*/}
               <View style={styles.subContainer}>
@@ -622,38 +723,29 @@ function ProductDetailScreen(props) {
                 </View>
               </View>
               <OtrixDivider size={"sm"} />
-              <View>
-                <TouchableWithoutFeedback>
-                  {product.selectedBrands.length > 0 &&
-                  product.selectedBrands[0].logo &&
-                  product.selectedBrands[0].logo !=
-                    "/static/media/plus image.3dff302b.jpeg" ? (
-                    <Image
-                      source={{
-                        uri: product.selectedBrands[0].logo,
-                      }}
+
+              {product.selectedBrands && (
+                <TouchableWithoutFeedback
+                  onPress={() =>
+                    props.navigation.replace("ProductListScreenByBrands", {
+                      title: product.selectedBrands[0].name,
+                      item: product.selectedBrands[0],
+                    })
+                  }
+                >
+                  <View>
+                    <Text
                       style={{
-                        width: wp("18%"),
-                        height: wp("18%"),
-                        borderColor: "gainsboro",
-                        borderWidth: 2,
-                        borderRadius: 5,
+                        color: "#ff8084",
+                        textDecorationLine: "underline",
                       }}
-                    />
-                  ) : (
-                    <Image
-                      source={cloudshopBD}
-                      style={{
-                        width: wp("20%"),
-                        height: wp("18%"),
-                        borderColor: "gainsboro",
-                        borderWidth: 2,
-                        borderRadius: 5,
-                      }}
-                    />
-                  )}
+                    >
+                      {product.selectedBrands && product.selectedBrands[0].name}
+                    </Text>
+                  </View>
                 </TouchableWithoutFeedback>
-              </View>
+              )}
+
               <OtrixDivider size={"md"} />
               <View
                 style={{
@@ -764,6 +856,42 @@ function ProductDetailScreen(props) {
                 >
                   Total: ৳ {parseFloat(getPrice2(product)) * state.quantity}
                 </Text>
+                <TouchableOpacity
+                  onPress={async () => {
+                    let cartObj = {
+                      quantity: state.quantity,
+                      productId: props.product.id,
+                      product: props.product,
+                      selectedVariation: state.variation
+                        ? state.variation
+                        : null,
+                    };
+
+                    props.setSpinnerRedux(true);
+                    await props.addToCartRedux(cartObj, props.currentUser);
+                    props.setSpinnerRedux(false);
+                    props.navigation.navigate("HomeCartScreen");
+                  }}
+                >
+                  <View
+                    style={{
+                      padding: 8,
+                      paddingLeft: 22,
+                      paddingRight: 22,
+                      backgroundColor: "orange",
+                      alignSelf: "flex-end",
+                      borderRadius: 8,
+                    }}
+                  >
+                    <Text style={{ color: "white", fontWeight: "bold" }}>
+                      <FontAwesomeIcon
+                        name={"shopping-bag"}
+                        style={{ color: "white" }}
+                      />
+                      {"  "}Buy Now
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               </View>
               {/* Color */}
               <OtrixDivider size={"md"} />
@@ -796,6 +924,7 @@ function ProductDetailScreen(props) {
                                   ...state,
                                   ["selectedTerm" + index]: term,
                                   render: true,
+                                  getPicture: true,
                                 });
                               }}
                             >
@@ -805,7 +934,7 @@ function ProductDetailScreen(props) {
                                   borderColor:
                                     state["selectedTerm" + index] &&
                                     state["selectedTerm" + index].id == term.id
-                                      ? "#EC345B"
+                                      ? "#ec345b"
                                       : "gray",
                                   borderWidth: 1,
                                   borderRadius: 5,
@@ -844,10 +973,6 @@ function ProductDetailScreen(props) {
               <View style={GlobalStyles.horizontalLine}></View>
               <OtrixDivider size={"md"} />
 
-              {/* Sizes Container*/}
-              {/* <SizeContainerComponent productData={productDetail} /> */}
-
-              {/* Description Container*/}
               <View
                 style={{
                   display: "flex",
@@ -1013,10 +1138,9 @@ function ProductDetailScreen(props) {
                           </Text>
                           <TextInput
                             value={review}
-                            placeholder="Your review"
+                            placeholder="Write your review here"
                             style={{
                               ...GlobalStyles.textInputStyle,
-                              padding: 14,
                               borderWidth: 1,
                               borderColor: "gainsboro",
                               borderRadius: 5,
@@ -1025,15 +1149,72 @@ function ProductDetailScreen(props) {
                               backgroundColor: "white",
                               height: hp("20%"),
                               marginBottom: 10,
+                              textAlignVertical: "top",
                             }}
                             onChangeText={(value) => setReview(value)}
                             multiline={true}
                           />
+                          <View
+                            style={{
+                              marginTop: 5,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: "#555",
+                                fontSize: 13,
+                                marginBottom: 5,
+                              }}
+                            >
+                              Product Image (optional)
+                            </Text>
+                            <TouchableWithoutFeedback
+                              onPress={() => {
+                                if (state.imageLoading) {
+                                  return;
+                                }
+                                setState({ ...state, visible: true });
+                              }}
+                            >
+                              <View
+                                style={{
+                                  borderColor: "gainsboro",
+                                  borderWidth: 1,
+                                  height: 155,
+                                  width: 155,
+                                  borderRadius: 10,
+                                  marginBottom: 20,
+                                  justifyContent: "center",
+                                }}
+                              >
+                                {state.imageLoading ? (
+                                  <ActivityIndicator
+                                    size="small"
+                                    color="#ec345b"
+                                  />
+                                ) : (
+                                  <Image
+                                    source={state.image}
+                                    style={{
+                                      height: "100%",
+                                      width: "100%",
+                                      borderRadius: 10,
+                                    }}
+                                  />
+                                )}
+                              </View>
+                            </TouchableWithoutFeedback>
+                          </View>
                           <GradientButton
                             // label={"ADD TO CART ->"}
                             onPress={async () => {
+                              if (state.imageLoading) {
+                                Toast.show(
+                                  "Image still uploading. Please wait"
+                                );
+                                return;
+                              }
                               props.setSpinnerRedux(true);
-                              console.log(product);
                               await props.updateSingleProductRedux({
                                 ...product,
                                 reviews:
@@ -1047,8 +1228,8 @@ function ProductDetailScreen(props) {
                                           date: new Date().toLocaleDateString(
                                             "en-GB"
                                           ),
+                                          imageUrl: state.imageUrl,
                                         },
-                                        ,
                                         ...product.reviews,
                                       ]
                                     : [
@@ -1060,6 +1241,7 @@ function ProductDetailScreen(props) {
                                           date: new Date().toLocaleDateString(
                                             "en-GB"
                                           ),
+                                          imageUrl: state.imageUrl,
                                         },
                                       ],
                               });
@@ -1068,6 +1250,10 @@ function ProductDetailScreen(props) {
                               setOption("Reviews");
                               props.setSpinnerRedux(false);
                               Toast.show("Review added.");
+                              setState({
+                                ...state,
+                                imageLoading: false,
+                              });
                             }}
                             children={
                               <View
@@ -1196,6 +1382,37 @@ function ProductDetailScreen(props) {
                           >
                             {review.reviewText}
                           </Text>
+                          {review.imageUrl && review.imageUrl !== "" ? (
+                            <TouchableWithoutFeedback
+                              onPress={() =>
+                                setState({
+                                  ...state,
+                                  showZoom: true,
+                                  zoomImages: [review.imageUrl],
+                                })
+                              }
+                            >
+                              <View
+                                style={{
+                                  borderColor: "gainsboro",
+                                  borderWidth: 1,
+                                  height: 100,
+                                  width: 100,
+                                  borderRadius: 10,
+                                  marginTop: 7,
+                                }}
+                              >
+                                <Image
+                                  source={{ uri: review.imageUrl }}
+                                  style={{
+                                    height: "100%",
+                                    width: "100%",
+                                    borderRadius: 10,
+                                  }}
+                                />
+                              </View>
+                            </TouchableWithoutFeedback>
+                          ) : null}
                         </View>
                       </View>
                     ))
@@ -1233,7 +1450,9 @@ function ProductDetailScreen(props) {
           {/* Zoom image */}
           <Modal visible={showZoom} transparent={true}>
             <ImageViewer
-              imageUrls={zoomImages}
+              imageUrls={zoomImages.map((image) => {
+                return { url: image };
+              })}
               saveToLocalByLongPress={false}
               backgroundColor={Colors.light_white}
               renderIndicator={(currentIndex, allSize) => {
@@ -1241,7 +1460,10 @@ function ProductDetailScreen(props) {
                   <View style={styles.pageindexview}>
                     <TouchableOpacity
                       onPress={() => setState({ ...state, showZoom: false })}
-                      style={{ padding: 8 }}
+                      style={{
+                        padding: 8,
+                        marginTop: Platform.OS == "ios" ? 10 : 0,
+                      }}
                     >
                       <Image square source={close} style={styles.cancleIcon} />
                     </TouchableOpacity>
@@ -1522,8 +1744,6 @@ const styles = StyleSheet.create({
     height: wp("4.5%"),
     width: wp("4.5%"),
     resizeMode: "contain",
-    borderColor: "red",
-    borderWidth: 1,
   },
   sheet: {
     padding: 10,

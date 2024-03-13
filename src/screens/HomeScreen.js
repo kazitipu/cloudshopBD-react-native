@@ -97,12 +97,39 @@ function HomeScreen(props) {
           }}
         >
           {props.currentUser && props.currentUser.uid ? (
-            <Avatar
-              ml="1"
-              size="sm"
-              style={styles.avatarImg}
-              source={avatarImg2}
-            ></Avatar>
+            <>
+              {props.currentUser.imageUrl ? (
+                <View
+                  style={{
+                    borderRadius: 20,
+                  }}
+                >
+                  <Image
+                    source={{ uri: props.currentUser.imageUrl }}
+                    style={{
+                      height: wp("9.5%"),
+                      width: wp("9.5%"),
+                      borderRadius: 20,
+                    }}
+                  ></Image>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    borderColor: "red",
+                    borderWidth: 1,
+                    borderRadius: 20,
+                    marginLeft: 5,
+                  }}
+                >
+                  <Avatar
+                    size="sm"
+                    style={styles.avatarImg}
+                    source={avatarImg2}
+                  ></Avatar>
+                </View>
+              )}
+            </>
           ) : (
             <View
               style={{
@@ -298,7 +325,5 @@ const styles = StyleSheet.create({
     height: wp("4.5%"),
     width: wp("4.5%"),
     resizeMode: "contain",
-    borderColor: "red",
-    borderWidth: 1,
   },
 });

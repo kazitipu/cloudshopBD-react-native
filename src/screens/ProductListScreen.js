@@ -8,6 +8,7 @@ import {
   FlatList,
   Modal,
   Image,
+  Platform,
 } from "react-native";
 import { connect } from "react-redux";
 import {
@@ -170,7 +171,10 @@ function ProductListScreen(props) {
     >
       {/* Header */}
       <OtrixHeader
-        customStyles={{ backgroundColor: Colors.light_white, marginTop: -15 }}
+        customStyles={{
+          backgroundColor: Colors.light_white,
+          marginTop: Platform.OS == "ios" ? -15 : 0,
+        }}
       >
         <TouchableOpacity
           style={GlobalStyles.headerLeft}

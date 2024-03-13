@@ -166,7 +166,7 @@ function CartScreen(props) {
       <OtrixContent
         customStyles={{
           marginHorizontal: wp("2%"),
-          marginBottom: hp("5%"),
+          marginBottom: Platform.OS == "ios" ? hp("5%") : hp("10%"),
         }}
       >
         {/* Cart Component Start from here */}

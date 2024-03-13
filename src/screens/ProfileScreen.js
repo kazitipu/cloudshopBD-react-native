@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { View, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { connect } from "react-redux";
 import { OtrixContainer, OtrixContent, OtrixDivider } from "@component";
 import {
@@ -14,6 +21,7 @@ import {
   incrementQuantity,
   doLogout,
   setSpinnerRedux,
+  updateUserRedux,
 } from "@actions";
 import { avatarImg } from "@common";
 import Fonts from "@helpers/Fonts";
@@ -26,9 +34,16 @@ import auth from "@react-native-firebase/auth";
 import { avatarImg2 } from "../common/config";
 import LoginScreen from "./LoginScreen";
 import { useIsFocused } from "@react-navigation/native";
-
+import ModalPoup from "./successModal";
+import { uploadImageD2dExpressProduct } from "../firebase/firebase.utils";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 function ProfileScreen(props) {
-  const [state, setState] = React.useState({ profileImage: "" });
+  const [state, setState] = React.useState({
+    image: require("../assets/images/plus.jpeg"),
+    visible: false,
+    imageUrl: "",
+    imageLoading: false,
+  });
   const focused = useIsFocused();
   useEffect(() => {
     if (props.currentUser && !props.currentUser.uid) {
@@ -36,15 +51,55 @@ function ProfileScreen(props) {
     }
   }, []);
 
-  const openImagePicker = async (res) => {
-    setState({
-      ...state,
-      profileImage: res.assets[0]["uri"],
+  const imageGalleryLaunch = async () => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: "images",
+      },
+    };
+
+    launchImageLibrary(options, async (res) => {
+      console.log("Response = ", res);
+      if (res.didCancel) {
+        setState({ ...state, visible: false });
+        console.log("User cancelled image picker");
+      } else if (res.error) {
+        setState({ ...state, visible: false });
+        console.log("ImagePicker Error: ", res.error);
+      } else if (res.customButton) {
+        setState({ ...state, visible: false });
+        console.log("User tapped custom button: ", res.customButton);
+        alert(res.customButton);
+      } else {
+        const source = { uri: res.assets[0].uri };
+        setState({
+          ...state,
+          image: source,
+          fileName: res.assets[0].fileName,
+          visible: false,
+        });
+        console.log(source);
+        if (source.uri) {
+          setState({ ...state, imageLoading: true });
+
+          let response = await fetch(source.uri);
+          let blob = await response.blob();
+          let fileName2 = `${res.assets[0].fileName}${Date.now()}`;
+          let imgUrl = await uploadImageD2dExpressProduct(blob, fileName2);
+          console.log(imgUrl);
+          setState({
+            ...state,
+            imageUrl: imgUrl,
+            imageLoading: false,
+            image: source,
+            visible: false,
+          });
+          props.updateUserRedux({ ...props.currentUser, imageUrl: imgUrl });
+        }
+      }
     });
   };
-
-  const { profileImage } = state;
-  console.log("RES ", profileImage);
 
   return (
     <>
@@ -54,13 +109,64 @@ function ProfileScreen(props) {
           statusBarColor={"#ec345b"}
           barStyle={"light-content"}
         >
+          <ModalPoup visible={state.visible}>
+            <View style={{ alignItems: "flex-end" }}>
+              <View style={styles.modalHeader}>
+                <TouchableOpacity
+                  onPress={() => setState({ ...state, visible: false })}
+                >
+                  <Image
+                    source={require("../assets/images/x.png")}
+                    style={{ height: 20, width: 20 }}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <TouchableWithoutFeedback
+              onPress={() => {
+                imageGalleryLaunch();
+              }}
+            >
+              <View
+                style={{
+                  paddingVertical: 10,
+
+                  alignItems: "center",
+                  borderColor: "gainsboro",
+                  borderTopWidth: 1,
+                }}
+              >
+                <Text>Choose from Photos</Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </ModalPoup>
           <View style={styles.container}>
-            <TouchableOpacity style={styles.imageView} onPress={() => {}}>
-              {profileImage != "" ? (
-                <Image
-                  source={{ uri: profileImage }}
-                  style={styles.image}
-                ></Image>
+            <TouchableOpacity
+              onPress={() => {
+                if (state.imageLoading) {
+                  return;
+                }
+                setState({ ...state, visible: true });
+              }}
+            >
+              {props.currentUser.imageUrl ? (
+                <View
+                  style={{
+                    height: 80,
+                    width: 80,
+                    borderRadius: 40,
+                  }}
+                >
+                  <Image
+                    source={{ uri: props.currentUser.imageUrl }}
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      borderRadius: 40,
+                    }}
+                  ></Image>
+                </View>
               ) : (
                 <Image source={avatarImg2} style={styles.image}></Image>
               )}
@@ -221,6 +327,7 @@ export default connect(mapStateToProps, {
   incrementQuantity,
   doLogout,
   setSpinnerRedux,
+  updateUserRedux,
 })(ProfileScreen);
 
 const styles = StyleSheet.create({

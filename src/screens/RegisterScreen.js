@@ -26,15 +26,13 @@ function RegisterScreen(props) {
   const [formData, setData] = React.useState({});
   const [state, setDatapassword] = React.useState({ secureEntry: true });
   useEffect(() => {}, []);
-  const { firstName, lastName, email, mobileNumber, password, cpassword } =
-    formData;
+  const { firstName, email, mobileNumber, password, cpassword } = formData;
   const createAccountWithEmailAndPassword = async () => {
     props.setAdditionalDataRedux({
       firstName,
-      lastName,
       mobileNumber,
       password,
-      displayName: firstName + " " + lastName,
+      displayName: firstName,
     });
     await auth()
       .createUserWithEmailAndPassword(email, password)
@@ -105,7 +103,7 @@ function RegisterScreen(props) {
         >
           <Input
             variant="unstyled"
-            placeholder="First Name"
+            placeholder="Display Name"
             style={GlobalStyles.textInputStyle}
             onChangeText={(value) => setData({ ...formData, firstName: value })}
           />
@@ -114,27 +112,7 @@ function RegisterScreen(props) {
           </FormControl.ErrorMessage>
         </FormControl>
         <OtrixDivider size={"sm"} />
-        <FormControl
-          isRequired
-          style={{
-            backgroundColor: Colors.white,
-            padding: 10,
-            borderWidth: 1,
-            borderColor: "gainsboro",
-            borderRadius: 10,
-          }}
-        >
-          <Input
-            variant="unstyled"
-            placeholder="Last Name"
-            style={GlobalStyles.textInputStyle}
-            onChangeText={(value) => setData({ ...formData, lastName: value })}
-          />
-          <FormControl.ErrorMessage _text={{ fontSize: "xs" }}>
-            Error Name
-          </FormControl.ErrorMessage>
-        </FormControl>
-        <OtrixDivider size={"sm"} />
+
         <FormControl
           isRequired
           style={{

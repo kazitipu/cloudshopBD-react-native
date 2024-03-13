@@ -48,8 +48,15 @@
 			</dict>
 		</dict>
 	</dict>
+	
+	<key>NSCameraUsageDescription</key>
+	<string>CloudshopBD needs camera access</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>1</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>CloudshopBD needs photo library access</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Black.ttf</string>

@@ -32,6 +32,7 @@ import {
   PrivacyPolicyScreen,
   NotificationScreen,
   SearchScreen,
+  ProductListScreenByBrands,
 } from "./screens/index";
 import {
   bottomHome,
@@ -331,6 +332,14 @@ function AppNavigator(props) {
           <Stack.Screen
             name="ProductListScreen"
             component={ProductListScreen}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
+          <Stack.Screen
+            name="ProductListScreenByBrands"
+            component={ProductListScreenByBrands}
             options={{
               headerShown: false,
               cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

@@ -9,6 +9,7 @@ export { default as CategoryScreen } from "./CategoryScreen.js";
 export { default as HomeCartScreen } from "./HomeCartScreen.js";
 export { default as ProfileScreen } from "./ProfileScreen.js";
 export { default as ProductListScreen } from "./ProductListScreen.js";
+export { default as ProductListScreenByBrands } from "./ProductListScreenByBrands.js";
 export { default as ProductDetailScreen } from "./ProductDetailScreen.js";
 export { default as CheckoutScreen } from "./CheckoutScreen.js";
 export { default as EditProfileScreen } from "./EditProfileScreen.js";

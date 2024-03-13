@@ -224,8 +224,8 @@ function CheckoutScreen(props) {
                       <Text
                         style={{
                           color: "#ff8084",
-
-                          fontSize: wp("3%"),
+                          fontSize: wp("2.7%"),
+                          textAlign: "center",
                         }}
                       >
                         Change
