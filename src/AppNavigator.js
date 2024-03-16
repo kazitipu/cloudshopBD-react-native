@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Platform, StyleSheet, Image, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -172,21 +172,37 @@ function MyTabs(props) {
 
 const Stack = createStackNavigator();
 function AppNavigator(props) {
+  const additionalData = useRef(props.additionalData);
   const { cartCount, authStatus, currentUser } = props;
   const [initializing, setInitializing] = useState(true);
 
-  const [user, setUser] = useState();
-  console.log(props.additionalData);
+  console.log(additionalData.current);
 
   // Handle user state changes
+  // etar rog hoilo eta first mount er shomoy props.additionalData jeta pay oitai use kortese. update r hoitese na
 
-  const onAuthStateChanged = async (user, additionalData) => {
-    console.log(props);
-    console.log(additionalData);
+  useEffect(() => {
+    if (props.additionalData.displayName) {
+      additionalData.current = props.additionalData;
+    }
+  }, [props.additionalData]);
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged((userAuth) => {
+      onAuthStateChanged(userAuth);
+    });
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  const onAuthStateChanged = async (user) => {
+    console.log(additionalData.current);
     let data = await getFreeShipping();
     props.setFreeShippingRedux(data.value);
     if (user) {
-      const userRef = await createUserProfileDocument(user, additionalData);
+      console.log("funciton getting called from index");
+      const userRef = await createUserProfileDocument(
+        user,
+        additionalData.current
+      );
 
       if (userRef) {
         userRef.onSnapshot(async (snapShot) => {
@@ -264,13 +280,6 @@ function AppNavigator(props) {
     isLoggedIn = currentUser.id ? true : false;
   }
 
-  useEffect(() => {
-    console.log(props.additionalData);
-    const subscriber = auth().onAuthStateChanged((userAuth) =>
-      onAuthStateChanged(userAuth, props.additionalData)
-    );
-    return subscriber; // unsubscribe on unmount
-  }, []);
   const { spinner } = props;
 
   return (

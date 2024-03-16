@@ -44,9 +44,9 @@ function CategoryView(props) {
             <View
               style={{
                 width: "94%",
-                height: 2,
-                backgroundColor: "black",
-                padding: wp("0.3%"),
+                height: 1,
+                backgroundColor: "gray",
+                padding: wp("0.2%"),
                 marginLeft: 10,
                 marginTop: 3,
                 marginBottom: 3,
@@ -153,10 +153,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: wp("2.4%"),
     fontFamily: Fonts.Font_Bold,
+    color: "#777",
   },
   categoryName2: {
     textAlign: "left",
     fontSize: wp("3.2%"),
     fontFamily: Fonts.Font_Bold,
+    color: "black",
   },
 });

@@ -54,7 +54,11 @@ const Pill = ({ sku, decrementQuantity, incrementQuantity, quantity }) => {
       </TouchableOpacity>
       <View style={styles.value}>
         <Text
-          style={{ fontSize: widthPercentageToDP("2.8%"), textAlign: "center" }}
+          style={{
+            fontSize: widthPercentageToDP("2.8%"),
+            textAlign: "center",
+            color: "black",
+          }}
         >
           {quantity}
         </Text>

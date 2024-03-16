@@ -7,6 +7,7 @@ import {
   ScrollView,
   Modal,
   Image,
+  Platform,
 } from "react-native";
 import { connect } from "react-redux";
 import {
@@ -184,6 +185,7 @@ function ManageAddressScreen(props) {
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "center",
+                  marginTop: Platform.OS == "android" ? 10 : 0,
                 }}
               >
                 <MatIcon name="plus" color={"#ec345b"} size={wp("5.5%")} />
@@ -232,184 +234,108 @@ function ManageAddressScreen(props) {
           >
             Choose Shipping Address
           </Text>
-          {currentUser &&
-            currentUser.address &&
-            currentUser.address.length > 0 &&
-            currentUser.address.map((shippingAddress) => (
-              <TouchableOpacity
-                key={shippingAddress.id}
-                onPress={async () => {
-                  if (!shippingAddress.defaultShipping) {
-                    props.setSpinnerRedux(true);
-                    props.updateShippingAddressRedux(currentUser, {
-                      ...shippingAddress,
-                      defaultShipping: true,
-                    });
-                    props.setSpinnerRedux(false);
-                    Toast.show("shipping address updated");
-                  }
-                  props.navigation.goBack();
-                }}
-              >
-                <View
-                  style={{
-                    ...styles.box,
-                    backgroundColor: shippingAddress.defaultShipping
-                      ? "#fffafb"
-                      : "white",
-                    borderWidth: 1,
-                    borderColor: shippingAddress.defaultShipping
-                      ? "#ff99af"
-                      : "white",
+          {currentUser && currentUser.address && currentUser.address.length > 0
+            ? currentUser.address.map((shippingAddress) => (
+                <TouchableOpacity
+                  key={shippingAddress.id}
+                  onPress={async () => {
+                    if (!shippingAddress.defaultShipping) {
+                      props.setSpinnerRedux(true);
+                      props.updateShippingAddressRedux(currentUser, {
+                        ...shippingAddress,
+                        defaultShipping: true,
+                      });
+                      props.setSpinnerRedux(false);
+                      Toast.show("shipping address updated");
+                    }
+                    props.navigation.goBack();
                   }}
                 >
                   <View
                     style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      flex: 1,
-                      marginTop: 15,
-                      paddingBottom: 20,
+                      ...styles.box,
+                      backgroundColor: shippingAddress.defaultShipping
+                        ? "#fffafb"
+                        : "white",
+                      borderWidth: 1,
+                      borderColor: shippingAddress.defaultShipping
+                        ? "#ff99af"
+                        : "white",
                     }}
                   >
                     <View
                       style={{
-                        flex: 0.2,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Entypo
-                        name={"location"}
-                        color={"#ec345b"}
-                        style={{ fontSize: wp("6.5%") }}
-                      />
-                      <View
-                        style={{
-                          backgroundColor:
-                            shippingAddress.addressType == "Home"
-                              ? "green"
-                              : shippingAddress.addressType == "Office"
-                              ? "blue"
-                              : "darkorange",
-                          padding: 5,
-                          paddingTop: 2,
-                          paddingBottom: 2,
-                          alignSelf: "center",
-                          marginTop: 7,
-                          fontSize: wp("3%"),
-                          borderRadius: 3,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: wp("2.8%"),
-                            color: "white",
-                          }}
-                        >
-                          {shippingAddress.addressType}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={{ flex: 0.5 }}>
-                      <Text style={styles.text}>
-                        {shippingAddress.fullName}
-                      </Text>
-                      <Text style={styles.text}>
-                        {shippingAddress.mobileNo}
-                      </Text>
-                      <Text style={styles.text}>{shippingAddress.address}</Text>
-                      <Text style={styles.text}>
-                        {shippingAddress.district},{shippingAddress.division}
-                      </Text>
-                    </View>
-
-                    <View
-                      style={{
-                        flex: 0.3,
                         display: "flex",
                         flexDirection: "row",
-                        justifyContent: "flex-end",
-                        marginRight: 6,
+                        flex: 1,
+                        marginTop: 15,
+                        paddingBottom: 20,
                       }}
                     >
-                      {!shippingAddress.defaultShipping && (
-                        <TouchableOpacity
-                          onPress={() => {
-                            props.navigation.navigate("AddAddressScreen", {
-                              selectedAddress: shippingAddress,
-                            });
-                          }}
-                          style={{
-                            marginRight: 8,
-                          }}
-                        >
-                          <View
-                            style={{
-                              padding: 5,
-                              paddingLeft: 15,
-                              paddingRight: 15,
-                              backgroundColor: "#fff0f4",
-                              borderRadius: 7,
-                            }}
-                          >
-                            <Text
-                              style={{
-                                color: "#ff8084",
-
-                                fontSize: wp("3%"),
-                              }}
-                            >
-                              Edit
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                      )}
-                      {!shippingAddress.defaultShipping && (
-                        <TouchableOpacity
-                          onPress={async () => {
-                            props.setSpinnerRedux(true);
-                            props.deleteAddressRedux(
-                              currentUser,
-                              shippingAddress
-                            );
-                            props.setSpinnerRedux(false);
-                            Toast.show("Address deleted!");
-                          }}
-                        >
-                          <Ionicon
-                            name={"trash"}
-                            color={"#ec345b"}
-                            style={{ fontSize: wp("5.2%") }}
-                          />
-                        </TouchableOpacity>
-                      )}
-                      {shippingAddress.defaultShipping && (
+                      <View
+                        style={{
+                          flex: 0.2,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Entypo
+                          name={"location"}
+                          color={"#ec345b"}
+                          style={{ fontSize: wp("6.5%") }}
+                        />
                         <View
-                          style={{ display: "flex", flexDirection: "column" }}
+                          style={{
+                            backgroundColor:
+                              shippingAddress.addressType == "Home"
+                                ? "green"
+                                : shippingAddress.addressType == "Office"
+                                ? "blue"
+                                : "darkorange",
+                            padding: 5,
+                            paddingTop: 2,
+                            paddingBottom: 2,
+                            alignSelf: "center",
+                            marginTop: 7,
+                            fontSize: wp("3%"),
+                            borderRadius: 3,
+                          }}
                         >
-                          <View
+                          <Text
                             style={{
-                              marginTop: 7,
-                              backgroundColor: "#0092ac",
-                              alignSelf: "flex-start",
-                              padding: 5,
-                              paddingTop: 3,
-                              paddingBottom: 3,
-                              borderRadius: 4,
+                              fontSize: wp("2.8%"),
+                              color: "white",
                             }}
                           >
-                            <Text
-                              style={{
-                                fontSize: wp("2.3%"),
-                                fontWeight: "bold",
-                                color: "white",
-                              }}
-                            >
-                              Shipping Address
-                            </Text>
-                          </View>
+                            {shippingAddress.addressType}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={{ flex: 0.5 }}>
+                        <Text style={styles.text}>
+                          {shippingAddress.fullName}
+                        </Text>
+                        <Text style={styles.text}>
+                          {shippingAddress.mobileNo}
+                        </Text>
+                        <Text style={styles.text}>
+                          {shippingAddress.address}
+                        </Text>
+                        <Text style={styles.text}>
+                          {shippingAddress.district},{shippingAddress.division}
+                        </Text>
+                      </View>
 
+                      <View
+                        style={{
+                          flex: 0.3,
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "flex-end",
+                          marginRight: 6,
+                        }}
+                      >
+                        {!shippingAddress.defaultShipping ? (
                           <TouchableOpacity
                             onPress={() => {
                               props.navigation.navigate("AddAddressScreen", {
@@ -418,8 +344,6 @@ function ManageAddressScreen(props) {
                             }}
                             style={{
                               marginRight: 8,
-                              alignSelf: "flex-start",
-                              marginTop: 10,
                             }}
                           >
                             <View
@@ -442,13 +366,92 @@ function ManageAddressScreen(props) {
                               </Text>
                             </View>
                           </TouchableOpacity>
-                        </View>
-                      )}
+                        ) : null}
+                        {!shippingAddress.defaultShipping ? (
+                          <TouchableOpacity
+                            onPress={async () => {
+                              props.setSpinnerRedux(true);
+                              props.deleteAddressRedux(
+                                currentUser,
+                                shippingAddress
+                              );
+                              props.setSpinnerRedux(false);
+                              Toast.show("Address deleted!");
+                            }}
+                          >
+                            <Ionicon
+                              name={"trash"}
+                              color={"#ec345b"}
+                              style={{ fontSize: wp("5.2%") }}
+                            />
+                          </TouchableOpacity>
+                        ) : null}
+                        {shippingAddress.defaultShipping ? (
+                          <View
+                            style={{ display: "flex", flexDirection: "column" }}
+                          >
+                            <View
+                              style={{
+                                marginTop: 7,
+                                backgroundColor: "#0092ac",
+                                alignSelf: "flex-start",
+                                padding: 5,
+                                paddingTop: 3,
+                                paddingBottom: 3,
+                                borderRadius: 4,
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  fontSize: wp("2.3%"),
+                                  fontWeight: "bold",
+                                  color: "white",
+                                }}
+                              >
+                                Shipping Address
+                              </Text>
+                            </View>
+
+                            <TouchableOpacity
+                              onPress={() => {
+                                props.navigation.navigate("AddAddressScreen", {
+                                  selectedAddress: shippingAddress,
+                                });
+                              }}
+                              style={{
+                                marginRight: 8,
+                                alignSelf: "flex-start",
+                                marginTop: 10,
+                              }}
+                            >
+                              <View
+                                style={{
+                                  padding: 5,
+                                  paddingLeft: 15,
+                                  paddingRight: 15,
+                                  backgroundColor: "#fff0f4",
+                                  borderRadius: 7,
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    color: "#ff8084",
+
+                                    fontSize: wp("3%"),
+                                  }}
+                                >
+                                  Edit
+                                </Text>
+                              </View>
+                            </TouchableOpacity>
+                          </View>
+                        ) : null}
+                      </View>
                     </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            ))}
+                </TouchableOpacity>
+              ))
+            : null}
         </ScrollView>
       </View>
 

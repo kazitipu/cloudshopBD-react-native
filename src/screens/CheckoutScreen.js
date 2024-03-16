@@ -319,8 +319,8 @@ function CheckoutScreen(props) {
             maxLength={40}
             onChangeText={(text) => onChangeText(text)}
             // value={}
-            placeholder="Write here any additional instruction here"
-            placeholderTextColor={"#555"}
+            placeholder="Write any additional instructions here"
+            placeholderTextColor={"#666"}
             style={{
               padding: 10,
               borderWidth: 1,
@@ -329,7 +329,8 @@ function CheckoutScreen(props) {
               width: "100%",
               backgroundColor: "white",
               height: hp("9%"),
-              fontSize: wp("3.8%"),
+              fontSize: wp("3.5%"),
+              textAlignVertical: "top",
             }}
           />
         </View>

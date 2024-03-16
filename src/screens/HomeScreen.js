@@ -141,6 +141,7 @@ function HomeScreen(props) {
                 paddingTop: 4,
                 paddingBottom: 4,
                 borderColor: "red",
+                marginLeft: 5,
               }}
             >
               <Text style={{ fontSize: wp("2.8%"), color: "red" }}>Login</Text>

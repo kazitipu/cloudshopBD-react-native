@@ -92,14 +92,22 @@ function CartView(props) {
               key={item.id}
             >
               <View style={styles.cartBox}>
-                <View style={styles.imageView}>
-                  <Image
-                    source={{
-                      uri: item.pictures[0],
-                    }}
-                    style={styles.image}
-                  ></Image>
-                </View>
+                <TouchableOpacity
+                  onPress={() =>
+                    props.navigation.navigate("ProductDetailScreen", {
+                      id: item.id,
+                    })
+                  }
+                >
+                  <View style={styles.imageView}>
+                    <Image
+                      source={{
+                        uri: item.pictures[0],
+                      }}
+                      style={styles.image}
+                    ></Image>
+                  </View>
+                </TouchableOpacity>
                 <View style={styles.infromationView}>
                   <TouchableOpacity
                     style={{ padding: 4, paddingLeft: 0, paddingBottom: 0 }}

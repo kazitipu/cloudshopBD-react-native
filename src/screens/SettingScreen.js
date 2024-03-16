@@ -39,10 +39,10 @@ import Share from "react-native-share";
 import Toast from "react-native-simple-toast";
 import auth from "@react-native-firebase/auth";
 const shareOptions = {
-  title: "Otrixapp",
+  title: "CloudshopBD",
   url:
     Platform.OS == "android"
-      ? "https://play.google.com/store/apps/details?id=com.otrixcommerce"
+      ? "https://play.google.com/store/apps/details?id=com.cloudshopbd&hl=en_US&pli=1"
       : "iOS url",
 };
 

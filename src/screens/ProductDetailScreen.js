@@ -809,7 +809,7 @@ function ProductDetailScreen(props) {
                     >
                       Tk {props.freeShipping}{" "}
                     </Text>
-                    to get Free Shipping.
+                    to get Free Delivery.
                   </Text>
                 </View>
                 <View

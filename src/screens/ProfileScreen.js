@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   TouchableWithoutFeedback,
+  Linking,
 } from "react-native";
 import { connect } from "react-redux";
 import { OtrixContainer, OtrixContent, OtrixDivider } from "@component";
@@ -37,6 +38,10 @@ import { useIsFocused } from "@react-navigation/native";
 import ModalPoup from "./successModal";
 import { uploadImageD2dExpressProduct } from "../firebase/firebase.utils";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import Facebook from "../assets/social/facebook.png";
+import Instagram from "../assets/social/instagram.png";
+import Tiktok from "../assets/social/tiktok.png";
+import Youtube from "../assets/social/youtube.png";
 function ProfileScreen(props) {
   const [state, setState] = React.useState({
     image: require("../assets/images/plus.jpeg"),
@@ -173,14 +178,14 @@ function ProfileScreen(props) {
             </TouchableOpacity>
             <OtrixDivider size={"sm"} />
             <Text style={styles.username}>
-              {props.currentUser && props.currentUser.displayName}
+              {props.currentUser ? props.currentUser.displayName : null}
             </Text>
-            {props.currentUser && props.currentUser.email && (
+            {props.currentUser && props.currentUser.email ? (
               <Text style={styles.email}>{props.currentUser.email}</Text>
-            )}
-            {props.currentUser && props.currentUser.mobileNumber && (
+            ) : null}
+            {props.currentUser && props.currentUser.mobileNumber ? (
               <Text style={styles.email}>{props.currentUser.mobileNumber}</Text>
-            )}
+            ) : null}
           </View>
 
           {/* Header */}
@@ -277,6 +282,112 @@ function ProfileScreen(props) {
               </View>
             </TouchableOpacity>
           </OtrixContent>
+          <View
+            style={{
+              position: "absolute",
+              bottom: 5,
+              left: 0,
+              right: 0,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View>
+              <Text
+                style={{ color: "black", fontSize: 11, fontWeight: "bold" }}
+              >
+                find us on
+              </Text>
+            </View>
+            <View>
+              <View style={{ display: "flex", flexDirection: "row" }}>
+                <TouchableOpacity
+                  onPress={async () => {
+                    let link = "https://www.facebook.com/cloudshopbdfb";
+                    const supported = await Linking.canOpenURL(link);
+                    console.log(supported);
+                    // if (supported) {
+                    await Linking.openURL(link);
+                    // } else {
+                    //   Toast.show("facebook not installed!");
+                    // }
+                  }}
+                >
+                  <Image
+                    source={require("../assets/social/facebook.png")}
+                    style={{
+                      height: 32,
+                      width: 32,
+                      marginLeft: -5,
+                    }}
+                  ></Image>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={async () => {
+                    let link = "https://www.youtube.com/@cloudshopbd35/videos";
+                    const supported = await Linking.canOpenURL(link);
+                    console.log(supported);
+                    // if (supported) {
+                    await Linking.openURL(link);
+                    // } else {
+                    //   Toast.show("facebook not installed!");
+                    // }
+                  }}
+                >
+                  <Image
+                    source={require("../assets/social/youtube.png")}
+                    style={{
+                      height: 30,
+                      width: 30,
+                      marginLeft: 5,
+                    }}
+                  ></Image>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={async () => {
+                    let link = "https://www.tiktok.com/@cloudshopbd.com";
+                    const supported = await Linking.canOpenURL(link);
+                    console.log(supported);
+                    // if (supported) {
+                    await Linking.openURL(link);
+                    // } else {
+                    //   Toast.show("facebook not installed!");
+                    // }
+                  }}
+                >
+                  <Image
+                    source={require("../assets/social/tiktok.png")}
+                    style={{
+                      height: 30,
+                      width: 30,
+                      marginLeft: 5,
+                    }}
+                  ></Image>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={async () => {
+                    let link = "https://www.instagram.com/cloud_shop_bd";
+                    const supported = await Linking.canOpenURL(link);
+                    console.log(supported);
+                    // if (supported) {
+                    await Linking.openURL(link);
+                    // } else {
+                    //   Toast.show("facebook not installed!");
+                    // }
+                  }}
+                >
+                  <Image
+                    source={require("../assets/social/instagram.png")}
+                    style={{
+                      height: 30,
+                      width: 30,
+                      marginLeft: 5,
+                    }}
+                  ></Image>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
         </OtrixContainer>
       ) : (
         <OtrixContainer customStyles={{ backgroundColor: Colors.light_white }}>

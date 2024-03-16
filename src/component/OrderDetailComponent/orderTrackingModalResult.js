@@ -36,15 +36,22 @@ class OrderTrackingModalResult extends Component {
           <>
             {order.orderStatusScore >= 1 ? (
               <View style={styles.row}>
-                <View style={{ marginRight: 25, marginTop: 5 }}>
+                <View
+                  style={{
+                    marginRight: 25,
+                    marginTop: 5,
+                    minWidth: width / 4.7,
+                    maxWidth: width / 4.7,
+                  }}
+                >
                   <Text style={styles.text}>
-                    {new Date(Number(order.date)).toLocaleDateString()}
+                    {new Date(Number(order.date)).toDateString("en-GB")}
                   </Text>
                   <Text style={styles.text}>
-                    {new Date(Number(order.date)).toLocaleTimeString()}
+                    {new Date(Number(order.date)).toLocaleTimeString("en-GB")}
                   </Text>
                 </View>
-                <View style={styles.iconProgressBarContainer}>
+                <View style={{ ...styles.iconProgressBarContainer }}>
                   <View style={styles.iconContainer}>
                     <Entypo
                       name="shopping-cart"
@@ -63,19 +70,26 @@ class OrderTrackingModalResult extends Component {
 
                 <Text style={styles.progressBarText}>
                   Order Placed {"\n"}
-                  <Text style={{ color: "gray" }}>
+                  <Text style={{ color: "gray", fontSize: 9 }}>
                     Your order is successfully placed
                   </Text>
                 </Text>
               </View>
             ) : (
               <View style={styles.row}>
-                <View style={{ marginRight: 25, marginTop: 5 }}>
+                <View
+                  style={{
+                    marginRight: 25,
+                    marginTop: 5,
+                    minWidth: width / 4.7,
+                    maxWidth: width / 4.7,
+                  }}
+                >
                   <Text style={{ ...styles.text, color: "white" }}>
-                    12/12/2023
+                    Fri Dec 08 2023
                   </Text>
                   <Text style={{ ...styles.text, color: "white" }}>
-                    03:00 PM
+                    12:26:57
                   </Text>
                 </View>
                 <View style={styles.iconProgressBarContainer}>
@@ -101,9 +115,16 @@ class OrderTrackingModalResult extends Component {
 
             {order.orderStatusScore >= 2 ? (
               <View style={styles.row}>
-                <View style={{ marginRight: 25, marginTop: 5 }}>
+                <View
+                  style={{
+                    marginRight: 25,
+                    marginTop: 5,
+                    minWidth: width / 4.7,
+                    maxWidth: width / 4.7,
+                  }}
+                >
                   <Text style={styles.text}>
-                    {new Date(Number(order.date)).toLocaleDateString()}
+                    {new Date(Number(order.date)).toDateString("en-GB")}
                   </Text>
                   <Text style={styles.text}>
                     {new Date(Number(order.date)).toLocaleTimeString()}
@@ -128,20 +149,26 @@ class OrderTrackingModalResult extends Component {
 
                 <Text style={styles.progressBarText}>
                   Processing {"\n"}
-                  <Text style={{ color: "gray" }}>
+                  <Text style={{ color: "gray", fontSize: 9 }}>
                     We are processing your order.
                   </Text>
                 </Text>
               </View>
             ) : (
               <View style={styles.row}>
-                <View style={{ marginRight: 25, marginTop: 5 }}>
+                <View
+                  style={{
+                    marginRight: 25,
+                    marginTop: 5,
+                    minWidth: width / 4.7,
+                    maxWidth: width / 4.7,
+                  }}
+                >
                   <Text style={{ ...styles.text, color: "white" }}>
-                    {" "}
-                    12/12/2023
+                    Fri Dec 08 2023
                   </Text>
                   <Text style={{ ...styles.text, color: "white" }}>
-                    03:00 PM
+                    12:26:57
                   </Text>
                 </View>
                 <View style={styles.iconProgressBarContainer}>
@@ -167,9 +194,18 @@ class OrderTrackingModalResult extends Component {
 
             {order.orderStatusScore >= 3 ? (
               <View style={styles.row}>
-                <View style={{ marginRight: 25, marginTop: 5 }}>
+                <View
+                  style={{
+                    marginRight: 25,
+                    marginTop: 5,
+                    minWidth: width / 4.7,
+                    maxWidth: width / 4.7,
+                  }}
+                >
                   <Text style={styles.text}>
-                    {new Date(Number(order.confirmedDate)).toLocaleDateString()}
+                    {new Date(Number(order.confirmedDate)).toDateString(
+                      "en-GB"
+                    )}
                   </Text>
                   <Text style={styles.text}>
                     {new Date(Number(order.confirmedDate)).toLocaleTimeString()}
@@ -194,19 +230,26 @@ class OrderTrackingModalResult extends Component {
 
                 <Text style={styles.progressBarText}>
                   Confirmed {"\n"}
-                  <Text style={{ color: "gray" }}>
+                  <Text style={{ color: "gray", fontSize: 9 }}>
                     Your order is confirmed.
                   </Text>
                 </Text>
               </View>
             ) : (
               <View style={styles.row}>
-                <View style={{ marginRight: 25, marginTop: 5 }}>
+                <View
+                  style={{
+                    marginRight: 25,
+                    marginTop: 5,
+                    minWidth: width / 4.7,
+                    maxWidth: width / 4.7,
+                  }}
+                >
                   <Text style={{ ...styles.text, color: "white" }}>
-                    12/12/2023
+                    Fri Dec 08 2023
                   </Text>
                   <Text style={{ ...styles.text, color: "white" }}>
-                    03:00 PM
+                    12:26:57
                   </Text>
                 </View>
                 <View style={styles.iconProgressBarContainer}>
@@ -232,9 +275,16 @@ class OrderTrackingModalResult extends Component {
 
             {order.orderStatusScore >= 4 ? (
               <View style={styles.row}>
-                <View style={{ marginRight: 25, marginTop: 5 }}>
+                <View
+                  style={{
+                    marginRight: 25,
+                    marginTop: 5,
+                    minWidth: width / 4.7,
+                    maxWidth: width / 4.7,
+                  }}
+                >
                   <Text style={styles.text}>
-                    {new Date(Number(order.packingDate)).toLocaleDateString()}
+                    {new Date(Number(order.packingDate)).toDateString("en-GB")}
                   </Text>
                   <Text style={styles.text}>
                     {new Date(Number(order.packingDate)).toLocaleTimeString()}
@@ -259,19 +309,26 @@ class OrderTrackingModalResult extends Component {
 
                 <Text style={styles.progressBarText}>
                   Packing {"\n"}
-                  <Text style={{ color: "gray" }}>
+                  <Text style={{ color: "gray", fontSize: 9 }}>
                     We are packing your order.
                   </Text>
                 </Text>
               </View>
             ) : (
               <View style={styles.row}>
-                <View style={{ marginRight: 25, marginTop: 5 }}>
+                <View
+                  style={{
+                    marginRight: 25,
+                    marginTop: 5,
+                    minWidth: width / 4.7,
+                    maxWidth: width / 4.7,
+                  }}
+                >
                   <Text style={{ ...styles.text, color: "white" }}>
-                    12/12/2023
+                    Fri Dec 08 2023
                   </Text>
                   <Text style={{ ...styles.text, color: "white" }}>
-                    03:00 PM
+                    12:26:57
                   </Text>
                 </View>
                 <View style={styles.iconProgressBarContainer}>
@@ -296,9 +353,18 @@ class OrderTrackingModalResult extends Component {
             )}
             {order.orderStatusScore >= 5 ? (
               <View style={styles.row}>
-                <View style={{ marginRight: 25, marginTop: 5 }}>
+                <View
+                  style={{
+                    marginRight: 25,
+                    marginTop: 5,
+                    minWidth: width / 4.7,
+                    maxWidth: width / 4.7,
+                  }}
+                >
                   <Text style={styles.text}>
-                    {new Date(Number(order.deliveredDate)).toLocaleDateString()}
+                    {new Date(Number(order.deliveredDate)).toDateString(
+                      "en-GB"
+                    )}
                   </Text>
                   <Text style={styles.text}>
                     {new Date(Number(order.deliveredDate)).toLocaleTimeString()}
@@ -317,19 +383,26 @@ class OrderTrackingModalResult extends Component {
 
                 <Text style={styles.progressBarText}>
                   Delivered {"\n"}
-                  <Text style={{ color: "gray" }}>
+                  <Text style={{ color: "gray", fontSize: 9 }}>
                     Your order is delivered.
                   </Text>
                 </Text>
               </View>
             ) : (
               <View style={styles.row}>
-                <View style={{ marginRight: 25, marginTop: 5 }}>
+                <View
+                  style={{
+                    marginRight: 25,
+                    marginTop: 5,
+                    minWidth: width / 4.7,
+                    maxWidth: width / 4.7,
+                  }}
+                >
                   <Text style={{ ...styles.text, color: "white" }}>
-                    12/12/2023
+                    Fri Dec 08 2023
                   </Text>
                   <Text style={{ ...styles.text, color: "white" }}>
-                    03:00 PM
+                    12:26:57
                   </Text>
                 </View>
                 <View style={styles.iconProgressBarContainer}>
@@ -350,9 +423,16 @@ class OrderTrackingModalResult extends Component {
         ) : (
           <>
             <View style={styles.row}>
-              <View style={{ marginRight: 25, marginTop: 5 }}>
+              <View
+                style={{
+                  marginRight: 25,
+                  marginTop: 5,
+                  minWidth: width / 4.7,
+                  maxWidth: width / 4.7,
+                }}
+              >
                 <Text style={{ ...styles.text, color: "red" }}>
-                  {new Date(Number(order.date)).toLocaleDateString()}
+                  {new Date(Number(order.date)).toDateString("en-GB")}
                 </Text>
                 <Text style={{ ...styles.text, color: "red" }}>
                   {new Date(Number(order.date)).toLocaleTimeString()}
@@ -387,9 +467,16 @@ class OrderTrackingModalResult extends Component {
             </View>
 
             <View style={styles.row}>
-              <View style={{ marginRight: 25, marginTop: 5 }}>
+              <View
+                style={{
+                  marginRight: 25,
+                  marginTop: 5,
+                  minWidth: width / 4.7,
+                  maxWidth: width / 4.7,
+                }}
+              >
                 <Text style={{ ...styles.text, color: "red" }}>
-                  {new Date(Number(order.cancelledDate)).toLocaleDateString()}
+                  {new Date(Number(order.cancelledDate)).toDateString("en-GB")}
                 </Text>
                 <Text style={{ ...styles.text, color: "red" }}>
                   {new Date(Number(order.cancelledDate)).toLocaleTimeString()}
@@ -420,9 +507,16 @@ class OrderTrackingModalResult extends Component {
             </View>
 
             <View style={styles.row}>
-              <View style={{ marginRight: 25, marginTop: 5 }}>
+              <View
+                style={{
+                  marginRight: 25,
+                  marginTop: 5,
+                  minWidth: width / 4.7,
+                  maxWidth: width / 4.7,
+                }}
+              >
                 <Text style={{ ...styles.text, color: "red" }}>
-                  {new Date(Number(order.cancelledDate)).toLocaleDateString()}
+                  {new Date(Number(order.cancelledDate)).toDateString("en-GB")}
                 </Text>
                 <Text style={{ ...styles.text, color: "red" }}>
                   {new Date(Number(order.cancelledDate)).toLocaleTimeString()}
@@ -453,9 +547,16 @@ class OrderTrackingModalResult extends Component {
             </View>
 
             <View style={styles.row}>
-              <View style={{ marginRight: 25, marginTop: 5 }}>
+              <View
+                style={{
+                  marginRight: 25,
+                  marginTop: 5,
+                  minWidth: width / 4.7,
+                  maxWidth: width / 4.7,
+                }}
+              >
                 <Text style={{ ...styles.text, color: "red" }}>
-                  {new Date(Number(order.cancelledDate)).toLocaleDateString()}
+                  {new Date(Number(order.cancelledDate)).toDateString("en-GB")}
                 </Text>
                 <Text style={{ ...styles.text, color: "red" }}>
                   {new Date(Number(order.cancelledDate)).toLocaleTimeString()}
@@ -486,9 +587,16 @@ class OrderTrackingModalResult extends Component {
             </View>
 
             <View style={styles.row}>
-              <View style={{ marginRight: 25, marginTop: 5 }}>
+              <View
+                style={{
+                  marginRight: 25,
+                  marginTop: 5,
+                  minWidth: width / 4.7,
+                  maxWidth: width / 4.7,
+                }}
+              >
                 <Text style={{ ...styles.text, color: "red" }}>
-                  {new Date(Number(order.cancelledDate)).toLocaleDateString()}
+                  {new Date(Number(order.cancelledDate)).toDateString("en-GB")}
                 </Text>
                 <Text style={{ ...styles.text, color: "red" }}>
                   {new Date(Number(order.cancelledDate)).toLocaleTimeString()}
@@ -531,7 +639,8 @@ export default connect(mapStateToProps)(OrderTrackingModalResult);
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 10,
+    fontSize: 9,
+    color: "#555",
   },
   container: {
     // flex: 1,

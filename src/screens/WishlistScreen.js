@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Platform,
+} from "react-native";
 import { connect } from "react-redux";
 import { Button } from "native-base";
 import {
@@ -61,7 +67,10 @@ function WishlistScreen(props) {
   const { wishlist } = props;
   return (
     <OtrixContainer
-      customStyles={{ backgroundColor: Colors.light_white }}
+      customStyles={{
+        backgroundColor: Colors.light_white,
+        paddingBottom: Platform.OS == "ios" ? 0 : 10,
+      }}
       statusBarColor={Colors.light_white}
     >
       {/* Header */}
@@ -69,7 +78,7 @@ function WishlistScreen(props) {
       <OtrixHeader
         customStyles={{
           backgroundColor: Colors.light_white,
-          height: Platform.OS === "ios" ? wp("13%") : wp("10%"),
+          height: Platform.OS === "ios" ? wp("13%") : wp("13%"),
         }}
       >
         <TouchableOpacity

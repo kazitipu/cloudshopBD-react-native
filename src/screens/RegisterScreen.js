@@ -22,6 +22,7 @@ import auth from "@react-native-firebase/auth";
 import { setAdditionalDataRedux, setSpinnerRedux } from "../redux/Action";
 import GradientButton from "../component/CartComponent/Button";
 import Toast from "react-native-simple-toast";
+import { createUserProfileDocument } from "../firebase/firebase.utils";
 function RegisterScreen(props) {
   const [formData, setData] = React.useState({});
   const [state, setDatapassword] = React.useState({ secureEntry: true });
@@ -36,7 +37,8 @@ function RegisterScreen(props) {
     });
     await auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
+      .then(async (userAuth) => {
+        console.log(userAuth.user);
         Toast.show("User account created & signed in!");
         setData({});
         props.navigation.goBack();
@@ -277,10 +279,15 @@ function RegisterScreen(props) {
   );
 }
 
-function mapStateToProps({ params }) {
-  return {};
+function mapStateToProps(state) {
+  return {
+    cartCount: state.cart.cartCount ? state.cart.cartCount : null,
+    authStatus: state.auth.authStatus,
+    currentUser: state.auth.currentUser,
+    spinner: state.auth.spinner,
+    additionalData: state.auth.additionalData,
+  };
 }
-
 export default connect(mapStateToProps, {
   requestInit,
   setAdditionalDataRedux,
