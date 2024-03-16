@@ -57,9 +57,7 @@ function ProductListScreenByBrands(props) {
 
   useEffect(() => {
     const getWishList = async () => {
-      props.setSpinnerRedux(true);
       await props.getSingleBrandProductsRedux(item);
-      props.setSpinnerRedux(false);
     };
     getWishList();
     let loadPage = setTimeout(

@@ -9,6 +9,7 @@ import {
   Image,
   TextInput,
   Platform,
+  Alert,
 } from "react-native";
 import { connect } from "react-redux";
 import { Button } from "native-base";
@@ -38,7 +39,12 @@ import GradientButton from "../component/CartComponent/Button";
 import Delivery from "./delivery.png";
 import CashOnDelivery from "./cashonDelivery.png";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
-import { addToOrderRedux, setSpinnerRedux } from "../redux/Action/general";
+import {
+  addToOrderRedux,
+  setSpinnerRedux,
+  updateSingleProductRedux,
+} from "../redux/Action/general";
+import { order } from "styled-system";
 
 function CheckoutScreen(props) {
   const [state, setState] = React.useState({
@@ -88,7 +94,7 @@ function CheckoutScreen(props) {
     selectedPaymentMethod,
     paymentSuccessModal,
   } = state;
-  const { sumAmount, actualOrder } = props.route.params;
+  const { sumAmount, actualOrder, dhakaDelivery } = props.route.params;
   const { currentUser, coupon } = props;
   let shippingAddress = null;
   if (currentUser && currentUser.address && currentUser.address.length > 0) {
@@ -415,7 +421,8 @@ function CheckoutScreen(props) {
                   fontSize: wp("2.8%"),
                 }}
               >
-                +৳ {sumAmount >= props.freeShipping ? 0 : 70}
+                +৳{" "}
+                {sumAmount >= props.freeShipping ? 0 : dhakaDelivery ? 70 : 120}
               </Text>
             </View>
             <View
@@ -643,6 +650,12 @@ function CheckoutScreen(props) {
               </View>
             }
             onPress={async () => {
+              if (!shippingAddress) {
+                Alert.alert(
+                  "You must add/choose a shipping address to place order."
+                );
+                return;
+              }
               props.setSpinnerRedux(true);
               let orderObj = {
                 id:
@@ -650,7 +663,12 @@ function CheckoutScreen(props) {
                 currentUser: currentUser,
                 orders: props.cartData,
                 subTotal: actualOrder,
-                deliveryCharge: sumAmount >= props.freeShipping ? 0 : 70,
+                deliveryCharge:
+                  sumAmount >= props.freeShipping
+                    ? 0
+                    : dhakaDelivery
+                    ? 70
+                    : 120,
                 discountApplied: actualOrder - sumAmount,
                 couponApplied: coupon
                   ? {
@@ -667,6 +685,15 @@ function CheckoutScreen(props) {
                 userId: currentUser.uid,
               };
               await props.addToOrderRedux(orderObj);
+              for (let i = 0; i < orderObj.orders.length; i++) {
+                await props.updateSingleProductRedux({
+                  ...orderObj.orders[i].product,
+                  totalSold: orderObj.orders[i].product.totalSold
+                    ? orderObj.orders[i].product.totalSold +
+                      parseInt(orderObj.orders[i].quantity)
+                    : parseInt(orderObj.orders[i].quantity),
+                });
+              }
               props.setSpinnerRedux(false);
               setState({
                 ...state,
@@ -703,9 +730,11 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { addToOrderRedux, setSpinnerRedux })(
-  CheckoutScreen
-);
+export default connect(mapStateToProps, {
+  addToOrderRedux,
+  setSpinnerRedux,
+  updateSingleProductRedux,
+})(CheckoutScreen);
 
 const styles = StyleSheet.create({
   box: {

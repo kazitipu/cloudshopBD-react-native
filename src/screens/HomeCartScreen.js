@@ -45,6 +45,7 @@ function CartScreen(props) {
     isApplied: false,
     validCode: false,
     couponCode: null,
+    dhakaDelivery: true,
   });
 
   const applyCouponCode = () => {
@@ -134,6 +135,10 @@ function CartScreen(props) {
     calculateCart();
   }, [props.cartData]);
 
+  const toggleDelivery = (value) => {
+    setState({ ...state, dhakaDelivery: value });
+  };
+
   const { cartProducts, sumAmount, couponCode, loading, isApplied, validCode } =
     state;
   return (
@@ -170,7 +175,7 @@ function CartScreen(props) {
         }}
       >
         {/* Cart Component Start from here */}
-        {!loading && props.cartData.length > 0 && (
+        {!loading && props.cartData.length > 0 ? (
           <CartView
             navigation={props.navigation}
             products={props.cartData}
@@ -179,9 +184,10 @@ function CartScreen(props) {
             incrementItem={increment}
             sumAmount={sumAmount}
             actualOrder={state.actualOrder}
+            toggleDelivery={toggleDelivery}
           />
-        )}
-        {props.cartData.length == 0 && (
+        ) : null}
+        {props.cartData.length == 0 ? (
           <View style={styles.noRecord}>
             <Text style={styles.emptyTxt}>Cart is empty!</Text>
             <Button
@@ -208,10 +214,10 @@ function CartScreen(props) {
               </Text>
             </Button>
           </View>
-        )}
+        ) : null}
       </OtrixContent>
 
-      {props.cartData.length > 0 && (
+      {props.cartData.length > 0 ? (
         <View
           style={{
             position: "absolute",
@@ -269,11 +275,12 @@ function CartScreen(props) {
               props.navigation.navigate("CheckoutScreen", {
                 sumAmount,
                 actualOrder: state.actualOrder,
+                dhakaDelivery: state.dhakaDelivery,
               });
             }}
           />
         </View>
-      )}
+      ) : null}
     </OtrixContainer>
   );
 }

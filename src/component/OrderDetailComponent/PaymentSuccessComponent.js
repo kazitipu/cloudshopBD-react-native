@@ -21,12 +21,12 @@ function PaymentSuccessComponent(props) {
         <View style={styles.contentView}>
           <Image source={checked} style={styles.checkImg} />
           <OtrixDivider size={"md"} />
-          <Text style={styles.paymentSuccess}>Order Confirmed</Text>
+          <Text style={styles.paymentSuccess}>Order Placed</Text>
           <OtrixDivider size={"lg"} />
           <OtrixDivider size={"lg"} />
           <Text style={styles.paymentDescTxt}>
-            Your order is confirmed you will receive an order confirmation call/
-            email/SMS shortly with the expected delivery date your items.
+            Congratulation Your order is placed. you will receive an order
+            confirmation call/ email/SMS shortly.
           </Text>
 
           <View

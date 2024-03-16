@@ -11,6 +11,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import {
   addToWishlistRedux,
   removeFromWishlistRedux,
+  updateSingleProductRedux,
 } from "../../redux/Action";
 import Toast from "react-native-simple-toast";
 import { connect } from "react-redux";
@@ -196,11 +197,16 @@ function ListProductView(props) {
               onPress={async () => {
                 if (props.currentUser && props.currentUser.uid) {
                   let wishlistObj = data;
-                  Toast.show("item removed from wishlist.");
+
                   await props.removeFromWishlistRedux(
                     wishlistObj,
                     props.currentUser
                   );
+                  await props.updateSingleProductRedux({
+                    ...data,
+                    wishlist: data.wishlist ? data.wishlist - 1 : 0,
+                  });
+                  Toast.show("item removed from wishlist.");
                 } else {
                   Toast.show("Please login first");
                 }
@@ -219,11 +225,15 @@ function ListProductView(props) {
                 if (props.currentUser && props.currentUser.uid) {
                   let wishlistObj = data;
 
-                  Toast.show("item added to wishlist.");
                   await props.addToWishlistRedux(
                     wishlistObj,
                     props.currentUser
                   );
+                  await props.updateSingleProductRedux({
+                    ...data,
+                    wishlist: data.wishlist ? data.wishlist + 1 : 1,
+                  });
+                  Toast.show("item added to wishlist.");
                 } else {
                   Toast.show("Please login first to add item into wishlist.");
                 }
@@ -251,6 +261,7 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   addToWishlistRedux,
   removeFromWishlistRedux,
+  updateSingleProductRedux,
 })(ListProductView);
 
 const styles = StyleSheet.create({

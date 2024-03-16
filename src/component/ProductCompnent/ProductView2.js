@@ -13,6 +13,7 @@ import {
   addToWishlistRedux,
   removeFromWishlistRedux,
   setSpinnerRedux,
+  updateSingleProductRedux,
 } from "../../redux/Action";
 import { connect } from "react-redux";
 import Toast from "react-native-simple-toast";
@@ -203,6 +204,10 @@ function ProductView2(props) {
                 wishlistObj,
                 props.currentUser
               );
+              await props.updateSingleProductRedux({
+                ...data,
+                wishlist: data.wishlist ? data.wishlist - 1 : 0,
+              });
               props.setSpinnerRedux(false);
               Toast.show("item removed from wishlist.");
             } else {
@@ -221,6 +226,10 @@ function ProductView2(props) {
 
               props.setSpinnerRedux(true);
               await props.addToWishlistRedux(wishlistObj, props.currentUser);
+              await props.updateSingleProductRedux({
+                ...data,
+                wishlist: data.wishlist ? data.wishlist + 1 : 1,
+              });
               props.setSpinnerRedux(false);
               Toast.show("item added to wishlist.");
             } else {
@@ -249,6 +258,7 @@ export default connect(mapStateToProps, {
   addToWishlistRedux,
   removeFromWishlistRedux,
   setSpinnerRedux,
+  updateSingleProductRedux,
 })(ProductView2);
 
 const styles = StyleSheet.create({

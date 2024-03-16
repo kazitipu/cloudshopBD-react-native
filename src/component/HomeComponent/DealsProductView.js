@@ -13,6 +13,7 @@ import {
   addToWishlistRedux,
   removeFromWishlistRedux,
   setSpinnerRedux,
+  updateSingleProductRedux,
 } from "../../redux/Action";
 import Toast from "react-native-simple-toast";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
@@ -208,6 +209,10 @@ function DealsProductView(props) {
                     wishlistObj,
                     props.currentUser
                   );
+                  await props.updateSingleProductRedux({
+                    ...data,
+                    wishlist: data.wishlist ? data.wishlist - 1 : 0,
+                  });
                   props.setSpinnerRedux(false);
                   Toast.show("item removed from wishlist.");
                 } else {
@@ -233,6 +238,10 @@ function DealsProductView(props) {
                     wishlistObj,
                     props.currentUser
                   );
+                  await props.updateSingleProductRedux({
+                    ...data,
+                    wishlist: data.wishlist ? data.wishlist + 1 : 1,
+                  });
                   props.setSpinnerRedux(false);
                   Toast.show("item added to wishlist.");
                 } else {
@@ -263,6 +272,7 @@ export default connect(mapStateToProps, {
   addToWishlistRedux,
   removeFromWishlistRedux,
   setSpinnerRedux,
+  updateSingleProductRedux,
 })(DealsProductView);
 
 const styles = StyleSheet.create({

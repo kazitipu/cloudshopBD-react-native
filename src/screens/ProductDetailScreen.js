@@ -528,6 +528,10 @@ function ProductDetailScreen(props) {
                         wishlistObj,
                         props.currentUser
                       );
+                      await props.updateSingleProductRedux({
+                        ...product,
+                        wishlist: product.wishlist ? product.wishlist - 1 : 0,
+                      });
                       props.setSpinnerRedux(false);
                       Toast.show("item removed from wishlist.");
                     } else {
@@ -553,6 +557,10 @@ function ProductDetailScreen(props) {
                         wishlistObj,
                         props.currentUser
                       );
+                      await props.updateSingleProductRedux({
+                        ...product,
+                        wishlist: product.wishlist ? product.wishlist + 1 : 1,
+                      });
                       props.setSpinnerRedux(false);
                       Toast.show("item added to wishlist.");
                     } else {
@@ -684,8 +692,26 @@ function ProductDetailScreen(props) {
                 </Text>
               </View>
 
-              <OtrixDivider size={"sm"} />
               {/* Price Container*/}
+              <Text
+                style={{
+                  ...styles.reviewTxt,
+                  textAlign: "left",
+                  fontSize: wp("2.7%"),
+                }}
+              >
+                Total Sold:{product.totalSold ? product.totalSold : 0}
+              </Text>
+              <Text
+                style={{
+                  ...styles.reviewTxt,
+                  textAlign: "left",
+                  fontSize: wp("2.7%"),
+                }}
+              >
+                Wishlist:{product.wishlist ? product.wishlist : 0}
+              </Text>
+              <OtrixDivider size={"sm"} />
               <View style={styles.subContainer}>
                 {getPrice(product)}
                 <View style={styles.starView}>
@@ -724,7 +750,7 @@ function ProductDetailScreen(props) {
               </View>
               <OtrixDivider size={"sm"} />
 
-              {product.selectedBrands && (
+              {product.selectedBrands && product.selectedBrands.length > 0 ? (
                 <TouchableWithoutFeedback
                   onPress={() =>
                     props.navigation.replace("ProductListScreenByBrands", {
@@ -744,7 +770,7 @@ function ProductDetailScreen(props) {
                     </Text>
                   </View>
                 </TouchableWithoutFeedback>
-              )}
+              ) : null}
 
               <OtrixDivider size={"md"} />
               <View

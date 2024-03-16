@@ -6,6 +6,7 @@ import {
   FlatList,
   Image,
   TextInput,
+  Switch,
 } from "react-native";
 import { Colors } from "@helpers";
 import {
@@ -41,6 +42,7 @@ function CartView(props) {
   const [number, onChangeNumber] = React.useState("");
   const [showCoupon, setShowCoupon] = React.useState(false);
   const [coupon, setCoupon] = React.useState(null);
+  const [dhakaDelivery, setDhakaDelivery] = React.useState(true);
 
   const PriceQuantity = (price, quantity) => {
     let amt = parseFloat(price.replace("$", ""));
@@ -93,13 +95,19 @@ function CartView(props) {
   };
   const getTotal = (sumAmount) => {
     let total = 0;
+    let deliveryCharge = 0;
+    if (dhakaDelivery) {
+      deliveryCharge = 70;
+    } else {
+      deliveryCharge = 120;
+    }
     if (coupon) {
       if (sumAmount < freeShipping) {
         total =
           coupon.discountType == "cash"
-            ? sumAmount + 70 - coupon.discountAmount
+            ? sumAmount + deliveryCharge - coupon.discountAmount
             : sumAmount +
-              70 -
+              deliveryCharge -
               parseInt(sumAmount * (coupon.discountAmount / 100));
         props.setTotalRedux(total);
         return total;
@@ -113,7 +121,7 @@ function CartView(props) {
       }
     } else {
       if (sumAmount < freeShipping) {
-        total = sumAmount + 70;
+        total = sumAmount + deliveryCharge;
         props.setTotalRedux(total);
         return total;
       } else {
@@ -122,6 +130,11 @@ function CartView(props) {
         return total;
       }
     }
+  };
+
+  const toggleSwitch = () => {
+    setDhakaDelivery(!dhakaDelivery);
+    props.toggleDelivery(!dhakaDelivery);
   };
 
   let { currentUser } = props;
@@ -402,6 +415,7 @@ function CartView(props) {
                   paddingLeft: 10,
                   paddingRight: 10,
                   backgroundColor: "#ff8084",
+                  marginBottom: 10,
                 }}
               >
                 Regular Delivery
@@ -413,15 +427,54 @@ function CartView(props) {
                   fontWeight: "bold",
                 }}
               >
-                {sumAmount > freeShipping ? "Free" : "৳ 70"}
+                {sumAmount > freeShipping
+                  ? "Free"
+                  : dhakaDelivery
+                  ? "৳ 70"
+                  : "৳ 120"}
               </Text>
             </View>
-            <Text style={{ color: "#555", fontSize: wp("2.9%"), marginTop: 4 }}>
-              12-48 hours delivery (Inside Dhaka)
-            </Text>
-            <Text style={{ color: "#555", fontSize: wp("2.9%") }}>
-              1-5 days delivery (Outside Dhaka)
-            </Text>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                marginLeft: -10,
+              }}
+            >
+              <Switch
+                trackColor={{ false: "gray", true: "#ff6166" }}
+                ios_backgroundColor={"gainsboro"}
+                onValueChange={toggleSwitch}
+                value={dhakaDelivery}
+              />
+              <Text
+                style={{ color: "#555", fontSize: wp("2.9%"), marginTop: 4 }}
+              >
+                12-48 hours delivery (Inside Dhaka) - ৳ 70
+              </Text>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                marginLeft: -10,
+              }}
+            >
+              <Switch
+                trackColor={{ false: "gray", true: "#ff6166" }}
+                ios_backgroundColor={"gainsboro"}
+                onValueChange={toggleSwitch}
+                value={!dhakaDelivery}
+              />
+              <Text
+                style={{ color: "#555", fontSize: wp("2.9%"), marginTop: 4 }}
+              >
+                1-5 days delivery (Outside Dhaka) - ৳ 120
+              </Text>
+            </View>
+
             <Text
               style={{
                 marginTop: 10,

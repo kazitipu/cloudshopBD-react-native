@@ -62,9 +62,8 @@ function ProductListScreen(props) {
     const getWishList = async () => {
       wishlistData = await _getWishlist();
       if (item == "Latest Products") {
-        props.setSpinnerRedux(true);
         await props.getAllLatestProductsRedux();
-        props.setSpinnerRedux(false);
+
         console.log("getting latest products");
       }
       props.getAllCategoriesRedux();
@@ -86,9 +85,8 @@ function ProductListScreen(props) {
         let categories = result.map((cat) => cat.id);
         console.log(categories);
         if (item !== "Latest Products") {
-          props.setSpinnerRedux(true);
           await props.getSingleCategoryProductsRedux(categories.slice(0, 10));
-          props.setSpinnerRedux(false);
+
           console.log("getting category products");
         }
       }
