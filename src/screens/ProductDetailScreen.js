@@ -1241,6 +1241,7 @@ function ProductDetailScreen(props) {
                                 return;
                               }
                               props.setSpinnerRedux(true);
+                              let date = new Date();
                               await props.updateSingleProductRedux({
                                 ...product,
                                 reviews:
@@ -1251,10 +1252,11 @@ function ProductDetailScreen(props) {
                                           id: props.currentUser.uid,
                                           reviewText: review,
                                           star: star,
-                                          date: new Date().toLocaleDateString(
+                                          date: date.toLocaleDateString(
                                             "en-GB"
                                           ),
                                           imageUrl: state.imageUrl,
+                                          time: date.getTime().toString(),
                                         },
                                         ...product.reviews,
                                       ]
@@ -1264,10 +1266,11 @@ function ProductDetailScreen(props) {
                                           id: props.currentUser.uid,
                                           reviewText: review,
                                           star: star,
-                                          date: new Date().toLocaleDateString(
+                                          date: date.toLocaleDateString(
                                             "en-GB"
                                           ),
                                           imageUrl: state.imageUrl,
+                                          time: date.getTime().toString(),
                                         },
                                       ],
                               });
