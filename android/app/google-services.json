@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "65158771737-5qob5lhjanbp4vt3vq1c7sisn5rdfruu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cloudshopbd",
+            "certificate_hash": "d56f7801ace13b166d0606f8a356e27fbff6e389"
+          }
+        },
+        {
+          "client_id": "65158771737-vv24ha1saor8n1e3b172hh5d3c9hn54j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cloudshopbd",
+            "certificate_hash": "35306117b21b5f5bbb799ff6ed0b35391ae944e1"
+          }
+        },
+        {
           "client_id": "65158771737-t16114kjqgie041v951j37jifan4345i.apps.googleusercontent.com",
           "client_type": 3
         }
