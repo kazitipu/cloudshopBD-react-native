@@ -8,19 +8,24 @@ import {
 import Fonts from "@helpers/Fonts";
 import { checkaround } from "@common";
 import { connect } from "react-redux";
-import { getSingleCategoryProductsRedux } from "../../redux/Action";
+import {
+  getSingleCategoryProductsRedux,
+  setSpinnerRedux,
+} from "../../redux/Action";
 function FilterTags(props) {
   let selectedTag = false;
   if (props.selected.includes(props.tagID)) {
     selectedTag = true;
   }
-  const onClick = () => {
+  const onClick = async () => {
     let result = getAllChildCategories(props.category);
     const categories = [
       props.category.id,
       ...result.map((category) => category.id),
     ];
-    props.getSingleCategoryProductsRedux(categories.slice(0, 10));
+    props.setSpinnerRedux(true);
+    await props.getSingleCategoryProductsRedux(categories.slice(0, 10));
+    props.setSpinnerRedux(false);
     props.onFilterPress(props.tagID);
   };
 
@@ -34,7 +39,7 @@ function FilterTags(props) {
       let c = cat;
       while (c && c.parentCategory) {
         c = c.parentCategory && categoriesById.get(c.parentCategory);
-        if (c.id === targetId) {
+        if (c && c.id === targetId) {
           results.push(cat);
           break;
         }
@@ -64,6 +69,7 @@ const mapStateToProps = (state) => {
 };
 export default connect(mapStateToProps, {
   getSingleCategoryProductsRedux,
+  setSpinnerRedux,
 })(FilterTags);
 
 const styles = StyleSheet.create({

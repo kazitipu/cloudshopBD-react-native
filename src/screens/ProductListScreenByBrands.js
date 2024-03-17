@@ -126,12 +126,12 @@ function ProductListScreenByBrands(props) {
             {title}
           </Text>
         </View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={GlobalStyles.headerRight}
           onPress={() => setState({ ...state, filterModelVisible: true })}
         >
           <Image source={filter} style={styles.filter} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </OtrixHeader>
 
       {/* Filter */}
