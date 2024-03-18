@@ -84,6 +84,7 @@ function ProductDetailScreen(props) {
     visible: false,
     imageUrl: "",
     imageLoading: false,
+    productFetched: false,
   });
   const sheetRef = useRef(null);
   const { loading, selectedColor, productCount, zoomImages, showZoom, msg } =
@@ -100,7 +101,6 @@ function ProductDetailScreen(props) {
       } else {
         await props.getSingleProductRedux(id);
       }
-
       console.log("getting product finished");
     };
     getProduct();
@@ -109,10 +109,10 @@ function ProductDetailScreen(props) {
   useEffect(() => {
     const { id } = props.route.params;
     const { product } = props;
+    console.log(product.name);
     let obj = {};
     const getProduct = async () => {
       await props.getSingleProductRedux(id);
-
       if (
         product &&
         product.id &&
@@ -126,15 +126,19 @@ function ProductDetailScreen(props) {
           }
         });
       }
+
       let variation = getVariation(obj);
       setState({
         ...state,
         ...obj,
         variation,
         loading: false,
+        productFetched: true,
       });
     };
-    getProduct();
+    if (!state.productFetched) {
+      getProduct();
+    }
   }, [product.id]);
 
   useEffect(() => {
@@ -441,6 +445,9 @@ function ProductDetailScreen(props) {
   };
 
   console.log(state);
+  if (props.product) {
+    console.log(props.product.name);
+  }
 
   return (
     <OtrixContainer customStyles={{ backgroundColor: "white" }}>

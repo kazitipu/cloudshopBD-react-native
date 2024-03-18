@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import {
   getSingleCategoryProductsRedux,
   setSpinnerRedux,
+  clearAllProductsRedux,
 } from "../../redux/Action";
 function FilterTags(props) {
   let selectedTag = false;
@@ -24,7 +25,8 @@ function FilterTags(props) {
       ...result.map((category) => category.id),
     ];
     props.setSpinnerRedux(true);
-    await props.getSingleCategoryProductsRedux(categories.slice(0, 10));
+    props.clearAllProductsRedux();
+    await props.getSingleCategoryProductsRedux(categories.slice(0, 10), null);
     props.setSpinnerRedux(false);
     props.onFilterPress(props.tagID);
   };
@@ -70,6 +72,7 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   getSingleCategoryProductsRedux,
   setSpinnerRedux,
+  clearAllProductsRedux,
 })(FilterTags);
 
 const styles = StyleSheet.create({

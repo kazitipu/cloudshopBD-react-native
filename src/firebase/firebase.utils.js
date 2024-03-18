@@ -617,14 +617,107 @@ export const getAllHomeScreenProducts = async (categoryId) => {
     console.log(error);
   }
 };
-export const getAllLatestProducts = async () => {
+export const getAllLatestProducts = async (startAfter) => {
+  let productsCollectionRef;
+  console.log(startAfter);
+  if (startAfter) {
+    productsCollectionRef = firestore()
+      .collection("products")
+      .where("new", "==", true)
+      .orderBy("id", "desc")
+      .startAfter(startAfter)
+      .limit(10);
+  } else {
+    productsCollectionRef = firestore()
+      .collection("products")
+      .where("new", "==", true)
+      .orderBy("id", "desc")
+      .limit(10);
+  }
+  const products = await productsCollectionRef.get();
+  const lastProduct = products.docs[products.docs.length - 1];
+  try {
+    const productsArray = [];
+    products.forEach((doc) => {
+      productsArray.push(doc.data());
+    });
+    return { productsArray, lastProduct };
+  } catch (error) {
+    alert(error);
+    console.log(error);
+  }
+};
+export const getSingleCategoryProducts = async (categories, startAfter) => {
+  let productsCollectionRef;
+  console.log(startAfter);
+  if (startAfter) {
+    productsCollectionRef = firestore()
+      .collection("products")
+      .where("checkedValues", "array-contains-any", categories)
+      .orderBy("id", "desc")
+      .startAfter(startAfter)
+      .limit(10);
+  } else {
+    productsCollectionRef = firestore()
+      .collection("products")
+      .where("checkedValues", "array-contains-any", categories)
+      .orderBy("id", "desc")
+      .limit(10);
+  }
+  const products = await productsCollectionRef.get();
+  const lastProduct = products.docs[products.docs.length - 1];
+
+  try {
+    const productsArray = [];
+    products.forEach((doc) => {
+      productsArray.push(doc.data());
+    });
+    return { productsArray, lastProduct };
+  } catch (error) {
+    alert(error);
+    console.log(error);
+  }
+};
+
+export const getSingleBrandProducts = async (brand, startAfter) => {
+  let productsCollectionRef;
+  console.log(startAfter);
+  if (startAfter) {
+    productsCollectionRef = firestore()
+      .collection("products")
+      .where("checkedValues2", "array-contains", brand.id)
+      .orderBy("id", "desc")
+      .startAfter(startAfter)
+      .limit(10);
+  } else {
+    productsCollectionRef = firestore()
+      .collection("products")
+      .where("checkedValues2", "array-contains", brand.id)
+      .orderBy("id", "desc")
+      .limit(10);
+  }
+  const products = await productsCollectionRef.get();
+  const lastProduct = products.docs[products.docs.length - 1];
+  try {
+    const productsArray = [];
+    products.forEach((doc) => {
+      productsArray.push(doc.data());
+    });
+    return { productsArray, lastProduct };
+  } catch (error) {
+    alert(error);
+    console.log(error);
+  }
+};
+
+export const getSimilarCategoryProducts = async (categories) => {
   const productsCollectionRef = firestore()
     .collection("products")
-    .where("new", "==", true)
+    .where("checkedValues", "array-contains-any", categories)
     .orderBy("id", "desc")
-    .limit(10);
+    .limit(20);
+  const products = await productsCollectionRef.get();
   try {
-    const products = await productsCollectionRef.get();
     const productsArray = [];
     products.forEach((doc) => {
       productsArray.push(doc.data());
@@ -633,41 +726,7 @@ export const getAllLatestProducts = async () => {
   } catch (error) {
     alert(error);
     console.log(error);
-  }
-};
-export const getSingleCategoryProducts = async (categories) => {
-  console.log(categories);
-  const productsCollectionRef = firestore()
-    .collection("products")
-    .where("checkedValues", "array-contains-any", categories);
-
-  try {
-    const products = await productsCollectionRef.get();
-    const productsArray = [];
-    products.forEach((doc) => {
-      productsArray.push(doc.data());
-    });
-    return productsArray;
-  } catch (error) {
-    alert(error);
-    console.log(error);
-  }
-};
-export const getSingleBrandProducts = async (brand) => {
-  const productsCollectionRef = firestore()
-    .collection("products")
-    .where("checkedValues2", "array-contains", brand.id);
-
-  try {
-    const products = await productsCollectionRef.get();
-    const productsArray = [];
-    products.forEach((doc) => {
-      productsArray.push(doc.data());
-    });
-    return productsArray;
-  } catch (error) {
-    alert(error);
-    console.log(error);
+    return [];
   }
 };
 export const getSingleProduct = async (id) => {

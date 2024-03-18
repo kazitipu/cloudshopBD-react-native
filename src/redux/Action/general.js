@@ -7,6 +7,7 @@ import {
   getAllHomeScreenProducts,
   getAllLatestProducts,
   getSingleCategoryProducts,
+  getSimilarCategoryProducts,
   getSingleBrandProducts,
   getAllCategories,
   getSingleProduct,
@@ -297,31 +298,59 @@ export const getAllHomeScreenProductsRedux =
       payload: { categoryId: categoryId, products: allProducts },
     });
   };
-export const getAllLatestProductsRedux = () => async (dispatch) => {
-  const allProducts = await getAllLatestProducts();
+export const getAllLatestProductsRedux = (startAfter) => async (dispatch) => {
+  const allProducts = await getAllLatestProducts(startAfter);
   dispatch({
     type: "GET_ALL_LATEST_PRODUCTS",
     payload: allProducts,
   });
 };
 export const getSingleCategoryProductsRedux =
-  (categories) => async (dispatch) => {
-    const allProducts = await getSingleCategoryProducts(categories);
+  (categories, lastProduct) => async (dispatch) => {
+    const allProducts = await getSingleCategoryProducts(
+      categories,
+      lastProduct
+    );
     dispatch({
       type: "GET_ALL_SINGLE_CATEGORY_PRODUCTS",
       payload: allProducts,
     });
   };
-export const getSingleBrandProductsRedux = (brand) => async (dispatch) => {
-  const allProducts = await getSingleBrandProducts(brand);
+export const clearAllProductsRedux = () => async (dispatch) => {
   dispatch({
-    type: "GET_ALL_SINGLE_CATEGORY_PRODUCTS",
-    payload: allProducts,
+    type: "CLEAR_ALL_PRODUCTS",
+    payload: [],
   });
 };
+export const clearAllBrandProductsRedux = () => async (dispatch) => {
+  dispatch({
+    type: "CLEAR_ALL_BRAND_PRODUCTS",
+    payload: [],
+  });
+};
+export const clearAllLatestProductsRedux = () => async (dispatch) => {
+  dispatch({
+    type: "CLEAR_ALL_LATEST_PRODUCTS",
+    payload: [],
+  });
+};
+export const clearSingleProductRedux = () => async (dispatch) => {
+  dispatch({
+    type: "CLEAR_SINGLE_PRODUCT",
+    payload: {},
+  });
+};
+export const getSingleBrandProductsRedux =
+  (brand, startAfter) => async (dispatch) => {
+    const allProducts = await getSingleBrandProducts(brand, startAfter);
+    dispatch({
+      type: "GET_ALL_SINGLE_BRAND_PRODUCTS",
+      payload: allProducts,
+    });
+  };
 export const getSimilarCategoryProductsRedux =
   (categories) => async (dispatch) => {
-    const allProducts = await getSingleCategoryProducts(categories);
+    const allProducts = await getSimilarCategoryProducts(categories);
     dispatch({
       type: "GET_ALL_SIMILAR_CATEGORY_PRODUCTS",
       payload: allProducts,

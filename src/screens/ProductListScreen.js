@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   TouchableOpacity,
@@ -9,6 +9,7 @@ import {
   Modal,
   Image,
   Platform,
+  Alert,
 } from "react-native";
 import { connect } from "react-redux";
 import {
@@ -42,6 +43,8 @@ import {
   getAllCategoriesRedux,
   getAllLatestProductsRedux,
   setSpinnerRedux,
+  clearAllProductsRedux,
+  clearAllLatestProductsRedux,
 } from "../redux/Action";
 import { fontSize } from "styled-system";
 import Toast from "react-native-simple-toast";
@@ -49,12 +52,16 @@ import Toast from "react-native-simple-toast";
 function ProductListScreen(props) {
   const { item } = props.route.params;
   const [result, setResult] = useState([]);
+
   const [state, setState] = React.useState({
     selectedFilters: [],
     wishlistArr: [],
     filterModelVisible: false,
     loading: true,
+    categories: [],
   });
+  const categoriesRef = useRef([]);
+  const goingToDetail = useRef(false);
 
   useEffect(() => {
     let wishlistData = [];
@@ -62,31 +69,43 @@ function ProductListScreen(props) {
     const getWishList = async () => {
       wishlistData = await _getWishlist();
       if (item == "Latest Products") {
+        props.clearAllLatestProductsRedux();
+        setState({ ...state, loading: true });
         await props.getAllLatestProductsRedux();
-
+        setState({ ...state, loading: false });
         console.log("getting latest products");
       }
       props.getAllCategoriesRedux();
     };
     getWishList();
-    let loadPage = setTimeout(
-      () => setState({ ...state, loading: false, wishlistArr: wishlistData }),
-      500
-    );
+    // let loadPage = setTimeout(
+    //   () => setState({ ...state, loading: false, wishlistArr: wishlistData }),
+    //   500
+    // );
 
-    return () => {
-      clearTimeout(loadPage);
-    };
+    // return () => {
+    //   clearTimeout(loadPage);
+    // };
   }, []);
 
   useEffect(() => {
+    if (goingToDetail.current == true || props.products.length > 0) {
+      return;
+    }
+
     const getProducts = async () => {
       if (item && result.length > 0) {
         let categories = result.map((cat) => cat.id);
         console.log(categories);
+        categoriesRef.current = categories;
         if (item !== "Latest Products") {
-          await props.getSingleCategoryProductsRedux(categories.slice(0, 10));
-
+          setState({ ...state, loading: true });
+          props.clearAllProductsRedux();
+          await props.getSingleCategoryProductsRedux(
+            categories.slice(0, 10),
+            null
+          );
+          setState({ ...state, loading: false });
           console.log("getting category products");
         }
       }
@@ -100,7 +119,7 @@ function ProductListScreen(props) {
       setResult([item, ...results]);
       console.log(results);
     }
-  }, [props.categories]);
+  }, [props.categories, item]);
 
   const categoriesById = new Map(
     props.categories.map((category) => [category.id, category])
@@ -112,7 +131,7 @@ function ProductListScreen(props) {
       let c = cat;
       while (c && c.parentCategory) {
         c = c.parentCategory && categoriesById.get(c.parentCategory);
-        if (c.id === targetId) {
+        if (c && c.id === targetId) {
           results.push(cat);
           break;
         }
@@ -125,10 +144,6 @@ function ProductListScreen(props) {
   const filterClick = (value) => {
     const { selectedFilters } = state;
     if (selectedFilters.includes(value)) {
-      const index = selectedFilters.indexOf(value);
-      if (index > -1) {
-        selectedFilters.splice(index, 1);
-      }
       setState({
         ...state,
         selectedFilters: value,
@@ -151,6 +166,21 @@ function ProductListScreen(props) {
   const addToWishlist = async (id) => {
     let wishlistData = await _addToWishlist(id);
     props.addToWishList(wishlistData);
+  };
+
+  const fetchMorePost = async () => {
+    console.log(props.lastProduct);
+    if (item !== "Latest Products" && props.lastProduct) {
+      await props.getSingleCategoryProductsRedux(
+        categoriesRef.current.slice(0, 10),
+        props.lastProduct
+      );
+      console.log("getting fetch more post.");
+    } else if (item == "Latest Products" && props.lastProduct2) {
+      await props.getAllLatestProductsRedux(props.lastProduct2);
+    } else {
+      // do nothing
+    }
   };
 
   const { title } = props.route.params;
@@ -176,7 +206,11 @@ function ProductListScreen(props) {
       >
         <TouchableOpacity
           style={GlobalStyles.headerLeft}
-          onPress={() => props.navigation.goBack()}
+          onPress={() => {
+            props.navigation.goBack();
+            props.clearAllProductsRedux();
+            goingToDetail.current = false;
+          }}
         >
           <OtirxBackButton />
         </TouchableOpacity>
@@ -249,7 +283,11 @@ function ProductListScreen(props) {
             scrollEnabled={true}
             horizontal={false}
             numColumns={2}
-            onEndReachedThreshold={0.7}
+            onEndReachedThreshold={0.07}
+            onEndReached={() => {
+              fetchMorePost();
+            }}
+            scrollEventThrottle={150}
             showsVerticalScrollIndicator={false}
             keyExtractor={(contact, index) => String(index)}
             renderItem={({ item, index }) => (
@@ -257,11 +295,12 @@ function ProductListScreen(props) {
                 data={item}
                 key={item.id.toString()}
                 imageViewBg={Colors.white}
-                navToDetail={() =>
+                navToDetail={() => {
+                  goingToDetail.current = true;
                   props.navigation.navigate("ProductDetailScreen", {
                     id: item.id,
-                  })
-                }
+                  });
+                }}
                 addToWishlist={addToWishlist}
                 wishlistArray={wishlistData}
               />
@@ -270,13 +309,13 @@ function ProductListScreen(props) {
         </View>
       )}
       {/* Fitler Model Start From Here */}
-      <Modal visible={filterModelVisible}>
+      {/* <Modal visible={filterModelVisible}>
         <FilterComponent
           selectedFilter={selectedFilters}
           onFilterPress={filterClick}
           closeFilter={closeFilterModel}
         />
-      </Modal>
+      </Modal> */}
     </OtrixContainer>
   );
 }
@@ -285,6 +324,8 @@ function mapStateToProps(state) {
   return {
     wishlistData: state.wishlist.wishlistData,
     products: state.products.products,
+    lastProduct: state.products.lastProduct,
+    lastProduct2: state.mainScreenInit.lastProduct,
     latestProducts: state.mainScreenInit.latestProducts,
     categories: state.mainScreenInit.categories,
   };
@@ -296,6 +337,8 @@ export default connect(mapStateToProps, {
   getAllCategoriesRedux,
   getAllLatestProductsRedux,
   setSpinnerRedux,
+  clearAllProductsRedux,
+  clearAllLatestProductsRedux,
 })(ProductListScreen);
 
 const styles = StyleSheet.create({

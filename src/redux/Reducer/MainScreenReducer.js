@@ -10,6 +10,7 @@ const initialState = {
   homeProducts: [],
   latestProducts: [],
   categories: [],
+  lastProduct: null,
 };
 export default (state = initialState, action) => {
   //    logfunction("STATE LOG ====", action)
@@ -43,8 +44,19 @@ export default (state = initialState, action) => {
     case "GET_ALL_LATEST_PRODUCTS":
       return {
         ...state,
-        latestProducts: action.payload,
+        latestProducts: [
+          ...state.latestProducts,
+          ...action.payload.productsArray,
+        ],
+        lastProduct: action.payload.lastProduct,
       };
+    case "CLEAR_ALL_LATEST_PRODUCTS":
+      return {
+        ...state,
+        latestProducts: [],
+        lastProduct: null,
+      };
+
     case "GET_ALL_HOMESCREEN_PRODUCTS":
       return {
         ...state,

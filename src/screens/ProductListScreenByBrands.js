@@ -26,10 +26,7 @@ import {
 } from "react-native-responsive-screen";
 import { GlobalStyles, Colors } from "@helpers";
 import { _roundDimensions } from "@helpers/util";
-import FilterTagsDummy from "@component/items/FilterTagsDummy";
-import { addToWishList } from "@actions";
-import ProductListDummy from "@component/items/ProductListDummy";
-import { filter } from "@common";
+
 import {
   _addToWishlist,
   _getWishlist,
@@ -37,14 +34,11 @@ import {
 } from "@helpers/FunctionHelper";
 import { ProductListSkeleton } from "@skeleton";
 import {
-  getSingleCategoryProductsRedux,
   getSingleBrandProductsRedux,
   getAllCategoriesRedux,
-  getAllLatestProductsRedux,
   setSpinnerRedux,
+  clearAllBrandProductsRedux,
 } from "../redux/Action";
-import { fontSize } from "styled-system";
-import Toast from "react-native-simple-toast";
 
 function ProductListScreenByBrands(props) {
   const { item } = props.route.params;
@@ -57,26 +51,18 @@ function ProductListScreenByBrands(props) {
 
   useEffect(() => {
     const getWishList = async () => {
+      setState({ ...state, loading: true });
+      props.clearAllBrandProductsRedux();
       await props.getSingleBrandProductsRedux(item);
+      setState({ ...state, loading: false });
     };
     getWishList();
-    let loadPage = setTimeout(
-      () => setState({ ...state, loading: false }),
-      500
-    );
-    return () => {
-      clearTimeout(loadPage);
-    };
   }, []);
 
   //when filter tag clicked
   const filterClick = (value) => {
     const { selectedFilters } = state;
     if (selectedFilters.includes(value)) {
-      const index = selectedFilters.indexOf(value);
-      if (index > -1) {
-        selectedFilters.splice(index, 1);
-      }
       setState({
         ...state,
         selectedFilters: value,
@@ -94,6 +80,12 @@ function ProductListScreenByBrands(props) {
       ...state,
       filterModelVisible: false,
     });
+  };
+
+  const fetchMorePost = async () => {
+    if (props.lastProduct) {
+      await props.getSingleBrandProductsRedux(item, props.lastProduct);
+    }
   };
 
   const { title } = props.route.params;
@@ -117,7 +109,10 @@ function ProductListScreenByBrands(props) {
       >
         <TouchableOpacity
           style={GlobalStyles.headerLeft}
-          onPress={() => props.navigation.goBack()}
+          onPress={() => {
+            props.clearAllBrandProductsRedux();
+            props.navigation.goBack();
+          }}
         >
           <OtirxBackButton />
         </TouchableOpacity>
@@ -148,7 +143,11 @@ function ProductListScreenByBrands(props) {
             scrollEnabled={true}
             horizontal={false}
             numColumns={2}
-            onEndReachedThreshold={0.7}
+            onEndReachedThreshold={0.07}
+            onEndReached={() => {
+              fetchMorePost();
+            }}
+            scrollEventThrottle={150}
             showsVerticalScrollIndicator={false}
             keyExtractor={(contact, index) => String(index)}
             renderItem={({ item, index }) => (
@@ -180,19 +179,17 @@ function ProductListScreenByBrands(props) {
 
 function mapStateToProps(state) {
   return {
-    products: state.products.products,
-    latestProducts: state.mainScreenInit.latestProducts,
+    products: state.products.brandProducts,
+    lastProduct: state.products.lastProductBrand,
     categories: state.mainScreenInit.categories,
   };
 }
 
 export default connect(mapStateToProps, {
-  addToWishList,
-  getSingleCategoryProductsRedux,
   getSingleBrandProductsRedux,
   getAllCategoriesRedux,
-  getAllLatestProductsRedux,
   setSpinnerRedux,
+  clearAllBrandProductsRedux,
 })(ProductListScreenByBrands);
 
 const styles = StyleSheet.create({

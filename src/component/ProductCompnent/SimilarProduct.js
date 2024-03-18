@@ -12,6 +12,7 @@ import ProductView2 from "./ProductView2";
 import {
   getSimilarCategoryProductsRedux,
   getAllCategoriesRedux,
+  clearSingleProductRedux,
 } from "../../redux/Action";
 import { StackActions } from "@react-navigation/native";
 import { connect } from "react-redux";
@@ -27,7 +28,6 @@ function SimilarProduct(props) {
   useEffect(() => {
     if (item && result.length > 0) {
       let categories = result.map((cat) => cat.id);
-
       props.getSimilarCategoryProductsRedux(categories.slice(0, 10));
     }
   }, [result]);
@@ -37,12 +37,12 @@ function SimilarProduct(props) {
       let results = getAllChildCategories(item);
       setResult([item, ...results]);
     }
-  }, [props.categories, item]);
+  }, [props.categories]);
   const navigateToDetailPage = (data) => {
+    // props.clearSingleProductRedux();
     props.navigation.dispatch(
       StackActions.replace("ProductDetailScreen", { id: data.id })
     );
-    // props.navigation.push("ProductDetailScreen", { id: data.id });
   };
   const addToWishlist = async (id) => {
     props.addToWishlist(id);
@@ -59,7 +59,7 @@ function SimilarProduct(props) {
       let c = cat;
       while (c && c.parentCategory) {
         c = c.parentCategory && categoriesById.get(c.parentCategory);
-        if (c.id === targetId) {
+        if (c && c.id === targetId) {
           results.push(cat);
           break;
         }
@@ -111,6 +111,7 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   getSimilarCategoryProductsRedux,
   getAllCategoriesRedux,
+  clearSingleProductRedux,
 })(SimilarProduct);
 
 const styles = StyleSheet.create({
