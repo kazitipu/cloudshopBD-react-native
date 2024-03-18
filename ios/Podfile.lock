@@ -1095,6 +1095,8 @@ PODS:
     - RNNotifee/NotifeeCore (= 7.8.0)
   - RNNotifee/NotifeeCore (7.8.0):
     - React-Core
+  - RNPermissions (3.10.1):
+    - React-Core
   - RNRate (1.2.9):
     - React-Core
   - RNScreens (3.10.2):
@@ -1165,6 +1167,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNRate (from `../node_modules/react-native-rate`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNShare (from `../node_modules/react-native-share`)
@@ -1297,6 +1300,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-google-signin/google-signin"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNRate:
     :path: "../node_modules/react-native-rate"
   RNScreens:
@@ -1382,6 +1387,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
   RNGoogleSignin: 2b8c54a7a72be36384a2527da8535aebfb450025
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
+  RNPermissions: 1c345d25a5dd6813f4ed69576d772f42e3f3fe33
   RNRate: 622db602051b6abf6ec467cdcc3c5e3112076745
   RNScreens: d6da2b9e29cf523832c2542f47bf1287318b1868
   RNShare: 730a2773b1e0007425f2f111dcf75208a919c902
@@ -1392,6 +1398,6 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   Yoga: 5cbf25add73edb290e1067017690f7ebf56c5468
 
-PODFILE CHECKSUM: 0db056e02aa6efa944204dde55355f9d22190739
+PODFILE CHECKSUM: 8b3ff38c3c83275df9f17ffe4cf094b689150aec
 
 COCOAPODS: 1.11.2

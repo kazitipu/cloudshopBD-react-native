@@ -377,6 +377,16 @@ export const getFreeShipping = async () => {
     alert(error);
   }
 };
+export const saveDeviceTokenAnonymus = async (token) => {
+  const tokenRef = firestore().doc(`deviceTokens/${token}`);
+  const snapShot = await tokenRef.get();
+  if (!snapShot.exists) {
+    await tokenRef.set({
+      deviceToken: firestore.FieldValue.arrayUnion(token),
+    });
+  }
+  return token;
+};
 export const makePayment = async (
   total,
   invoicesToPay,

@@ -66,9 +66,11 @@ import firestore from "@react-native-firebase/firestore";
 import {
   createUserProfileDocument,
   getFreeShipping,
+  saveDeviceTokenAnonymus,
 } from "./firebase/firebase.utils";
 import Spinner from "react-native-loading-spinner-overlay";
 import messaging from "@react-native-firebase/messaging";
+import { check, request, PERMISSIONS, RESULTS } from "react-native-permissions";
 const SettingStack = createStackNavigator();
 let cartCount = 0;
 
@@ -187,6 +189,7 @@ function AppNavigator(props) {
     }
   }, [props.additionalData]);
   useEffect(() => {
+    requestUserPermissionAnonymus();
     const subscriber = auth().onAuthStateChanged((userAuth) => {
       onAuthStateChanged(userAuth);
     });
@@ -219,38 +222,23 @@ function AppNavigator(props) {
             props.setReduxCart(snapShot.data().cart);
           }
         });
-        // const favouriteRef = firestore.doc(`favourites/${userAuth.uid}`);
-        // favouriteRef.onSnapshot((snapShot) => {
-        //   if (snapShot.exists) {
-        //     setReduxFavourite(snapShot.data().favourite);
-        //   }
-        // });
-        // const footPrintRef = firestore.doc(`footPrints/${userAuth.uid}`);
-        // footPrintRef.onSnapshot((snapShot) => {
-        //   if (snapShot.exists) {
-        //     setReduxFootPrint(snapShot.data().footPrint);
-        //   }
-        // });
         const wishlistRef = firestore().doc(`wishlists/${user.uid}`);
         wishlistRef.onSnapshot((snapShot) => {
           if (snapShot.exists) {
             props.setReduxWishlist(snapShot.data().wishlist);
           }
         });
-        // await getAllMessagesRedux(userAuth.uid);
       }
     } else {
       props.setCurrentUserRedux({ displayName: "", email: "" });
-      // props.setAdditionalDataRedux({});
       setReduxCart([]);
-      // setReduxFavourite([]);
-      // setReduxFootPrint([]);
       props.setReduxWishlist([]);
     }
 
     if (initializing) setInitializing(false);
   };
 
+  // getting device token for registered user and updating user object in the database
   const requestUserPermission = async (user) => {
     if (Platform.OS === "ios") {
       const authStatus = await messaging().requestPermission();
@@ -262,17 +250,122 @@ function AppNavigator(props) {
         console.log("Authorization status:", authStatus);
         getDeviceToken(user);
       }
+    } else if (Platform.OS === "android" && Platform.Version >= 33) {
+      check(PERMISSIONS.ANDROID.POST_NOTIFICATIONS)
+        .then((result) => {
+          switch (result) {
+            case RESULTS.UNAVAILABLE:
+              console.log(
+                "This feature is not available (on this device / in this context)"
+              );
+              break;
+
+            case RESULTS.DENIED:
+              console.log(
+                "The permission has not been requested / is denied but requestable"
+              );
+              request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS).then((result) => {
+                console.log(result);
+              });
+              break;
+
+            case RESULTS.LIMITED:
+              console.log(
+                "The permission is limited: some actions are possible"
+              );
+              break;
+            case RESULTS.GRANTED:
+              console.log("The permission is granted");
+              break;
+            case RESULTS.BLOCKED:
+              console.log(
+                "The permission is denied and not requestable anymore"
+              );
+              break;
+          }
+        })
+        .catch((error) => {
+          console.log(
+            "An error occurred while trying to get allow push notification"
+          );
+        });
+      request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS).then((result) => {
+        console.log(result);
+      });
+      getDeviceToken(user);
     } else {
       getDeviceToken(user);
     }
   };
-
   const getDeviceToken = async (user) => {
     let token = await messaging().getToken();
     if (token && user && user.id) {
       props.saveDeviceTokenRedux(user, token);
     }
     console.log(token);
+  };
+
+  // getting device token for not registered user and updating device token in database
+  const requestUserPermissionAnonymus = async () => {
+    if (Platform.OS === "ios") {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+      if (enabled) {
+        console.log("Authorization status:", authStatus);
+        getDeviceTokenAnonymus();
+      }
+    } else if (Platform.OS === "android") {
+      check(PERMISSIONS.ANDROID.POST_NOTIFICATIONS)
+        .then((result) => {
+          switch (result) {
+            case RESULTS.UNAVAILABLE:
+              console.log(
+                "This feature is not available (on this device / in this context)"
+              );
+              break;
+            case RESULTS.DENIED:
+              console.log(
+                "The permission has not been requested / is denied but requestable"
+              );
+              request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS).then((result) => {
+                console.log(result);
+              });
+              break;
+            case RESULTS.LIMITED:
+              console.log(
+                "The permission is limited: some actions are possible"
+              );
+              break;
+            case RESULTS.GRANTED:
+              console.log("The permission is granted");
+              break;
+            case RESULTS.BLOCKED:
+              console.log(
+                "The permission is denied and not requestable anymore"
+              );
+              break;
+          }
+        })
+        .catch((error) => {
+          console.log(
+            "An error occurred while trying to get allow push notification"
+          );
+        });
+
+      getDeviceTokenAnonymus();
+    } else {
+      getDeviceTokenAnonymus();
+    }
+  };
+
+  const getDeviceTokenAnonymus = async () => {
+    let token = await messaging().getToken();
+    if (token) {
+      saveDeviceTokenAnonymus(token);
+    }
   };
 
   let isLoggedIn = false;
