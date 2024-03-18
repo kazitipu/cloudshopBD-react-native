@@ -78,14 +78,6 @@ function ProductListScreen(props) {
       props.getAllCategoriesRedux();
     };
     getWishList();
-    // let loadPage = setTimeout(
-    //   () => setState({ ...state, loading: false, wishlistArr: wishlistData }),
-    //   500
-    // );
-
-    // return () => {
-    //   clearTimeout(loadPage);
-    // };
   }, []);
 
   useEffect(() => {
@@ -170,13 +162,21 @@ function ProductListScreen(props) {
 
   const fetchMorePost = async () => {
     console.log(props.lastProduct);
-    if (item !== "Latest Products" && props.lastProduct) {
+    if (
+      item !== "Latest Products" &&
+      props.lastProduct &&
+      props.products.length > 9
+    ) {
       await props.getSingleCategoryProductsRedux(
         categoriesRef.current.slice(0, 10),
         props.lastProduct
       );
       console.log("getting fetch more post.");
-    } else if (item == "Latest Products" && props.lastProduct2) {
+    } else if (
+      item == "Latest Products" &&
+      props.lastProduct2 &&
+      props.latestProducts.length > 9
+    ) {
       await props.getAllLatestProductsRedux(props.lastProduct2);
     } else {
       // do nothing

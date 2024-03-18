@@ -54,6 +54,7 @@ function ProductListScreenByBrands(props) {
       setState({ ...state, loading: true });
       props.clearAllBrandProductsRedux();
       await props.getSingleBrandProductsRedux(item);
+      console.log("getting product in useEffect");
       setState({ ...state, loading: false });
     };
     getWishList();
@@ -83,8 +84,9 @@ function ProductListScreenByBrands(props) {
   };
 
   const fetchMorePost = async () => {
-    if (props.lastProduct) {
+    if (props.lastProduct && props.products.length > 9) {
       await props.getSingleBrandProductsRedux(item, props.lastProduct);
+      console.log("getting product in fetchmore post.");
     }
   };
 
