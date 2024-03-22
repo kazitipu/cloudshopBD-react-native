@@ -446,7 +446,7 @@ function CheckoutScreen(props) {
                 -৳ {actualOrder - sumAmount}
               </Text>
             </View>
-            {coupon && (
+            {coupon ? (
               <View
                 style={{
                   display: "flex",
@@ -471,7 +471,7 @@ function CheckoutScreen(props) {
                     : parseInt(sumAmount * (coupon.discountAmount / 100))}
                 </Text>
               </View>
-            )}
+            ) : null}
             <View
               style={{
                 display: "flex",
@@ -598,7 +598,7 @@ function CheckoutScreen(props) {
           minWidth: "100%",
         }}
       ></View>
-      {props.cartData.length > 0 && (
+      {props.cartData.length > 0 ? (
         <View
           style={{
             position: "absolute",
@@ -702,7 +702,7 @@ function CheckoutScreen(props) {
             }}
           />
         </View>
-      )}
+      ) : null}
 
       {/* Payment Modal  */}
       <Modal visible={paymentSuccessModal} transparent={true}>

@@ -102,14 +102,14 @@ function WishlistScreen(props) {
 
                 */}
 
-        {wishlist.length > 0 && (
+        {wishlist.length > 0 ? (
           <WishListView
             navigation={props.navigation}
             products={wishlist}
             deleteItem={onDeleteItem}
           />
-        )}
-        {wishlist.length == 0 && (
+        ) : null}
+        {wishlist.length == 0 ? (
           <View style={styles.noRecord}>
             <Text style={styles.emptyTxt}>Wishlist is empty!</Text>
             <Button
@@ -136,7 +136,7 @@ function WishlistScreen(props) {
               </Text>
             </Button>
           </View>
-        )}
+        ) : null}
       </OtrixContent>
     </OtrixContainer>
   );

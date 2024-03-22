@@ -633,7 +633,7 @@ function ProductDetailScreen(props) {
             style={styles.childView}
             showsVerticalScrollIndicator={false}
           >
-            {product.pictures.length > 0 && (
+            {product.pictures.length > 0 ? (
               <View style={{ paddingTop: 10, marginTop: 10 }}>
                 <SliderBox
                   images={
@@ -679,7 +679,7 @@ function ProductDetailScreen(props) {
                   }}
                 />
               </View>
-            )}
+            ) : null}
             <OtrixContent customStyles={styles.productDetailView}>
               <View style={{ ...styles.subContainer, marginTop: 10 }}>
                 <Text style={styles.headingTxt}>{product.name}</Text>
@@ -929,79 +929,81 @@ function ProductDetailScreen(props) {
               {/* Color */}
               <OtrixDivider size={"md"} />
               <View style={GlobalStyles.horizontalLine}></View>
-              {product.savedAttributes.length > 0 &&
-                product.savedAttributes.map((attribute, index) => (
-                  <>
-                    <OtrixDivider size={"sm"} />
-                    <View>
-                      <Text
-                        style={[styles.headingTxt, { fontSize: wp("3.2%") }]}
-                      >
-                        Choose {attribute.name}
-                      </Text>
-                      <View
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "flex-start",
-                          flexWrap: "wrap",
-                          width: "100%",
-                          alignItems: "flex-start",
-                        }}
-                      >
-                        {attribute.selectedTerms.map((term) => {
-                          return (
-                            <TouchableOpacity
-                              onPress={() => {
-                                setState({
-                                  ...state,
-                                  ["selectedTerm" + index]: term,
-                                  render: true,
-                                  getPicture: true,
-                                });
-                              }}
-                            >
-                              <View
-                                style={{
-                                  padding: wp("3%"),
-                                  borderColor:
-                                    state["selectedTerm" + index] &&
-                                    state["selectedTerm" + index].id == term.id
-                                      ? "#ec345b"
-                                      : "gray",
-                                  borderWidth: 1,
-                                  borderRadius: 5,
-                                  margin: 7,
-                                  marginLeft: 0,
+              {product.savedAttributes.length > 0
+                ? product.savedAttributes.map((attribute, index) => (
+                    <>
+                      <OtrixDivider size={"sm"} />
+                      <View>
+                        <Text
+                          style={[styles.headingTxt, { fontSize: wp("3.2%") }]}
+                        >
+                          Choose {attribute.name}
+                        </Text>
+                        <View
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            flexWrap: "wrap",
+                            width: "100%",
+                            alignItems: "flex-start",
+                          }}
+                        >
+                          {attribute.selectedTerms.map((term) => {
+                            return (
+                              <TouchableOpacity
+                                onPress={() => {
+                                  setState({
+                                    ...state,
+                                    ["selectedTerm" + index]: term,
+                                    render: true,
+                                    getPicture: true,
+                                  });
                                 }}
                               >
-                                <Text
+                                <View
                                   style={{
-                                    color:
+                                    padding: wp("3%"),
+                                    borderColor:
                                       state["selectedTerm" + index] &&
                                       state["selectedTerm" + index].id ==
                                         term.id
-                                        ? "#EC345B"
+                                        ? "#ec345b"
                                         : "gray",
-                                    fontSize: wp("3%"),
+                                    borderWidth: 1,
+                                    borderRadius: 5,
+                                    margin: 7,
+                                    marginLeft: 0,
                                   }}
                                 >
-                                  {term.name}
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
-                          );
-                        })}
+                                  <Text
+                                    style={{
+                                      color:
+                                        state["selectedTerm" + index] &&
+                                        state["selectedTerm" + index].id ==
+                                          term.id
+                                          ? "#EC345B"
+                                          : "gray",
+                                      fontSize: wp("3%"),
+                                    }}
+                                  >
+                                    {term.name}
+                                  </Text>
+                                </View>
+                              </TouchableOpacity>
+                            );
+                          })}
+                        </View>
                       </View>
-                    </View>
-                  </>
-                ))}
-              {product.savedAttributes.length > 0 && (
+                    </>
+                  ))
+                : null}
+              {product.savedAttributes.length > 0 ? (
                 <>
                   <OtrixDivider size={"md"} />
                   <View style={GlobalStyles.horizontalLine}></View>
                 </>
-              )}
+              ) : null}
 
               <View style={GlobalStyles.horizontalLine}></View>
               <OtrixDivider size={"md"} />

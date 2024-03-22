@@ -275,7 +275,7 @@ function CheckoutScreen(props) {
                 }
               </Text>
             </View>
-            {order.orderStatusScore < 3 && (
+            {order.orderStatusScore < 3 ? (
               <View style={{ flex: 0.2, paddingRight: 15 }}>
                 <TouchableOpacity
                   onPress={() => {
@@ -303,7 +303,7 @@ function CheckoutScreen(props) {
                   </View>
                 </TouchableOpacity>
               </View>
-            )}
+            ) : null}
           </View>
         </View>
         <CartView

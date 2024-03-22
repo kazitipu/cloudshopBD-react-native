@@ -91,7 +91,7 @@ function SearchScreen(props) {
           ></TextInput>
         </View>
       </View>
-
+      {/* 
       {showMost && (
         <View style={styles.mostSearchView}>
           <Text style={styles.title}>Most Searches</Text>
@@ -109,7 +109,7 @@ function SearchScreen(props) {
             ))}
           </View>
         </View>
-      )}
+      )} */}
 
       {showSuggestions && state.searchResults.length > 0 && (
         <OtrixContent>

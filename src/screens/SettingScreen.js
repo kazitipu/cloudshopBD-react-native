@@ -155,7 +155,7 @@ function SettingScreen(props) {
             <MatIcon name="arrow-forward-ios" style={styles.rightIcon} />
           </View>
         </TouchableOpacity>
-        {props.currentUser && props.currentUser.uid && (
+        {props.currentUser && props.currentUser.uid ? (
           <TouchableOpacity
             style={styles.listView}
             onPress={async () => {
@@ -199,7 +199,7 @@ function SettingScreen(props) {
               />
             </View>
           </TouchableOpacity>
-        )}
+        ) : null}
       </OtrixContent>
 
       {/* <Text style={styles.bottomTxt}>Otrixapp</Text> */}

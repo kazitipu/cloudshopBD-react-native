@@ -26,7 +26,6 @@ function LatestProducts(props) {
     props.navigation.navigate("ProductDetailScreen", { id: data.id });
   };
 
-
   const renderCard = (item) => {
     return (
       <View style={styles.productBox} key={item.id.toString()}>
@@ -34,7 +33,6 @@ function LatestProducts(props) {
           data={item}
           key={item.id}
           navToDetail={navigateToDetailPage}
-       
         />
       </View>
     );
@@ -62,7 +60,7 @@ function LatestProducts(props) {
       </View>
       <OtrixDivider size={"sm"} />
       <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-        {latestProducts.map((item, index) => {
+        {latestProducts.slice(0, 20).map((item, index) => {
           return renderCard(item);
         })}
       </View>

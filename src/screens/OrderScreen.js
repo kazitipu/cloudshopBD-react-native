@@ -403,39 +403,39 @@ function OrderScreen(props) {
                   </Text>
                 </View>
                 {order.orderStatus !== "Cancelled" &&
-                  order.orderStatus !== "Processing" && (
-                    <TouchableOpacity
-                      onPress={() => {
-                        orderAgain(order);
+                order.orderStatus !== "Processing" ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      orderAgain(order);
+                    }}
+                  >
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        marginTop: 15,
+
+                        padding: 10,
+                        paddingTop: 8,
+                        paddingBottom: 8,
+                        backgroundColor: "#dcefff",
+                        borderRadius: 6,
                       }}
                     >
-                      <View
+                      <Text
                         style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "center",
-                          marginTop: 15,
-
-                          padding: 10,
-                          paddingTop: 8,
-                          paddingBottom: 8,
-                          backgroundColor: "#dcefff",
-                          borderRadius: 6,
+                          color: "#005dac",
+                          fontWeight: "bold",
+                          fontSize: wp("3.3%"),
                         }}
                       >
-                        <Text
-                          style={{
-                            color: "#005dac",
-                            fontWeight: "bold",
-                            fontSize: wp("3.3%"),
-                          }}
-                        >
-                          Order Again
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  )}
-                {order.orderStatus == "Processing" && (
+                        Order Again
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ) : null}
+                {order.orderStatus == "Processing" ? (
                   <TouchableOpacity
                     onPress={() => {
                       handleSubmit(order);
@@ -466,8 +466,8 @@ function OrderScreen(props) {
                       </Text>
                     </View>
                   </TouchableOpacity>
-                )}
-                {order.cancelNote && (
+                ) : null}
+                {order.cancelNote ? (
                   <View
                     style={{
                       display: "flex",
@@ -492,7 +492,7 @@ function OrderScreen(props) {
                       Cancelled by customer
                     </Text>
                   </View>
-                )}
+                ) : null}
               </View>
             </TouchableOpacity>
           ))

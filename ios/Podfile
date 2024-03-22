@@ -4,6 +4,27 @@ require_relative '../node_modules/react-native-permissions/scripts/setup'
 
 platform :ios, '11.0'
 
+setup_permissions([
+  # 'AppTrackingTransparency',
+  # 'BluetoothPeripheral',
+  # 'Calendars',
+  # 'Camera',
+  # 'Contacts',
+  # 'FaceID',
+  # 'LocationAccuracy',
+  # 'LocationAlways',
+  # 'LocationWhenInUse',
+  # 'MediaLibrary',
+  # 'Microphone',
+  # 'Motion',
+  'Notifications',
+  # 'PhotoLibrary',
+  # 'PhotoLibraryAddOnly',
+  # 'Reminders',
+  # 'Siri',
+  # 'SpeechRecognition',
+  # 'StoreKit',
+])
 target 'otrixcommerce' do
   config = use_native_modules!
 
